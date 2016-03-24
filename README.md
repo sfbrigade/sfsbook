@@ -4,7 +4,7 @@
 This is the respository for the project that came out of the Code Across 2016. Currently we're in the exploratory phase of the project. 
 
 ## How to contribute
-Right now we are working on understnading the problem and the people and agencies in SF that work on the very wide range of problems that fall under the category "violence against women." 
+Right now we are working on understanding the problem and the people and agencies in SF that work on the very wide range of problems that fall under the category "violence against women." 
 
 ### Issues
 We're adding issues to the project as we identify tasks that need to be completed. [Check out the issues page](https://github.com/sfbrigade/stop-violence/issues) to see what we've currently identified.
