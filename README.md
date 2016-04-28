@@ -1,7 +1,7 @@
 # stop-violence
 
 ## About the project
-We are building an interactive resource guide based on the PDF Resource guide compiled by SFWAR. The guide will allow volunteers to help maintain the guide to make sure that it is a publicly available source of up-to-date information about the resources available to survivors in the SF Bay Area.
+We are building an interactive resource guide based on the [PDF referral guide](http://sfwar.org/pdf/RefGuide.pdf) compiled by SFWAR. The guide will allow volunteers to help maintain the guide to make sure that it is a publicly available source of up-to-date information about the resources available to survivors in the SF Bay Area.
 
 This is the respository for the project that came out of the Code Across 2016. Currently we're in the exploratory phase of the project. 
 
