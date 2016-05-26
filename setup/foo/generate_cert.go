@@ -25,6 +25,7 @@ import (
 	"math/big"
 	"net"
 	"os"
+	"path/filepath"
 	"strings"
 	"time"
 )
@@ -49,23 +50,27 @@ func publicKey(priv interface{}) interface{} {
 	}
 }
 
-func pemBlockForKey(priv interface{}) *pem.Block {
+func pemBlockForKey(priv interface{}) (*pem.Block, error) {
 	switch k := priv.(type) {
 	case *rsa.PrivateKey:
-		return &pem.Block{Type: "RSA PRIVATE KEY", Bytes: x509.MarshalPKCS1PrivateKey(k)}
+		return &pem.Block{Type: "RSA PRIVATE KEY", Bytes: x509.MarshalPKCS1PrivateKey(k)}, nil
 	case *ecdsa.PrivateKey:
 		b, err := x509.MarshalECPrivateKey(k)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "Unable to marshal ECDSA private key: %v", err)
-			os.Exit(2)
+			return nil, fmt.Errorf("Unable to marshal ECDSA private key: %v", err)
 		}
-		return &pem.Block{Type: "EC PRIVATE KEY", Bytes: b}
+		return &pem.Block{Type: "EC PRIVATE KEY", Bytes: b}, nil
 	default:
-		return nil
+		return nil, nil
 	}
 }
 
 func main() {
+	pth := "."
+	certpth := filepath.Join(pth, "cert.pem")
+	keypth := filepath.Join(pth, "key.pem")
+
+
 //	flag.Parse()
 
 //	if len(*host) == 0 {
@@ -144,20 +149,26 @@ func main() {
 		log.Fatalf("Failed to create certificate: %s", err)
 	}
 
-	certOut, err := os.Create("cert.pem")
+	certOut, err := os.Create(certpth)
 	if err != nil {
-		log.Fatalf("failed to open cert.pem for writing: %s", err)
+		log.Fatalf("failed to open %s for writing: %s", certpth, err)
 	}
 	pem.Encode(certOut, &pem.Block{Type: "CERTIFICATE", Bytes: derBytes})
 	certOut.Close()
-	log.Print("written cert.pem\n")
 
-	keyOut, err := os.OpenFile("key.pem", os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0600)
+	log.Println("written", certpth)
+
+	keyOut, err := os.OpenFile(keypth, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0600)
 	if err != nil {
-		log.Print("failed to open key.pem for writing:", err)
+		log.Print("failed to open %s for writing:", keypth, err)
 		return
 	}
-	pem.Encode(keyOut, pemBlockForKey(priv))
-	keyOut.Close()
-	log.Print("written key.pem\n")
+	defer keyOut.Close()
+
+	blk, err := pemBlockForKey(priv)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	pem.Encode(keyOut, blk)
+	log.Println("written", keypth)
 }
