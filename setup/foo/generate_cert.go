@@ -19,7 +19,7 @@ import (
 	"crypto/x509"
 	"crypto/x509/pkix"
 	"encoding/pem"
-	"flag"
+//	"flag"
 	"fmt"
 	"log"
 	"math/big"
@@ -29,14 +29,14 @@ import (
 	"time"
 )
 
-var (
-	host       = flag.String("host", "", "Comma-separated hostnames and IPs to generate a certificate for")
-	validFrom  = flag.String("start-date", "", "Creation date formatted as Jan 1 15:04:05 2011")
-	validFor   = flag.Duration("duration", 365*24*time.Hour, "Duration that certificate is valid for")
-	isCA       = flag.Bool("ca", false, "whether this cert should be its own Certificate Authority")
-	rsaBits    = flag.Int("rsa-bits", 2048, "Size of RSA key to generate. Ignored if --ecdsa-curve is set")
-	ecdsaCurve = flag.String("ecdsa-curve", "", "ECDSA curve to use to generate a key. Valid values are P224, P256, P384, P521")
-)
+//var (
+//	host       = flag.String("host", "", "Comma-separated hostnames and IPs to generate a certificate for")
+//	validFrom  = flag.String("start-date", "", "Creation date formatted as Jan 1 15:04:05 2011")
+//	validFor   = flag.Duration("duration", 365*24*time.Hour, "Duration that certificate is valid for")
+//	isCA       = flag.Bool("ca", false, "whether this cert should be its own Certificate Authority")
+//	rsaBits    = flag.Int("rsa-bits", 2048, "Size of RSA key to generate. Ignored if --ecdsa-curve is set")
+//	ecdsaCurve = flag.String("ecdsa-curve", "", "ECDSA curve to use to generate a key. Valid values are P224, P256, P384, P521")
+//)
 
 func publicKey(priv interface{}) interface{} {
 	switch k := priv.(type) {
@@ -66,7 +66,7 @@ func pemBlockForKey(priv interface{}) *pem.Block {
 }
 
 func main() {
-	flag.Parse()
+//	flag.Parse()
 
 //	if len(*host) == 0 {
 //		log.Fatalf("Missing required --host parameter")
