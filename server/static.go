@@ -20,11 +20,13 @@ func MakeStaticServer(pathroot string) *staticServer {
 
 func (gs *staticServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	_, sn := filepath.Split(req.URL.Path)
+	if sn == "" {
+		sn = "index.html"
+	}
 
 	filepath := filepath.Join(gs.s, sn)
 
 	log.Println(filepath)
-
 	if _, err := os.Stat(filepath); err != nil {
 		log.Println("file", filepath, "missing", err, "ought to be trying the wired-in content")
 		// TODO(rjk): If the file doesn't exist, we default to using the content
