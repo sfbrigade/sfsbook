@@ -4,6 +4,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/sfbrigade/sfsbook/server"
 	"github.com/sfbrigade/sfsbook/setup"
 )
 
@@ -18,5 +19,8 @@ func main() {
 	}
 
 	setup.ConstructNecessaryStartingState(pth)
+
+	srv := server.MakeServer(":10443", pth)
+	server.Start(pth, srv)
 
 }
