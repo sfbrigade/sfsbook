@@ -2,5 +2,5 @@
 package server
 
 var Resources map[string]string = map[string]string{
-index.html: "<html>\n<body>\nHello from sfsbook!\n</body>\n</html>\n",
+"index.html": "<html>\n<body>\nHello from sfsbook!\n</body>\n</html>\n",
 }

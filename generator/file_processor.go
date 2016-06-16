@@ -34,7 +34,7 @@ func EmbedOneFile(path, prefix string, output io.Writer) error {
 			return fmt.Errorf("Can't read file path %s: %v", path, err)
 		}
 
-		fmt.Fprintf(output, "%s: %#v,\n", prepareHashPath(path, prefix), string(array))
+		fmt.Fprintf(output, "%#v: %#v,\n", prepareHashPath(path, prefix), string(array))
 	// case ".js":
 	// TODO(rjk): Invoke CSS, JS processing here. Aside: minification might
 	// suggest that we want to combine resources. I suppose that means that
