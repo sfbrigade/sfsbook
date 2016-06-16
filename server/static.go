@@ -10,7 +10,7 @@ import (
 	"strings"
 )
 
-//go:generate go run ../generator/generateresources.go ../sites
+//go:generate go run ../generator/tool/generateresources.go -output embedded_resources.go -prefix ../site/ ../site
 
 // TODO(rjk): This will probably require additional fields.
 type staticServer struct {
