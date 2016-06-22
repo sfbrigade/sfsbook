@@ -1,0 +1,52 @@
+---
+notes: |
+  The info card module is used to display a single entry in the resource guide. 
+---
+<div class="info-card">
+				<!-- using any higher value H tags in modules will screw up the hierarchy for screen readers. Adjust this H1 accordingly -->
+				<h1 class="info-card__name">{{resource-entry.name}}</h1>
+				<div class="info-card__column-left">
+					<div class="info-card__map"> gmap goes here</div>
+					<div class="info-card__multi-line_entry info-card__multi-line_entry--address">
+						<p>{{resource-entry.address}}<br/> {{resource-entry.city}}, {{resource-entry.state}} {{resource-entry.zip}}</p>
+					</div>
+					<p class="info-card__single-line-entry info-card__single-line-entry--wheelchair">{{> sm-label sm-label-text="wheelchar access"}} {{resource-entry.wheelchair}}</p>
+					<p class="info-card__single-line-entry info-card__single-line-entry--crisis-line">{{> sm-label sm-label-text="crisis number"}} {{resource-entry.crisis_line}}</p>
+					<p class="info-card__single-line-entry info-card__single-line-entry--business-line">{{> sm-label sm-label-text="business number"}} {{resource-entry.business_line}}</p>
+					<p class="info-card__single-line-entry info-card__single-line-entry--fax">{{> sm-label sm-label-text="fax number"}} {{resource-entry.fax_number}}</p>
+					<p class="info-card__single-line-entry info-card__single-line-entry--tdd">{{> sm-label sm-label-text="tdd"}} {{resource-entry.tdd}}
+					<p class="info-card__single-line-entry info-card__single-line-entry--email">{{> sm-label sm-label-text="email"}} {{resource-entry.email}}</p>
+					<p class="info-card__single-line-entry info-card__single-line-entry--website">{{> sm-label sm-label-text="website"}} <a href="">{{resource-entry.website}}</a></p>
+				</div>
+				<div class="info-card__column-right">
+					<div class="info-card__multi-line_entry info-card__multi-line_entry--desc">
+						<p>
+							{{resource-entry.description}}
+						</p>
+					</div>
+					<div class="info-card__multi-line_entry info-card__multi-line_entry--services">
+						<p>{{> sm-label sm-label-text="services"}}</p> 
+						<p>{{resource-entry.services}}</p>
+					</div>
+					<div class="info-card__multi-line_entry info-card__multi-line_entry--pop-served">
+						<p>{{> sm-label sm-label-text="populations served"}}</p> 
+						<p>{{resource-entry.pops_served}}</p>
+					</div>
+					<p class="info-card__single-line-entry info-card__single-line-entry--cost">{{> sm-label sm-label-text="cost free"}}</p>
+					<p class="info-card__single-line-entry info-card__single-line-entry--insurance">{{> sm-label sm-label-text="insurance"}} {{resource-entry.insurance}}</p>
+					
+					<div class="info-card__multi-line_entry info-card__multi-line_entry--languages">
+						<p>{{> sm-label sm-label-text="languages"}}</p> 
+						<p>{{resource-entry.languages}}</p>
+					</div>
+					<!-- This needs to be broken out into it's own module -->
+					<div class="tag-cloud">
+						<p>{{> sm-label sm-label-text="categories"}}</p> 
+						<ul class="tag-cloud__tag-list">
+							<li class="tag-cloud__tag-list-item"><a class="tag-cloud__tag" href="">Legal Services</a></li>
+							<li class="tag-cloud__tag-list-item"><a class="tag-cloud__tag" href="">Employment</a></li>
+							<li class="tag-cloud__tag-list-item"><a class="tag-cloud__tag" href="">Hotlines</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>

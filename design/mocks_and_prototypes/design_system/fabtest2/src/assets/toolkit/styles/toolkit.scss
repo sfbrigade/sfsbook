@@ -1,0 +1,63 @@
+/**
+ * Toolkit styles
+ */
+@import "bower_components/susy/sass/susy";
+@import "bower_components/normalize-css/normalize";
+
+//= Global Variables
+//== Typeography
+$sans-serif: 'Source Sans Pro', sans-serif;
+$serif: 'Lora', serif;
+$default-line-height:1.4rem;
+$thin: 300;
+$regular: 400;
+$bold: 700;
+
+//== Colors
+//=== Color Pallet
+//==== working greys
+$g10:lighten(black,90%);
+$g20:lighten(black,80%);
+$g30:lighten(black,70%);
+$g40:lighten(black,60%);
+$g50:lighten(black,50%);
+$g60:lighten(black,40%);
+$g70:lighten(black,30%);
+$g80:lighten(black,20%);
+$g90:lighten(black,10%);
+//=== Element Color Values 
+// !! Colors values should be changed here, not in individual selectors !!
+$sandbox-body-bg: $g10;
+$default-link-underline: $g30;
+$default-link-color: $g40;
+$shadow-color: $g20;
+$sm-label-bg: $g10;
+$sm-label-text: $g70;
+// the below vars need to be moved into the tag cloud partial once that element is created
+$tag-cloud__tag-bg: lighten(black,45%), lighten(black,50%); // this is two colors becuase it's a gradient ramp
+$tag-cloud__tag-text: $g10;
+$tag-cloud__tag-text-shadow:rgba(lighten(black,5%),0.1);
+
+//= Global Styles
+*{
+	box-sizing: border-box;
+}
+
+body {
+	font-family: sans-serif;
+}
+
+a{
+	color:$default-link-color;
+	text-decoration:none;
+	border-bottom: 1px dotted $default-link-underline;
+
+}
+
+//= Imports of individual styles
+//== Component specific imports
+@import "components/paragraph"; 
+@import "components/sm-label";
+
+//= Module specific imports
+@import "modules/info-card";

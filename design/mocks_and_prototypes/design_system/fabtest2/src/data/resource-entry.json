@@ -1,0 +1,23 @@
+{
+    "address": "207 E Buffalo St #211",
+    "city" : "Milwaukee",
+    "state" : "WI",
+    "zip" : "53202",
+    "categories": "Legal: Services Employment Hotlines",
+    "description": "Provides information on legal rights, strategies to win fair treatment on the job, and ways to get involved with 9to5 in your community. No documentation required. Over the phone.",
+    "email": "9to5@9to5.org",
+    "crisis_line": "800-522-0925",
+    "business_line" : "414-274-0925",
+    "fax_number" : "414-272-2870",
+    "tdd" : "¯\\_(ツ)_/¯",
+    "cost" : "FREE",
+    "insurance" : "¯\\_(ツ)_/¯",
+    "hours" : "¯\\_(ツ)_/¯",
+    "ages" : "¯\\_(ツ)_/¯",
+    "languges": "This entry needs a languages list",
+    "name": "9to5 National Job Survival Hotline",
+    "pops_served": "This entry needs a populations served list",
+    "services": "This entry needs a services list",
+    "website": "www.9to5.org",
+    "wheelchair": "This entry needs Wheelchair accessibliy info"
+}

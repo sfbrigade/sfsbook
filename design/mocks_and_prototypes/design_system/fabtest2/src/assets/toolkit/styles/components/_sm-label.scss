@@ -1,0 +1,12 @@
+//= Styles for small label component
+.sm-label{
+		display:inline-block;
+		font-size: 0.9rem;
+		line-height: 1rem;
+		font-variant: small-caps;
+		color:$sm-label-text;
+		background-color: $sm-label-bg;
+		padding:0 rem(10) rem(2) rem(3);
+		margin:0 rem(5) 0.2rem 0;
+		box-shadow: 2px 3px 0px $shadow-color; 
+}

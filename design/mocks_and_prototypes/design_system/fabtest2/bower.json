@@ -1,0 +1,30 @@
+{
+  "name": "fabricator",
+  "description": "A tool for building website UI toolkits",
+  "main": "README.md",
+  "authors": [
+    "Tony Santos"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "toolkit",
+    "styleguide",
+    "framework",
+    "scaffold",
+    "patterns",
+    "library"
+  ],
+  "homepage": "https://github.com/sfbrigade/sfsbook",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "susy": "^2.2.12",
+    "normalize-css": "^4.1.1"
+  }
+}

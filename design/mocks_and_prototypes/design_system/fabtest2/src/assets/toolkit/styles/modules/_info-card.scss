@@ -1,0 +1,114 @@
+//= Vars for the info card module
+//== Colors
+$info-card__name-text:$g60;
+$info-card-body-text: $g70;
+$info-card__map-bg: $g40;
+
+//= Styles for info card module
+
+.info-card{
+	//@include span-columns(9);
+	background:white;
+	min-height:20rem;
+	padding: 0.5rem 1rem 0.5rem 1rem;
+	font-size:1.15rem;
+	line-height:$default-line-height;
+	color:$info-card-body-text;
+
+	&__column-left{
+		// @include span-columns(4 of 9);
+	}
+	&__column-right{
+		// @include span-columns(5 of 9);
+	}
+	
+	&__map{
+		// @include span-columns(4 of 4);
+		background-color:$info-card__map-bg;
+		min-height: 14rem;
+		margin-bottom:1rem;
+	}
+	&__name{
+		// @include span-columns(8 of 9);
+		font-size:2.7rem;
+		line-height: 3rem;
+		margin:0;
+		padding:1rem 0 1.5rem 0;
+		color:$info-card__name-text;
+		font-family: $serif;
+		font-weight: $regular;
+	}
+	&__single-line-entry{
+		margin:0 0 0.7rem 0;
+	}
+	&__multi-line_entry{
+		margin:0 0 0.8rem 0;
+	}
+
+	&__multi-line_entry--desc{
+		// @include span-columns(5 of 5);
+	}
+	&__multi-line_entry--pop-served{
+		// @include span-columns(5 of 5);
+	}
+	&__multi-line_entry--services{
+		// @include span-columns(5 of 5);
+	}
+	&__multi-line_entry--address{
+		// @include span-columns(4 of 4);
+	}
+	&__single-line-entry--wheelchair{
+		// @include span-columns(4 of 4);
+	}
+	&__single-line-entry--crisis-line{
+		// @include span-columns(4 of 4);
+	}
+	&__single-line-entry--business-line{
+		// @include span-columns(4 of 4);
+	}
+	&__single-line-entry--fax{
+		// @include span-columns(4 of 4);
+	}
+	&__single-line-entry--email{
+		// @include span-columns(4 of 8);
+	}
+	&__single-line-entry--website{
+		// @include span-columns(4 of 4);
+	}
+	&__single-line-entry--cost{
+		// @include span-columns(2 of 5);
+	}
+	&__single-line-entry--insurance{
+		// @include span-columns(3 of 5);
+		// @include omega;
+	}
+	&__multi-line_entry--languages{
+		// @include span-columns(5 of 5);
+	}
+}
+
+.tag-cloud{
+	// @include span-columns(5 of 5);
+	padding:0;
+	min-height:10rem;
+
+	&__tag-list{
+		margin: 0;
+		padding: rem(3) 0 0 0;
+		list-style: none;
+	}
+	&__tag-list-item{
+		display: inline-block;
+	}
+	&__tag{
+		display:inline-block;
+		// @include linear-gradient(0deg, $tag-cloud__tag-bg);
+		padding:rem(8) rem(10) rem(12) rem(10);
+		color:$tag-cloud__tag-text;
+		text-decoration: none;
+		text-shadow: 1px 2px 1px $tag-cloud__tag-text-shadow;
+		font-weight: $thin;
+
+	}
+
+}
