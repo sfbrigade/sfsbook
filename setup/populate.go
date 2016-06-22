@@ -27,12 +27,10 @@ func MakeKeys(pth string) error {
 // ConstructNecessaryStartingState builds all the necessary state to get started,
 // placing it in the persistentpath/"state"
 func ConstructNecessaryStartingState(persistentroot string) {
-	// make key
-	// create a database
 	log.Println("hello from setup, dumping stuff to", persistentroot)
-
 	pth := filepath.Join(persistentroot, "state")
 
+	// make key
 	if err := MakeKeys(pth); err != nil {
 		log.Fatalln("Don't have and can't make keys.", err)
 	}
