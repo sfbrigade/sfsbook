@@ -22,27 +22,26 @@ func MakeStaticServer(pathroot string) *staticServer {
 }
 
 func (gs *staticServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
-	// TODO(rjk): This doesn't handle sub-directories correctly.
-	_, sn := filepath.Split(req.URL.Path)
+	sn := req.URL.Path
 	if sn == "" {
 		sn = "index.html"
 	}
-	filepath := filepath.Join(gs.s, sn)
+	fpath := filepath.Join(gs.s, sn)
 
 	var resreader  io.Reader
 
-	log.Println(filepath)
-	if _, err := os.Stat(filepath); err != nil {
+	log.Println(sn, fpath)
+	if _, err := os.Stat(fpath); err != nil {
 		res, ok := Resources[sn]
 		if !ok {
-			log.Println("file", filepath, "missing from disk", err, "and also missing", sn, "from compiled in resource")
+			log.Println("file", fpath, "missing from disk", err, "and also missing", sn, "from compiled in resource")
 			respondWithError(w, fmt.Sprintln("Can't open file: ", err))
 			return
 		}
 	
 		resreader = strings.NewReader(res)
 	} else {
-		f, err := os.Open(filepath)
+		f, err := os.Open(fpath)
 		// Set up processing chain for file here. There are two kinds of processing. Static
 		// (i.e. processing that happens at generate time) and dynamic (templating) that
 		// happen at serve time.
@@ -51,7 +50,7 @@ func (gs *staticServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		// like this. Perhaps I need to revise my opinions about how the error handling
 		// should work.
 		if err != nil {
-			log.Println("problem opening file", filepath, err)
+			log.Println("problem opening file", fpath, err)
 			respondWithError(w, fmt.Sprintln("Can't open file: ", err))
 			return
 		}
@@ -61,6 +60,11 @@ func (gs *staticServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 
 	// What about templating? Or generative content? We need to insert a phase here
 	// here (some refactoring required) that can re-process the file.
+
+	// TODO(rjkroege): I need smarter handling of mimetypes.
+	if filepath.Ext(fpath) == ".js" {
+		w.Header().Add("Content-Type", "application/javascript")
+	}
 
 	// Processing of the content has to happen here.	
 	if _, err := io.Copy(w, resreader); err != nil {

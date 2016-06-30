@@ -14,7 +14,7 @@ import (
 // that we can use a hash.
 func prepareHashPath(path, prefix  string) string {
 	// I need to strip the prefix. But... where does the prefix come from
-	return strings.TrimPrefix(path, prefix)
+	return "/" + strings.TrimPrefix(path, prefix)
 }
 
 // EmbedOneFile writes a single file to the output in a format appropriate for
@@ -24,7 +24,7 @@ func prepareHashPath(path, prefix  string) string {
 // TODO(rjk): Add parallel processing.
 func EmbedOneFile(path, prefix string, output io.Writer) error {
 	switch filepath.Ext(path) {
-	case ".html", ".png":
+	case ".html", ".png", ".js":
 		f, err := os.Open(path)
 		if err != nil {
 			return fmt.Errorf("Can't open file path %s: %v", path, err)
