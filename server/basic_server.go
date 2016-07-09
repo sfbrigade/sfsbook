@@ -27,12 +27,6 @@ func MakeServer(address, pathroot string) *graceful.Server {
 	return srv
 }
 
-func TestHandler(w http.ResponseWriter, req *http.Request) {
-	log.Println("roothandler: ", req)
-	w.Header().Set("Content-Type", "text/plain")
-	w.Write([]byte("This is an example server.\n"))
-}
-
 // helper function. Re-write me.
 func respondWithError(w http.ResponseWriter, message string) {
 	w.WriteHeader(http.StatusBadRequest)
