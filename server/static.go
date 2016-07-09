@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"path"
 	"path/filepath"
 	"strings"
 )
@@ -15,6 +16,19 @@ import (
 // TODO(rjk): This will probably require additional fields.
 type staticServer struct {
 	s string
+
+	// insert runtime processors here
+}
+
+// RuntimeProcessor provides entry points that the basic server uses to 
+// process and return content. Different extensions can have different
+//  implementations of the RuntimeProcessor. The simplest interface
+// simply copies the file to the output or fails and is provided internally
+// by staticServer itself.
+// can (obviously) generate content dynamically.
+type RuntimeProcessor interface {
+	ServeStream(reader io.Reader, w http.ResponseWriter, req *http.Request)
+	ServeString(s string, w http.ResponseWriter, req *http.Request) 
 }
 
 func MakeStaticServer(pathroot string) *staticServer {
@@ -26,9 +40,19 @@ func (gs *staticServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	if sn == "" {
 		sn = "index.html"
 	}
+
+	// I might generalize this too
 	fpath := filepath.Join(gs.s, sn)
 
-	var resreader  io.Reader
+	// Filename-specific actions.
+	var processor RuntimeProcessor
+	switch path.Ext(sn) {
+	case ".js":
+		processor = gs
+		w.Header().Add("Content-Type", "application/javascript")
+	default:
+		processor = gs
+	}
 
 	log.Println(sn, fpath)
 	if _, err := os.Stat(fpath); err != nil {
@@ -38,39 +62,36 @@ func (gs *staticServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 			respondWithError(w, fmt.Sprintln("Can't open file: ", err))
 			return
 		}
-	
-		resreader = strings.NewReader(res)
+		processor.ServeString(res, w, req)
 	} else {
 		f, err := os.Open(fpath)
 		// Set up processing chain for file here. There are two kinds of processing. Static
 		// (i.e. processing that happens at generate time) and dynamic (templating) that
-		// happen at serve time.
+		// happen at serve time. Generation-time processing (i.e. JavaScript minification)
+		// would happen here by running code provided by the generator's library.
 
 		// TODO(rjk): I'm not sure that we necessarily want to expose our innards
-		// like this. Perhaps I need to revise my opinions about how the error handling
-		// should work.
+		// in the 404 responses. Perhaps only if you're signed in.
 		if err != nil {
 			log.Println("problem opening file", fpath, err)
 			respondWithError(w, fmt.Sprintln("Can't open file: ", err))
 			return
 		}
 		defer f.Close()
-		resreader = f		
+		processor.ServeStream(f, w, req)
 	}
+	log.Println("finished. supposedly copied the content")
+}
 
-	// What about templating? Or generative content? We need to insert a phase here
-	// here (some refactoring required) that can re-process the file.
+func (gs *staticServer) ServeString(s string, w http.ResponseWriter, req *http.Request) {
+	reader := strings.NewReader(s)
+	gs.ServeStream(reader, w, req)
+}
 
-	// TODO(rjkroege): I need smarter handling of mimetypes.
-	if filepath.Ext(fpath) == ".js" {
-		w.Header().Add("Content-Type", "application/javascript")
-	}
-
-	// Processing of the content has to happen here.	
-	if _, err := io.Copy(w, resreader); err != nil {
+func (gs *staticServer) ServeStream(reader io.Reader, w http.ResponseWriter, req *http.Request) {
+	if _, err := io.Copy(w, reader); err != nil {
 		log.Println("could not copy to the request body ", err)
 		respondWithError(w, fmt.Sprintln("Can't copy: ", err))
 		return
 	}
-	log.Println("finished. supposedly copied the content")
 }
