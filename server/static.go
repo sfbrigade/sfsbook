@@ -18,6 +18,7 @@ type staticServer struct {
 	s string
 
 	// insert runtime processors here
+	templatedhtml RuntimeProcessor
 }
 
 // RuntimeProcessor provides entry points that the basic server uses to 
@@ -32,7 +33,10 @@ type RuntimeProcessor interface {
 }
 
 func MakeStaticServer(pathroot string) *staticServer {
-	return &staticServer{filepath.Join(pathroot, "site")}
+	return &staticServer{
+		s: filepath.Join(pathroot, "site"),
+		templatedhtml: MakeTemplatedProcessor(),
+	}
 }
 
 func (gs *staticServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
@@ -47,6 +51,9 @@ func (gs *staticServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	// Filename-specific actions.
 	var processor RuntimeProcessor
 	switch path.Ext(sn) {
+	case ".html":
+		processor = gs.templatedhtml
+		// TODO(rjk): Figure out the mimetype.
 	case ".js":
 		processor = gs
 		w.Header().Add("Content-Type", "application/javascript")
