@@ -7,38 +7,41 @@ import (
 	"io/ioutil"
 	"net/http"
 	"sync"
+
+	"github.com/sfbrigade/sfsbook/dba"
 )
 
-// TemplatedProcessor implements RuntimeProcessor for files
-// that can be templated.
-type templatedProcessor struct {
+// templatedServer is a 
+type templatedServer struct {
 	sync.Mutex
 	templates map[string]*template.Template
+	ff *fileFinder
+
+	generator dba.Generator
 }
 
-
-func MakeTemplatedProcessor() RuntimeProcessor {
-	return &templatedProcessor{ 
+func MakeTemplatedServer(ff *fileFinder, g dba.Generator) *templatedServer {
+	return &templatedServer{ 
 		templates: make(map[string]*template.Template),
+		ff: ff,
+		generator: g,
 	}
 }
 
+func (gs *templatedServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
+	sn := req.URL.Path
+	if sn == "" {
+		sn = "index.html"
+	}
 
-// BasicStateVariables is a placeholder to demonstrate that the
-// template code is doing the right thing.
-type BasicStateVariables struct {
-	Message string
-	
-}
-
-func MakeBasicStateVariables() interface{} {
-	return &BasicStateVariables{
-		Message: "hello from inside of the program",
+	if err := gs.ff.StreamOrString(sn, gs, w, req); err != nil {
+		respondWithError(w, fmt.Sprintln("Server error", err))
 	}
 }
+
 
 // ServeString caches the parsed templates. 
-func (gs *templatedProcessor) ServeString(s string, w http.ResponseWriter, req *http.Request) {
+func (gs *templatedServer) ServeForString(s string, w http.ResponseWriter, req *http.Request) {
 	gs.Lock()
 	template, ok := gs.templates[s]
 	gs.Unlock()
@@ -60,7 +63,7 @@ func (gs *templatedProcessor) ServeString(s string, w http.ResponseWriter, req *
 	// TODO(rjk): plumb the state into here and wire it up in some way.
 	// The basic idea: there's a different staticServer instance for each of the
 	// the various files.
-	if err := template.Execute(w, MakeBasicStateVariables()); err != nil {
+	if err := template.Execute(w, gs.generator.ForRequest(req)); err != nil {
 		respondWithError(w, fmt.Sprintln("Can't execute template", err))
 	}
 }
@@ -68,7 +71,7 @@ func (gs *templatedProcessor) ServeString(s string, w http.ResponseWriter, req *
 // ServeStream implementation re-parses the template each time and then
 // executes it. The presumption is that in stream serving mode, a single developer
 // is using the software.
-func (gs *templatedProcessor) ServeStream(reader io.Reader, w http.ResponseWriter, req *http.Request) {
+func (gs *templatedServer) ServeForStream(reader io.Reader, w http.ResponseWriter, req *http.Request) {
 	templatestr, err := ioutil.ReadAll(reader)
 	if err != nil {
 		respondWithError(w, fmt.Sprintln("Can't read source file", err))
@@ -81,8 +84,7 @@ func (gs *templatedProcessor) ServeStream(reader io.Reader, w http.ResponseWrite
 		return
 	}
 
-	if err := template.Execute(w, MakeBasicStateVariables()); err != nil {
+	if err := template.Execute(w, gs.generator.ForRequest(req)); err != nil {
 		respondWithError(w, fmt.Sprintln("Can't execute template", err))
 	}
-	
 }

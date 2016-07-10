@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/sfbrigade/sfsbook/dba"
 	"gopkg.in/tylerb/graceful.v1"
 )
 
@@ -14,8 +15,9 @@ func MakeServer(address, pathroot string) *graceful.Server {
 	log.Println("MakeServer", address, pathroot)
 	m := http.NewServeMux()
 
-	// TODO(rjk): Expand appropriately.
-	m.Handle("/", MakeStaticServer(pathroot))
+	ff := makeFileFinder(pathroot)
+	m.Handle("/js/", MakeStaticServer(ff))
+	m.Handle("/", MakeTemplatedServer(ff, dba.MakekStubGenerator()))
 
 	srv := &graceful.Server{
 		Timeout: 5 * time.Second,
