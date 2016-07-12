@@ -24,8 +24,9 @@ func MakeKeys(pth string) error {
 	return nil
 }
 
-// ConstructNecessaryStartingState builds all the necessary state to get started,
-// placing it in the persistentpath/"state"
+// ConstructNecessaryStartingState builds all the necessary state except the database
+// to get started, placing it in the persistentpath/"state". Call this function first to make
+// sure that the path exists and can be written.
 func ConstructNecessaryStartingState(persistentroot string) {
 	pth := filepath.Join(persistentroot, "state")
 	log.Println("hello from setup, creating state in", pth)
