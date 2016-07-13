@@ -34,6 +34,10 @@ func (gs *templatedServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		sn = "index.html"
 	}
 
+	if err := req.ParseForm(); err != nil {
+		respondWithError(w, fmt.Sprintln("invalid form parameters", err))
+	}
+
 	if err := gs.ff.StreamOrString(sn, gs, w, req); err != nil {
 		respondWithError(w, fmt.Sprintln("Server error", err))
 	}
