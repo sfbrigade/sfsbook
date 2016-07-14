@@ -1,0 +1,22 @@
+<html>
+<head>
+<script type="text/javascript" src="js/example.js"></script>
+</head>
+<body>
+<p>Search results for the query: {{.Query}}</p>
+
+<ul>
+{{range .Resources}}
+	<li>
+		<ul>
+			<li><a href="/resources/{{.Uuid}}.html">{{.Name}}</a></li>
+			<li>{{.Categories}}</li>
+			<li>{{.Services}}</li>
+			<li>{{.Description}}</a></li>
+		</ul>
+	</li>
+{{end}}
+</ul>
+
+</body>
+</html>
