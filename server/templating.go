@@ -45,7 +45,7 @@ func (gs *templatedServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 
 
 // ServeString caches the parsed templates. 
-func (gs *templatedServer) ServeForString(s string, w http.ResponseWriter, req *http.Request) {
+func (gs *templatedServer) ServeForString(s string, w http.ResponseWriter, req interface{}) {
 	gs.Lock()
 	template, ok := gs.templates[s]
 	gs.Unlock()
@@ -75,7 +75,7 @@ func (gs *templatedServer) ServeForString(s string, w http.ResponseWriter, req *
 // ServeStream implementation re-parses the template each time and then
 // executes it. The presumption is that in stream serving mode, a single developer
 // is using the software.
-func (gs *templatedServer) ServeForStream(reader io.Reader, w http.ResponseWriter, req *http.Request) {
+func (gs *templatedServer) ServeForStream(reader io.Reader, w http.ResponseWriter, req interface{}) {
 	templatestr, err := ioutil.ReadAll(reader)
 	if err != nil {
 		respondWithError(w, fmt.Sprintln("Can't read source file", err))

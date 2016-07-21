@@ -1,0 +1,47 @@
+<html>
+<head>
+</head>
+<body>
+<a href="/index.html">Home</a>
+<p>Resource Details</p>
+
+<div class="resource">
+
+{{/* The fields are explicitly enumerated here so that we can control the presentation */}}
+<form action="/resources/{{.Uuid}}.html" method="post">
+
+<div class="onefield">
+<label for="name">Name:</label>
+<input id="name" type="text" name="name" size="80" value="{{.Document.name}}"./>
+</div>
+
+<div class="onefield">
+<label for="categories">Categories:</label>
+<input id="categories" type="text" name="categories" size="80" value="{{.Document.categories}}"./>
+</div>
+
+<div class="multifield">
+<label for="description">Description:</label>
+ <textarea id="description" rows="10" cols="80" name="description">{{.Document.description}}</textarea>
+</div>
+
+<div class="multifield">
+<label for="services">Services:</label>
+<textarea id="services" rows="5" cols="80" name="services">{{.Document.services}}</textarea>
+</div>
+
+<div class="buttonbar">
+<div class="button">
+<input type="submit" value="Update resource" />
+</div>
+
+<div class="button">
+<input type="submit" value="Discard Edits" />
+</div>
+</div>
+
+</form>
+</div>
+
+</body>
+</html>

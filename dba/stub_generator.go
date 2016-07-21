@@ -1,8 +1,6 @@
 package dba
 
 import (
-	"net/http"
-
 	"github.com/blevesearch/bleve"
 )
 
@@ -21,7 +19,7 @@ type stubGeneratorModel struct {
 	Message string
 }
 
-func (sg *StubGenerator) ForRequest(req *http.Request) interface{} {
+func (sg *StubGenerator) ForRequest(req interface{}) interface{} {
 	// TODO(rjk): do a query here against the index based on req.
 	// TODO(rjk): write some kind of parse thing that valiadates input
 	// TODO(rjk): manage cookies etc.

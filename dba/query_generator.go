@@ -35,7 +35,8 @@ type queryResults struct {
 	Resources []ResourceResult
 }
 
-func (qr *QueryResultsGenerator) ForRequest(req *http.Request) interface{} {
+func (qr *QueryResultsGenerator) ForRequest(param interface{}) interface{} {
+	req := param.(*http.Request)
 	// TODO(rjk): manage cookies etc.
 
 	// TODO(rjk): web doesn't belong in DBA. And dba doesn't belong in server so fix up your layering issues.

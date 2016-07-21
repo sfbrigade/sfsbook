@@ -36,12 +36,12 @@ func (gs *staticServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	}
 }
 
-func (gs *staticServer) ServeForString(s string, w http.ResponseWriter, req *http.Request) {
+func (gs *staticServer) ServeForString(s string, w http.ResponseWriter, req interface{}) {
 	reader := strings.NewReader(s)
 	gs.ServeForStream(reader, w, req)
 }
 
-func (gs *staticServer) ServeForStream(reader io.Reader, w http.ResponseWriter, req *http.Request) {
+func (gs *staticServer) ServeForStream(reader io.Reader, w http.ResponseWriter, req interface{}) {
 	if _, err := io.Copy(w, reader); err != nil {
 		log.Println("could not copy to the request body ", err)
 		respondWithError(w, fmt.Sprintln("Can't copy: ", err))

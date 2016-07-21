@@ -20,8 +20,8 @@ import (
 // serve content.
 type Serve interface {
 	// The desired content is available as a file.
-	ServeForStream(reader io.Reader, w http.ResponseWriter, req *http.Request)
-	ServeForString(s string, w http.ResponseWriter, req *http.Request) 
+	ServeForStream(reader io.Reader, w http.ResponseWriter, req interface{})
+	ServeForString(s string, w http.ResponseWriter, req interface{}) 
 }
 
 type fileFinder struct {
@@ -36,7 +36,7 @@ func makeFileFinder(pathroot string) *fileFinder {
 	}
 }
 
-func (ff *fileFinder) StreamOrString(upath string, serve Serve, w http.ResponseWriter, req *http.Request) error {
+func (ff *fileFinder) StreamOrString(upath string, serve Serve, w http.ResponseWriter, req interface{}) error {
 	fpath := filepath.Join(ff.sitepath, upath)
 	log.Println(upath, fpath)
 		

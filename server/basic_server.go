@@ -20,6 +20,7 @@ func MakeServer(address, pathroot string, bi bleve.Index) *graceful.Server {
 
 	ff := makeFileFinder(pathroot)
 	m.Handle("/js/", MakeStaticServer(ff))
+	m.Handle("/resources/", MakeResourceServer(ff, dba.MakeResourceResultsGenerator(bi)))
 	m.Handle("/search.html", MakeTemplatedServer(ff, dba.MakeQueryResultsGenerator(bi)))
 	m.Handle("/", MakeTemplatedServer(ff, dba.MakeStubGenerator(bi)))
 
