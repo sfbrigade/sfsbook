@@ -60,11 +60,14 @@ type resource struct {
 
 	// TODO(rjk): we need some way to encode phone numbers.
 	// TODO(rjk): we need some way to encode when a facility is open.
+
+	
 }
 
 func (p resource) Type() string {
 	return "resource"
 }
+
 
 // buildIndexMapping 
 func buildIndexMapping() (*bleve.IndexMapping, error) {
@@ -84,10 +87,13 @@ func buildIndexMapping() (*bleve.IndexMapping, error) {
 	ignoredFieldMapping.IncludeInAll = false
 
 	// TODO(rjk): I might need to adjust this.
+	// TODO(rjk): Move password data to a separate file.
 	passwordFieldMapping := bleve.NewTextFieldMapping()
 	ignoredFieldMapping.Index = false
 	ignoredFieldMapping.IncludeTermVectors = false
 	ignoredFieldMapping.IncludeInAll = false
+
+	boolFieldMapping := bleve.NewBooleanFieldMapping()
 
 	// TODO(rjk): There is a an open-tail of effort to do here.
 	// resourceEntryMapping is the mappings for each of the resource
@@ -114,6 +120,8 @@ func buildIndexMapping() (*bleve.IndexMapping, error) {
 	// TODO(rjk): Perhaps it could be auto-populated.
 	resourceEntryMapping.AddFieldMappingsAt("wheelchair", ignoredFieldMapping)
 
+	// To track if we have been reviewed.
+	resourceEntryMapping.AddFieldMappingsAt("reviewed", boolFieldMapping)
 
 	// TODO(rjk): Create structures for comments. Create structures for resourceEntries.
 

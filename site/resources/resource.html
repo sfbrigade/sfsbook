@@ -10,6 +10,11 @@
 {{/* The fields are explicitly enumerated here so that we can control the presentation */}}
 <form action="/resources/{{.Uuid}}.html" method="post">
 
+<div class="toggle">
+<label for="reviewed">Reviewed:</label>
+<input id="name" type="checkbox" name="reviewed" value="{{.Document.reviewed}}"/>
+</div>
+
 <div class="onefield">
 <label for="name">Name:</label>
 <input id="name" type="text" name="name" size="80" value="{{.Document.name}}"./>

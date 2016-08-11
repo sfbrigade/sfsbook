@@ -45,7 +45,6 @@ func OpenBleve(persistentroot string) (bleve.Index, error) {
 }
 
 func indexDatabase(i bleve.Index, pathroot string) error {
-
 	log.Printf("Indexing...")
 
 	jsonBytes, err := ioutil.ReadFile(filepath.Join(pathroot, "refguide.json"))	
@@ -59,6 +58,11 @@ func indexDatabase(i bleve.Index, pathroot string) error {
 	if err != nil {
 		return err
 	}
+
+	// So: how do I maintain flexibility in the handling of the fields?
+	// Can unmarshal into a map of interface{}
+	// I can set reasonable defaults.
+	// Documents can have sub-documents...
 
 	batch := i.NewBatch()
 	for _, r := range parsedResources {
