@@ -53,7 +53,7 @@ func indexDatabase(i bleve.Index, pathroot string) error {
 	}
 
 	// parse bytes as json
-	var parsedResources []resource
+	var parsedResources []interface{}
 	err = json.Unmarshal(jsonBytes, &parsedResources)
 	if err != nil {
 		return err
