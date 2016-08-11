@@ -55,8 +55,8 @@ func (qr *ResourceResultsGenerator) ForRequest(req interface{}) interface{} {
 	// Because template code operates on maps, I can build a generic solution that
 	// can work for any future change in the format of documents.
 	for _, f := range doc.Fields {
-		// TODO(rjk): I need to give these things types.
-		// This is not happy. I want to type the thing, not use an array of bytes...
+		// TODO(rjk): I want the debug output to be dynamically configurable.
+		// log.Println("resource name", f.Name())
 
 		switch t := f.(type) {
 		default:
@@ -73,6 +73,7 @@ func (qr *ResourceResultsGenerator) ForRequest(req interface{}) interface{} {
 			}
 			results.Document[t.Name()] = v
 		case *document.BooleanField:
+			// log.Println("found boolean field", f.Name())
 			v, err := t.Boolean()
 			if err != nil {
 				log.Println("couldn't convert field", t.Name(), "to bool", err)	

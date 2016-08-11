@@ -12,7 +12,7 @@
 
 <div class="toggle">
 <label for="reviewed">Reviewed:</label>
-<input id="name" type="checkbox" name="reviewed" value="{{.Document.reviewed}}"/>
+<input id="reviewed" type="checkbox" name="reviewed" {{if .Document.reviewed }}checked{{end}}/>
 </div>
 
 <div class="onefield">

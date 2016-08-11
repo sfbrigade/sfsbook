@@ -53,7 +53,7 @@ func indexDatabase(i bleve.Index, pathroot string) error {
 	}
 
 	// parse bytes as json
-	var parsedResources []interface{}
+	var parsedResources []map[string]interface{}
 	err = json.Unmarshal(jsonBytes, &parsedResources)
 	if err != nil {
 		return err
@@ -67,6 +67,7 @@ func indexDatabase(i bleve.Index, pathroot string) error {
 	batch := i.NewBatch()
 	for _, r := range parsedResources {
 		rid := uuid.NewRandom().String()
+		r["reviewed"] =  false
 		batch.Index(rid, r)
 	}
 
