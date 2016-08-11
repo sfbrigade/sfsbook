@@ -68,6 +68,8 @@ func indexDatabase(i bleve.Index, pathroot string) error {
 	for _, r := range parsedResources {
 		rid := uuid.NewRandom().String()
 		r["reviewed"] =  false
+		// This can be adapted to specify different types.
+		r["_type"] = "resource"
 		batch.Index(rid, r)
 	}
 

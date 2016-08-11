@@ -35,40 +35,6 @@ func (p comment) Type() string {
 	return "comment"
 }
 
-type resource struct {
-	Uuid string `json:"uuid"`
-	// TODO(rjk): can rationalize this?
-	Address string `json:"address"`
-
-	// TODO(rjk): try to make it a structured list.
-	Categories string `json:"categories"`
-	
-	Description string `json:"description"`
-	Email string `json:"email"`
-	// TODO(rjk): try to make it a structured list.
-	Languages string `json:"languages"`
-	Name string `json:"name"`
-	PopsServed string `json:"pops_served"`
-	Services string `json:"services"`
-
-	// TODO(rjk): need a validator
-	// Aside: there should be a validator service provided by the app.
-	Website string `json:"website"`
-
-	// TODO(rjk): this should be a boolean.
-	Wheelchair string `json:"wheelchair"`
-
-	// TODO(rjk): we need some way to encode phone numbers.
-	// TODO(rjk): we need some way to encode when a facility is open.
-
-	
-}
-
-func (p resource) Type() string {
-	return "resource"
-}
-
-
 // buildIndexMapping 
 func buildIndexMapping() (*bleve.IndexMapping, error) {
 	// a generic reusable mapping for english text
@@ -93,26 +59,23 @@ func buildIndexMapping() (*bleve.IndexMapping, error) {
 	ignoredFieldMapping.IncludeTermVectors = false
 	ignoredFieldMapping.IncludeInAll = false
 
+	// a generic reusable mapping for booleans
 	boolFieldMapping := bleve.NewBooleanFieldMapping()
 
 	// TODO(rjk): There is a an open-tail of effort to do here.
 	// resourceEntryMapping is the mappings for each of the resource
 	// entries.
 	resourceEntryMapping := bleve.NewDocumentMapping()
+	// TODO(rjk): Make sure that I have full language support enabled.
+	resourceEntryMapping.DefaultAnalyzer = en.AnalyzerName
+
+	// With a default analyzer specified, we don't need to list the english field mappings.
 	resourceEntryMapping.AddFieldMappingsAt("uuid", keywordFieldMapping)
-	resourceEntryMapping.AddFieldMappingsAt("address", englishTextFieldMapping)
-	resourceEntryMapping.AddFieldMappingsAt("categories", englishTextFieldMapping)
-	resourceEntryMapping.AddFieldMappingsAt("description", englishTextFieldMapping)
 	resourceEntryMapping.AddFieldMappingsAt("email", keywordFieldMapping)
 
 	// TODO(rjk): Support the indexing of the hand_sort later. At the moment, this is not
 	// well structured. 
-	// resourceEntryMapping.AddFieldMappingsAt("hand_sort", ignoredFieldMapping)
-	
-	resourceEntryMapping.AddFieldMappingsAt("languages", englishTextFieldMapping)
-	resourceEntryMapping.AddFieldMappingsAt("name", englishTextFieldMapping)
-	resourceEntryMapping.AddFieldMappingsAt("pops_served", englishTextFieldMapping)
-	resourceEntryMapping.AddFieldMappingsAt("services", englishTextFieldMapping)
+	resourceEntryMapping.AddFieldMappingsAt("hand_sort", ignoredFieldMapping)
 	resourceEntryMapping.AddFieldMappingsAt("website", keywordFieldMapping)
 
 	// I note in passing that this can be populated from the hand_sort data.
@@ -141,14 +104,13 @@ func buildIndexMapping() (*bleve.IndexMapping, error) {
 	passwordEntryMapping.AddFieldMappingsAt("uid", keywordFieldMapping)
 	passwordEntryMapping.AddFieldMappingsAt("passwordhash", passwordFieldMapping)
 
-
+	// I don't support multiple types. But I could use this to address CSV, web and JSON
+	// updated documents? Particularly given that they can have different fields.
 	indexMapping := bleve.NewIndexMapping()
 	indexMapping.AddDocumentMapping("resource", resourceEntryMapping)
-	indexMapping.AddDocumentMapping("comment", commentEntryMapping)
-	indexMapping.AddDocumentMapping("password", passwordEntryMapping)
 
 	// TODO(rjk): Implement some fieldstuff.
-//	indexMapping.TypeField = "type"
+	indexMapping.TypeField = "_type"
 	indexMapping.DefaultAnalyzer = "en"
 
 	return indexMapping, nil
