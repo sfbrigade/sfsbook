@@ -3,6 +3,7 @@
 </head>
 <body>
 <a href="/index.html">Home</a>
+{{if .Success}}
 <p>Resource Details</p>
 
 <div class="resource">
@@ -47,6 +48,9 @@
 
 </form>
 </div>
-
+{{else}}
+{{/* Do I need to santiize Uuid? Almost certaintly */}}
+<p>Resource {{.Uuid}} isn't currently available. Sorry about that.</p>
+{{end}}
 </body>
 </html>

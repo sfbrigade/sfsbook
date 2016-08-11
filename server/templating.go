@@ -43,7 +43,6 @@ func (gs *templatedServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	}
 }
 
-
 // ServeString caches the parsed templates. 
 func (gs *templatedServer) ServeForString(s string, w http.ResponseWriter, req interface{}) {
 	gs.Lock()

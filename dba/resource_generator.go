@@ -30,13 +30,15 @@ type resourceResults struct {
 	Document map[string]interface{}
 }
 
-
+// ForRequest generates the data comprising a result page showing a single
+// resource guide entry.
 func (qr *ResourceResultsGenerator) ForRequest(req interface{}) interface{} {
 	uuid := req.(string)
 
 	log.Println("uuid", uuid)
 
-
+	// Code quality comment: Writing the templates requires knowing what I've
+	// produced here. I feel that I have not layered this code very well.
 	results := &resourceResults{
 		Success: false,
 		FailureText: "query had a sad",
@@ -45,12 +47,13 @@ func (qr *ResourceResultsGenerator) ForRequest(req interface{}) interface{} {
 	}	
 
 	doc, err :=  qr.index.Document(uuid)
-	if err != nil {
+	if err != nil || doc == nil {
 		log.Println("query failed", err)
 		return results
 	}
 
 	log.Println("succeeded", doc)
+	results.Success = true
 	
 	// Because template code operates on maps, I can build a generic solution that
 	// can work for any future change in the format of documents.
@@ -86,6 +89,5 @@ func (qr *ResourceResultsGenerator) ForRequest(req interface{}) interface{} {
 	}
 	
 	// Need to support showing the comments.
-	
 	return results
 }
