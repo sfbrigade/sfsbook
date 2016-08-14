@@ -87,7 +87,9 @@ func (gs *templatedServer) ServeForStream(reader io.Reader, w http.ResponseWrite
 		return
 	}
 
-	if err := template.Execute(w, gs.generator.ForRequest(req)); err != nil {
+	generatedResult := gs.generator.ForRequest(req)
+	generatedResult.SetDebug(true)
+	if err := template.Execute(w, generatedResult); err != nil {
 		respondWithError(w, fmt.Sprintln("Can't execute template", err))
 	}
 }

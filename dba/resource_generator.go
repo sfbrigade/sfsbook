@@ -17,25 +17,18 @@ func MakeResourceResultsGenerator(bi bleve.Index) *ResourceResultsGenerator {
 }
 
 type resourceResults struct {
-	// Indicates if the query was successful. (i.e. that it produced data.)
-	Success bool
-
-	// Show this if something went wrong.
-	FailureText string
+	generatedResultCore
 
 	// The requested resource.
 	Uuid string
 
 	// The actual fields in the document.
 	Document map[string]interface{}
-
-	// Should we display additional debugging info
-	Debug bool
 }
 
 // ForRequest generates the data comprising a result page showing a single
 // resource guide entry.
-func (qr *ResourceResultsGenerator) ForRequest(req interface{}) interface{} {
+func (qr *ResourceResultsGenerator) ForRequest(req interface{}) GeneratedResult {
 	uuid := req.(string)
 
 	log.Println("uuid", uuid)
@@ -43,11 +36,13 @@ func (qr *ResourceResultsGenerator) ForRequest(req interface{}) interface{} {
 	// Code quality comment: Writing the templates requires knowing what I've
 	// produced here. I feel that I have not layered this code very well.
 	results := &resourceResults{
-		Success: false,
-		FailureText: "query had a sad",
+		generatedResultCore: generatedResultCore{
+			success: false,
+			failureText: "query had a sad",
+			debug: false,
+		},
 		Uuid: uuid,
 		Document: make(map[string]interface{}),
-		Debug: true,
 	}	
 
 	doc, err :=  qr.index.Document(uuid)
@@ -57,7 +52,8 @@ func (qr *ResourceResultsGenerator) ForRequest(req interface{}) interface{} {
 	}
 
 	log.Println("succeeded", doc)
-	results.Success = true
+	results.generatedResultCore.success = true
+	results.generatedResultCore.failureText = "No error."
 	
 	// Because template code operates on maps, I can build a generic solution that
 	// can work for any future change in the format of documents.

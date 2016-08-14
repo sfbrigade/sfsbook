@@ -15,11 +15,13 @@ func MakeStubGenerator(bi bleve.Index) *StubGenerator {
 	return &StubGenerator{}
 }
 
+// stubGeneratorModel is a GeneratedResult implementation that does nothing.
 type stubGeneratorModel struct {
+	generatedResultCore
 	Message string
 }
 
-func (sg *StubGenerator) ForRequest(req interface{}) interface{} {
+func (sg *StubGenerator) ForRequest(req interface{}) GeneratedResult {
 	// TODO(rjk): do a query here against the index based on req.
 	// TODO(rjk): write some kind of parse thing that valiadates input
 	// TODO(rjk): manage cookies etc.

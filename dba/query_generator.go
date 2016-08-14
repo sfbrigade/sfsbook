@@ -26,16 +26,13 @@ type ResourceResult struct {
 }
 
 type queryResults struct {
-	Query string
-	Success bool
+	generatedResultCore
 
-	// Text to display if something has gone wrong.
-	// Pull from internal resource table for i18n
-	FailureText string
+	Query string
 	Resources []ResourceResult
 }
 
-func (qr *QueryResultsGenerator) ForRequest(param interface{}) interface{} {
+func (qr *QueryResultsGenerator) ForRequest(param interface{}) GeneratedResult {
 	req := param.(*http.Request)
 	// TODO(rjk): manage cookies etc.
 
@@ -57,8 +54,12 @@ func (qr *QueryResultsGenerator) ForRequest(param interface{}) interface{} {
 	}
 
 	results := &queryResults{
+		generatedResultCore: generatedResultCore{
+			success: false,
+			failureText: "query had a sad",
+			debug: false,
+		},
 		Query: query,
-		FailureText: "query had a sad",
 	}	
 
 	// Query goals (long term)?
@@ -104,6 +105,9 @@ func (qr *QueryResultsGenerator) ForRequest(param interface{}) interface{} {
 		log.Println("query failed", err)
 		return results
 	}
+
+	results.generatedResultCore.success = true
+	results.generatedResultCore.failureText = ""
 
 	// Verbose... but handy
 	log.Println(searchresults)
