@@ -28,6 +28,9 @@ type resourceResults struct {
 
 	// The actual fields in the document.
 	Document map[string]interface{}
+
+	// Should we display additional debugging info
+	Debug bool
 }
 
 // ForRequest generates the data comprising a result page showing a single
@@ -44,6 +47,7 @@ func (qr *ResourceResultsGenerator) ForRequest(req interface{}) interface{} {
 		FailureText: "query had a sad",
 		Uuid: uuid,
 		Document: make(map[string]interface{}),
+		Debug: true,
 	}	
 
 	doc, err :=  qr.index.Document(uuid)
