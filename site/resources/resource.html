@@ -7,6 +7,11 @@
 <p>Resource Details</p>
 <div class="resource">
 
+<div>
+{{/* TODO(rjk): Prettier dates. */}}
+Resource first added to the guide on {{.Document.date_indexed}}.
+</div>
+
 {{/* The fields are explicitly enumerated here so that we can control the presentation */}}
 <form action="/resources/{{.Uuid}}.html" method="post">
 

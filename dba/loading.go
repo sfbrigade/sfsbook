@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"log"
 	"path/filepath"
+	"time"
 
 	"github.com/blevesearch/bleve"
 	"github.com/pborman/uuid"
@@ -70,6 +71,7 @@ func indexDatabase(i bleve.Index, pathroot string) error {
 		r["reviewed"] =  false
 		// This can be adapted to specify different types.
 		r["_type"] = "resource"
+		r["date_indexed"] = time.Now()
 		batch.Index(rid, r)
 	}
 

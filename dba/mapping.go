@@ -52,6 +52,10 @@ func buildIndexMapping() (*bleve.IndexMapping, error) {
 	ignoredFieldMapping.IncludeTermVectors = false
 	ignoredFieldMapping.IncludeInAll = false
 
+	// a date/time mapping
+	// I believe that this is good like this. I will have to experiment.
+	dateTimeMapping := bleve.NewDateTimeFieldMapping();
+
 	// TODO(rjk): I might need to adjust this.
 	// TODO(rjk): Move password data to a separate file.
 	passwordFieldMapping := bleve.NewTextFieldMapping()
@@ -85,6 +89,11 @@ func buildIndexMapping() (*bleve.IndexMapping, error) {
 
 	// To track if we have been reviewed.
 	resourceEntryMapping.AddFieldMappingsAt("reviewed", boolFieldMapping)
+
+	// Time when this resource was first added to the database.
+	resourceEntryMapping.AddFieldMappingsAt("date_indexed", dateTimeMapping)
+	resourceEntryMapping.AddFieldMappingsAt("date_modified", dateTimeMapping)
+
 
 	// TODO(rjk): Create structures for comments. Create structures for resourceEntries.
 

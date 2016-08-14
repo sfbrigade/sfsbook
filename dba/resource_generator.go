@@ -69,8 +69,11 @@ func (qr *ResourceResultsGenerator) ForRequest(req interface{}) GeneratedResult 
 			// It is preferable to ship a number here so that I generate JSON.
 			v, err := t.Number()
 			if err != nil {
+				// TODO(rjk): Worry about enhanced error handling.
 				// I don't really know what goes here. I need to figure it out.
 				// Error handling in general needs to be treated correctly.
+				// Success is a more complicated concept than a boolean. Perhaps
+				// an error? I have (wrongly) collapsed errors together into a single blob.
 				log.Println("couldn't convert field", t.Name(), "to number", err)				
 				continue
 			}
@@ -85,6 +88,13 @@ func (qr *ResourceResultsGenerator) ForRequest(req interface{}) GeneratedResult 
 			results.Document[t.Name()] = v
 		case *document.TextField:
 			results.Document[t.Name()] = string(t.Value())
+		case *document.DateTimeField:
+			v, err := t.DateTime()
+			if err != nil {
+				log.Println("couldn't convert field", t.Name(), "to date", err)				
+				continue
+			}
+			results.Document[t.Name()] = v
 		}
 	}
 	
