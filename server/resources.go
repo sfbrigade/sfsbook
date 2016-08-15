@@ -31,11 +31,29 @@ func (gs *resourceServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	// Path is expected to be of the form /resources/<uuid>.html
 	if path.Ext(sn) != ".html" {
 		respondWithError(w, "bad extension: " + path.Ext(sn))
+		return
 	}
 
 	// Re-use req's payload.
 	uuid := strings.TrimSuffix(path.Base(sn), path.Ext(sn))
 	sn = "/resources/resource.html"
+
+	// TODO(rjk): Validate the uuid here and error-out if it's non-sensical.
+
+
+	if req.Method == "POST" {
+		log.Println("handling Post of resource")
+		if err := req.ParseForm(); err != nil {
+			respondWithError(w, fmt.Sprintln("bad uploaded form data: ", err))
+			return
+		}
+
+		// We only use the posted info.
+		log.Println("parsing form:")
+		for k, v := range req.PostForm {
+			log.Println("	", k, "		", v)
+		}
+	}
 
 	if err := gs.ff.StreamOrString(sn, gs, w, uuid); err != nil {
 		respondWithError(w, fmt.Sprintln("Server error", err))
