@@ -10,6 +10,7 @@
 <div>
 {{/* TODO(rjk): Prettier dates. */}}
 Resource first added to the guide on {{.Document.date_indexed}}.
+{{if .Document.date_last_modified}}Resource last modified on {{.Document.date_last_modified}}.{{end}}
 </div>
 
 {{/* The fields are explicitly enumerated here so that we can control the presentation */}}

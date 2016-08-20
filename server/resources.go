@@ -40,6 +40,9 @@ func (gs *resourceServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 
 	// TODO(rjk): Validate the uuid here and error-out if it's non-sensical.
 
+	dbreq := &dba.ResourceRequest{
+		Uuid: uuid,
+	}
 
 	if req.Method == "POST" {
 		log.Println("handling Post of resource")
@@ -53,9 +56,12 @@ func (gs *resourceServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		for k, v := range req.PostForm {
 			log.Println("	", k, "		", v)
 		}
+
+		dbreq.IsPost = true
+		dbreq.PostArgs = req.PostForm
 	}
 
-	if err := gs.ff.StreamOrString(sn, gs, w, uuid); err != nil {
+	if err := gs.ff.StreamOrString(sn, gs, w, dbreq); err != nil {
 		respondWithError(w, fmt.Sprintln("Server error", err))
 	}
 }
