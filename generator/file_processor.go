@@ -2,17 +2,17 @@ package generator
 
 import (
 	"fmt"
-	"io/ioutil"
 	"io"
+	"io/ioutil"
 	"log"
-	"path/filepath"
 	"os"
+	"path/filepath"
 	"strings"
 )
 
 // prepareHashPath takes the provided path and converts it to a subpath
 // that we can use a hash.
-func prepareHashPath(path, prefix  string) string {
+func prepareHashPath(path, prefix string) string {
 	// I need to strip the prefix. But... where does the prefix come from
 	return "/" + strings.TrimPrefix(path, prefix)
 }
@@ -29,7 +29,7 @@ func EmbedOneFile(path, prefix string, output io.Writer) error {
 		if err != nil {
 			return fmt.Errorf("Can't open file path %s: %v", path, err)
 		}
-		array, err  := ioutil.ReadAll(f)
+		array, err := ioutil.ReadAll(f)
 		if err != nil {
 			return fmt.Errorf("Can't read file path %s: %v", path, err)
 		}
@@ -58,8 +58,8 @@ func WritePrefix(output io.Writer) error {
 
 const suffix = `}
 `
+
 func WriteSuffix(output io.Writer) error {
 	_, err := io.WriteString(output, suffix)
 	return err
 }
-

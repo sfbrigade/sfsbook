@@ -15,13 +15,13 @@ import (
 // and encodes them as strings literals in textfiles.go
 // TODO(rjk): Extend this with the rich selection of thints that I need to support.
 
-// nested directories... 
+// nested directories...
 // i needs a hash. slash is not a valid symbol. the path w.r.t. site needs is a key.
 
 // some args.
 var (
 	outputfile = flag.String("output", "", "Write generated source here.")
-	prefix = flag.String("prefix", "", "The prefix of our website contents to intern.")
+	prefix     = flag.String("prefix", "", "The prefix of our website contents to intern.")
 )
 
 func main() {
@@ -45,7 +45,6 @@ func main() {
 		output = os.Stdout
 	}
 
-
 	// TODO(rjk): Don't trash the previous file unless we succeed?
 	// nah. we have version control for a reason.
 
@@ -55,7 +54,7 @@ func main() {
 
 	for _, pth := range flag.Args() {
 		_, err := os.Stat(pth)
-		if  err != nil {
+		if err != nil {
 			log.Println("Skipping un-stat-able argument:", pth, "because:", err)
 			continue
 		}
@@ -74,7 +73,7 @@ func main() {
 
 			// This is not very sophisticated. I can imagine that an advanced JS
 			// minification scheme will need to be smarter. In particular, I might
-			// want to group together all the files of similar 
+			// want to group together all the files of similar
 			return generator.EmbedOneFile(path, *prefix, output)
 		}); err != nil {
 			log.Println("file walking had an error on path:", pth, "because", err)
