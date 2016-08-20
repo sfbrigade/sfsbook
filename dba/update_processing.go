@@ -41,9 +41,15 @@ func (qr *ResourceResultsGenerator) mergeAndUpdateIfNecessary(rr *ResourceReques
 			continue
 		}
 
+		// Check boxes are special. The absence of the entry from the posted date
+		// indicates that we have falsehood. But the rest of the logic uses absence
+		// to indicate that the field doesn't have to be updated at all.
 		postedarray, ok := postdata[k]
 		if !ok {
-			continue
+			if _, ok := mustInitializeFields[k]; !ok {
+				continue
+			} 
+			postedarray = []string{""}
 		}
 
 		if len(postedarray) != 1 {
@@ -56,11 +62,12 @@ func (qr *ResourceResultsGenerator) mergeAndUpdateIfNecessary(rr *ResourceReques
 		case bool:
 			log.Println("bool value: need to exercise")
 			// The database value is bool.
-			if posted == "checked" {
+			if posted == "on" {
 				// This may not be handling the boolean field properly.
 				updatedresults[k] = true
 				needtoupdate = true
 			} else {
+				needtoupdate = true
 				updatedresults[k] = false				
 			}
 		case float64:

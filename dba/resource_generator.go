@@ -34,6 +34,7 @@ type ResourceRequest struct {
 }
 
 var immutableFields map[string]struct{}
+var mustInitializeFields map[string]struct{}
 
 func init() {
 	o := struct{}{}
@@ -41,6 +42,10 @@ func init() {
 		 "_type": o,
 		" date_indexed": o,
 		"date_last_modified": o,
+	}
+
+	mustInitializeFields = map[string]struct{}{
+		 "reviewed": o,
 	}
 }
 
