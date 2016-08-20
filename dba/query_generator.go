@@ -18,17 +18,17 @@ func MakeQueryResultsGenerator(bi bleve.Index) *QueryResultsGenerator {
 
 // I would obviously want to expand on this.
 type ResourceResult struct {
-	Uuid string
-	Categories string
+	Uuid        string
+	Categories  string
 	Description string
-	Name string
-	Services string
+	Name        string
+	Services    string
 }
 
 type queryResults struct {
 	generatedResultCore
 
-	Query string
+	Query     string
 	Resources []ResourceResult
 }
 
@@ -55,21 +55,20 @@ func (qr *QueryResultsGenerator) ForRequest(param interface{}) GeneratedResult {
 
 	results := &queryResults{
 		generatedResultCore: generatedResultCore{
-			success: false,
+			success:     false,
 			failureText: "query had a sad",
-			debug: false,
+			debug:       false,
 		},
 		Query: query,
-	}	
+	}
 
 	// Query goals (long term)?
-	// I think we need some way for the user to specify terms for search.	
+	// I think we need some way for the user to specify terms for search.
 
 	// Actually do a query against the database.
 	// how do I limit this to only some document types and fields?
 	// I don't know how to do that. SetField() on the query?
 	// create a more complicated query
-
 
 	// Add specific terms as "must"
 	// This makes a match query for the description field.
@@ -87,18 +86,17 @@ func (qr *QueryResultsGenerator) ForRequest(param interface{}) GeneratedResult {
 	searchRequest := bleve.NewSearchRequest(bq)
 
 	// Modify the search request to only retrieve some fields.
-	searchRequest.Fields = []string{ "name", "categories", "description", "services" }
+	searchRequest.Fields = []string{"name", "categories", "description", "services"}
 	searchRequest.Size = 10
 	// Advance this to move forward through the result set...
 	searchRequest.From = 0
 
-	// Get a highlighted output.	
-//	searchRequest.Highlight = bleve.NewHighlight()
+	// Get a highlighted output.
+	//	searchRequest.Highlight = bleve.NewHighlight()
 
 	// Search.
 	searchresults, err := qr.index.Search(searchRequest)
 
-	
 	// I need to rationalize the error handling..
 	if err != nil {
 		// TODO(rjk): update the FailureText
@@ -112,19 +110,18 @@ func (qr *QueryResultsGenerator) ForRequest(param interface{}) GeneratedResult {
 	// Verbose... but handy
 	log.Println(searchresults)
 
-
 	results.Resources = make([]ResourceResult, len(searchresults.Hits))
 
 	c := 0
 	for _, sr := range searchresults.Hits {
-//		log.Println(sr.Fields)
+		//		log.Println(sr.Fields)
 		// TODO(rjk): There is a lot of boilerplate here. Maybe I can be clever.
 		results.Resources[c].Uuid = sr.ID
 		results.Resources[c].Name = sr.Fields["name"].(string)
 		results.Resources[c].Services = sr.Fields["services"].(string)
 		results.Resources[c].Categories = sr.Fields["categories"].(string)
 		results.Resources[c].Description = sr.Fields["description"].(string)
-		
+
 		c++
 		if c > 10 {
 			break

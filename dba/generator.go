@@ -50,7 +50,7 @@ func (grc *generatedResultCore) Debug() bool {
 	return grc.debug
 }
 
-func (grc *generatedResultCore) SetDebug(t  bool)  {
+func (grc *generatedResultCore) SetDebug(t bool) {
 	grc.debug = t
 }
 

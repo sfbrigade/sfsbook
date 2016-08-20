@@ -14,7 +14,7 @@ import (
 // OpenBleve opens the backing database or builds it if it doesn't exist.
 func OpenBleve(persistentroot string) (bleve.Index, error) {
 	dbpath := filepath.Join(persistentroot, "state", "sfsbook.bleve")
-	bi,  err := bleve.Open(dbpath)
+	bi, err := bleve.Open(dbpath)
 	if err == bleve.ErrorIndexPathDoesNotExist {
 		// TODO(rjkroege): Might consider making the path configurable. Or something.
 		// At present, tries to be smart for development. I'll worry about deployment
@@ -48,7 +48,7 @@ func OpenBleve(persistentroot string) (bleve.Index, error) {
 func indexDatabase(i bleve.Index, pathroot string) error {
 	log.Printf("Indexing...")
 
-	jsonBytes, err := ioutil.ReadFile(filepath.Join(pathroot, "refguide.json"))	
+	jsonBytes, err := ioutil.ReadFile(filepath.Join(pathroot, "refguide.json"))
 	if err != nil {
 		return err
 	}
@@ -68,7 +68,7 @@ func indexDatabase(i bleve.Index, pathroot string) error {
 	batch := i.NewBatch()
 	for _, r := range parsedResources {
 		rid := uuid.NewRandom().String()
-		r["reviewed"] =  false
+		r["reviewed"] = false
 		// This can be adapted to specify different types.
 		r["_type"] = "resource"
 		r["date_indexed"] = time.Now()
