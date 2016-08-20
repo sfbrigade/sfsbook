@@ -28,8 +28,8 @@ type resourceResults struct {
 // TODO(rjk): Would it be so wrong to use the http Request? Database layer (aka middle) should
 // be devoid of http concepts?
 type ResourceRequest struct {
-	Uuid string
-	IsPost bool
+	Uuid     string
+	IsPost   bool
 	PostArgs map[string][]string
 }
 
@@ -39,13 +39,13 @@ var mustInitializeFields map[string]struct{}
 func init() {
 	o := struct{}{}
 	immutableFields = map[string]struct{}{
-		 "_type": o,
-		" date_indexed": o,
+		"_type":              o,
+		" date_indexed":      o,
 		"date_last_modified": o,
 	}
 
 	mustInitializeFields = map[string]struct{}{
-		 "reviewed": o,
+		"reviewed": o,
 	}
 }
 
@@ -63,25 +63,25 @@ func (qr *ResourceResultsGenerator) ForRequest(req interface{}) GeneratedResult 
 	results := &resourceResults{
 		generatedResultCore: generatedResultCore{
 			// TODO(rjk): Should use error type. This is not idiomatic Go.
-			success: false,
+			success:     false,
 			failureText: "query had a sad",
-			debug: false,
+			debug:       false,
 		},
 		Uuid: uuid,
-	}	
+	}
 
 	if request.IsPost {
 		results.generatedResultCore.failureText = "update had a sad"
 	}
 
-	doc, err :=  qr.index.Document(uuid)
+	doc, err := qr.index.Document(uuid)
 	if err != nil || doc == nil {
 		log.Println("query failed", err)
 		results.generatedResultCore.failureText = err.Error()
 		return results
 	}
 
- 	resultsMap, err := resultsMapFromDocument(doc)
+	resultsMap, err := resultsMapFromDocument(doc)
 	if err != nil {
 		log.Println("couldn't convert doc to resultsMap")
 		results.generatedResultCore.failureText = err.Error()
@@ -98,7 +98,7 @@ func (qr *ResourceResultsGenerator) ForRequest(req interface{}) GeneratedResult 
 	results.generatedResultCore.success = true
 	results.generatedResultCore.failureText = "No error."
 	results.Document = resultsMap
-	
+
 	// Need to support showing the comments.
 	return results
 }

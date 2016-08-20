@@ -13,8 +13,8 @@ import (
 
 // password contains the user identity records.
 type password struct {
-	Username string  `json:"username"`
-	Passwordhash string  `passwordhash:"uid"`
+	Username     string `json:"username"`
+	Passwordhash string `passwordhash:"uid"`
 }
 
 func (p password) Type() string {
@@ -23,19 +23,19 @@ func (p password) Type() string {
 
 type comment struct {
 	// The uuid of the associated resource card.
-	ResourceUuid string  `json:"resourceuuid"`
+	ResourceUuid string    `json:"resourceuuid"`
 	CreationTime time.Time `json:"creationtime"`
-	UpdateTime time.Time `json:"updatetime"`
-	Owner string `json:"owner"`
-	Viewability string `json:"viewability"`
-	Body string `json:"body"`
+	UpdateTime   time.Time `json:"updatetime"`
+	Owner        string    `json:"owner"`
+	Viewability  string    `json:"viewability"`
+	Body         string    `json:"body"`
 }
 
 func (p comment) Type() string {
 	return "comment"
 }
 
-// buildIndexMapping 
+// buildIndexMapping
 func buildIndexMapping() (*bleve.IndexMapping, error) {
 	// a generic reusable mapping for english text
 	englishTextFieldMapping := bleve.NewTextFieldMapping()
@@ -54,7 +54,7 @@ func buildIndexMapping() (*bleve.IndexMapping, error) {
 
 	// a date/time mapping
 	// I believe that this is good like this. I will have to experiment.
-	dateTimeMapping := bleve.NewDateTimeFieldMapping();
+	dateTimeMapping := bleve.NewDateTimeFieldMapping()
 
 	// TODO(rjk): I might need to adjust this.
 	// TODO(rjk): Move password data to a separate file.
@@ -78,7 +78,7 @@ func buildIndexMapping() (*bleve.IndexMapping, error) {
 	resourceEntryMapping.AddFieldMappingsAt("email", keywordFieldMapping)
 
 	// TODO(rjk): Support the indexing of the hand_sort later. At the moment, this is not
-	// well structured. 
+	// well structured.
 	resourceEntryMapping.AddFieldMappingsAt("hand_sort", ignoredFieldMapping)
 	resourceEntryMapping.AddFieldMappingsAt("website", keywordFieldMapping)
 
@@ -93,7 +93,6 @@ func buildIndexMapping() (*bleve.IndexMapping, error) {
 	// Time when this resource was first added to the database.
 	resourceEntryMapping.AddFieldMappingsAt("date_indexed", dateTimeMapping)
 	resourceEntryMapping.AddFieldMappingsAt("date_modified", dateTimeMapping)
-
 
 	// TODO(rjk): Create structures for comments. Create structures for resourceEntries.
 

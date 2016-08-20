@@ -15,10 +15,9 @@ func (rr *ResourceRequest) validateIfNecessary() error {
 
 	// TODO(rjk): Must validate here.	 Many validations are possible.
 	// Recall that this is user-generated content and must be treated
-	// appropriately. 
+	// appropriately.
 	return nil
 }
-
 
 func (qr *ResourceResultsGenerator) mergeAndUpdateIfNecessary(rr *ResourceRequest, updatedresults map[string]interface{}) error {
 	if !rr.IsPost {
@@ -32,11 +31,11 @@ func (qr *ResourceResultsGenerator) mergeAndUpdateIfNecessary(rr *ResourceReques
 
 	// I will bundle all the errors together but it might be preferable to handle update
 	// errors specially so that I can bring out to the UI in some way. i.e.: errors need to
-	// be per-field. 
+	// be per-field.
 	// TODO(rjk): deliver errors per-field and carry through to the resource template.
 	allerrors := make([]error, 0)
 
-	for k, v:= range updatedresults {
+	for k, v := range updatedresults {
 		if _, ok := immutableFields[k]; ok {
 			continue
 		}
@@ -48,7 +47,7 @@ func (qr *ResourceResultsGenerator) mergeAndUpdateIfNecessary(rr *ResourceReques
 		if !ok {
 			if _, ok := mustInitializeFields[k]; !ok {
 				continue
-			} 
+			}
 			postedarray = []string{""}
 		}
 
@@ -68,7 +67,7 @@ func (qr *ResourceResultsGenerator) mergeAndUpdateIfNecessary(rr *ResourceReques
 				needtoupdate = true
 			} else {
 				needtoupdate = true
-				updatedresults[k] = false				
+				updatedresults[k] = false
 			}
 		case float64:
 			if n, err := strconv.ParseFloat(posted, 64); err == nil {
@@ -89,7 +88,7 @@ func (qr *ResourceResultsGenerator) mergeAndUpdateIfNecessary(rr *ResourceReques
 		case string:
 			updatedresults[k] = posted
 			needtoupdate = true
-		}			
+		}
 	}
 
 	if needtoupdate {
