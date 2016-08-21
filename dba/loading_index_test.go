@@ -5,6 +5,8 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"reflect"
+	"sort"
 	"testing"
 
 	"log"
@@ -66,12 +68,26 @@ func TestIndexResourcet(t *testing.T) {
 	if err != nil {
 		t.Fatal("OpenBleve failed to open an index a testdata", err)
 	}
+	defer db.Close()
 	
 	// There is a datum in the database.
 	if n, err := db.DocCount(); n != 1 || err != nil {
 		t.Error("expected to find data in the database, count is", n , "or error getting count", err)
 	}
 
-	
+	fields, err := db.Fields()
+	if err != nil {
+		t.Fatal("couldn't retrieve the fields from the Bleve database because", err)
+	}
+
+	want_fields := []string{"_all", "_type", "address", "categories", "date_indexed", "description", "email", "hand_sort", "languges", "name", "pops_served", "reviewed", "services", "website", "wheelchair"}
+
+	sort.Strings(want_fields)
+	sort.Strings(fields)
+
+	if want, got := want_fields, fields; !reflect.DeepEqual(want, got) {
+		t.Errorf("wanted %#v but got %#v\n", want_fields, fields)
+	}
+
 
 }
