@@ -11,15 +11,6 @@ import (
 // This code is largely inspired by the bleve beer-search demo application.
 // Keeps all the state in the bleve database.
 
-// password contains the user identity records.
-type password struct {
-	Username     string `json:"username"`
-	Passwordhash string `passwordhash:"uid"`
-}
-
-func (p password) Type() string {
-	return "password"
-}
 
 type comment struct {
 	// The uuid of the associated resource card.
@@ -55,13 +46,6 @@ func buildIndexMapping() (*bleve.IndexMapping, error) {
 	// a date/time mapping
 	// I believe that this is good like this. I will have to experiment.
 	dateTimeMapping := bleve.NewDateTimeFieldMapping()
-
-	// TODO(rjk): I might need to adjust this.
-	// TODO(rjk): Move password data to a separate file.
-	passwordFieldMapping := bleve.NewTextFieldMapping()
-	ignoredFieldMapping.Index = false
-	ignoredFieldMapping.IncludeTermVectors = false
-	ignoredFieldMapping.IncludeInAll = false
 
 	// a generic reusable mapping for booleans
 	boolFieldMapping := bleve.NewBooleanFieldMapping()
@@ -106,11 +90,6 @@ func buildIndexMapping() (*bleve.IndexMapping, error) {
 	// comments can be vieweable by signed in user ("me", signed-in "volunteers", "world")
 	commentEntryMapping.AddFieldMappingsAt("viewability", keywordFieldMapping)
 	commentEntryMapping.AddFieldMappingsAt("body", englishTextFieldMapping)
-
-	// passwordEntryMapping is a document for each user.
-	passwordEntryMapping := bleve.NewDocumentMapping()
-	passwordEntryMapping.AddFieldMappingsAt("uid", keywordFieldMapping)
-	passwordEntryMapping.AddFieldMappingsAt("passwordhash", passwordFieldMapping)
 
 	// I don't support multiple types. But I could use this to address CSV, web and JSON
 	// updated documents? Particularly given that they can have different fields.
