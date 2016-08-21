@@ -6,6 +6,8 @@ import (
 	"os"
 	"path/filepath"
 	"testing"
+
+	"log"
 )
 
 const testdata = `[
@@ -38,10 +40,11 @@ const testdata = `[
 
 func TestIndexResourcet(t *testing.T) {
 	tmpdir, err := ioutil.TempDir("", "sfsbook")
+	log.Println(tmpdir)
 	if err != nil {
 		t.Fatal("can't make a temporary directory", err)
 	}
-	defer os.RemoveAll(tmpdir)
+	// defer os.RemoveAll(tmpdir)
 
 	// Create a database. Should fail because one or more of the paths doesn't exist.
 	if _, err := OpenBleve(tmpdir);  err == nil {
@@ -64,9 +67,11 @@ func TestIndexResourcet(t *testing.T) {
 		t.Fatal("OpenBleve failed to open an index a testdata", err)
 	}
 	
-	// There is datum in the database.
+	// There is a datum in the database.
 	if n, err := db.DocCount(); n != 1 || err != nil {
 		t.Error("expected to find data in the database, count is", n , "or error getting count", err)
 	}
+
+	
 
 }

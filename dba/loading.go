@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"log"
+	"os"
 	"path/filepath"
 	"time"
 
@@ -24,17 +25,23 @@ func OpenBleve(persistentroot string) (bleve.Index, error) {
 		// create a mapping
 		indexMapping, err := buildIndexMapping()
 		if err != nil {
+			// Partial success at success leaves a dbpath that will interfere with
+			// trying again later so always clean up.
+			os.RemoveAll(dbpath)
 			return nil, err
 		}
 		bi, err = bleve.New(dbpath, indexMapping)
 		if err != nil {
+			os.RemoveAll(dbpath)
 			return nil, err
 		}
 
 		if err = indexDatabase(bi, persistentroot); err != nil {
+			os.RemoveAll(dbpath)
 			return nil, err
 		}
 	} else if err != nil {
+		os.RemoveAll(dbpath)
 		return nil, err
 	}
 	return bi, nil
@@ -43,12 +50,14 @@ func OpenBleve(persistentroot string) (bleve.Index, error) {
 const sourcefile = "refguide.json"
 
 func indexDatabase(i bleve.Index, pathroot string) error {
-	log.Printf("Indexing...")
+	log.Println("Indexing... now")
 
 	jsonBytes, err := ioutil.ReadFile(filepath.Join(pathroot, sourcefile))
 	if err != nil {
 		return err
 	}
+
+	log.Println("read the database")
 
 	// parse bytes as json
 	var parsedResources []map[string]interface{}
@@ -56,6 +65,8 @@ func indexDatabase(i bleve.Index, pathroot string) error {
 	if err != nil {
 		return err
 	}
+
+	log.Println("parsed the database record")
 
 	// So: how do I maintain flexibility in the handling of the fields?
 	// Can unmarshal into a map of interface{}
@@ -71,6 +82,8 @@ func indexDatabase(i bleve.Index, pathroot string) error {
 		r["date_indexed"] = time.Now()
 		batch.Index(rid, r)
 	}
+
+	log.Println("built a batch")
 
 	err = i.Batch(batch)
 	if err != nil {
