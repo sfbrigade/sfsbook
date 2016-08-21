@@ -11,7 +11,6 @@ import (
 // This code is largely inspired by the bleve beer-search demo application.
 // Keeps all the state in the bleve database.
 
-
 type comment struct {
 	// The uuid of the associated resource card.
 	ResourceUuid string    `json:"resourceuuid"`

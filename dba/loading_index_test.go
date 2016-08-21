@@ -39,7 +39,6 @@ const testdata = `[
 ]
 `
 
-
 func TestIndexResourcet(t *testing.T) {
 	tmpdir, err := ioutil.TempDir("", "sfsbook")
 	log.Println(tmpdir)
@@ -49,30 +48,30 @@ func TestIndexResourcet(t *testing.T) {
 	// defer os.RemoveAll(tmpdir)
 
 	// Create a database. Should fail because one or more of the paths doesn't exist.
-	if _, err := OpenBleve(tmpdir);  err == nil {
+	if _, err := OpenBleve(tmpdir); err == nil {
 		t.Fatal("OpenBleve succeeded adding a non-existent starter database when it should have failed", err)
 	}
 
 	// Stick some data in the file.
 	file, err := os.Create(filepath.Join(tmpdir, sourcefile))
 	if err != nil {
-		t.Fatal("can't openfile in tmp directory",  tmpdir, "because", err)
+		t.Fatal("can't openfile in tmp directory", tmpdir, "because", err)
 	}
-	if n, err := io.WriteString(file, testdata); err != nil || n != len(testdata)  {
+	if n, err := io.WriteString(file, testdata); err != nil || n != len(testdata) {
 		t.Fatal("can't write testdata to tmpdir file because", err)
 	}
 	file.Close()
-	
+
 	// Create a database. Should succeed.
 	db, err := OpenBleve(tmpdir)
 	if err != nil {
 		t.Fatal("OpenBleve failed to open an index a testdata", err)
 	}
 	defer db.Close()
-	
+
 	// There is a datum in the database.
 	if n, err := db.DocCount(); n != 1 || err != nil {
-		t.Error("expected to find data in the database, count is", n , "or error getting count", err)
+		t.Error("expected to find data in the database, count is", n, "or error getting count", err)
 	}
 
 	fields, err := db.Fields()
@@ -88,6 +87,5 @@ func TestIndexResourcet(t *testing.T) {
 	if want, got := want_fields, fields; !reflect.DeepEqual(want, got) {
 		t.Errorf("wanted %#v but got %#v\n", want_fields, fields)
 	}
-
 
 }
