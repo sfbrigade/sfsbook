@@ -31,24 +31,21 @@ func OpenBleve(persistentroot string) (bleve.Index, error) {
 			return nil, err
 		}
 
-		// index data in the background.
-		// TODO(rjk): Error handling?
-		go func() {
-			err = indexDatabase(bi, persistentroot)
-			if err != nil {
-				log.Fatal(err)
-			}
-		}()
+		if err = indexDatabase(bi, persistentroot); err != nil {
+			return nil, err
+		}
 	} else if err != nil {
 		return nil, err
 	}
 	return bi, nil
 }
 
+const sourcefile = "refguide.json"
+
 func indexDatabase(i bleve.Index, pathroot string) error {
 	log.Printf("Indexing...")
 
-	jsonBytes, err := ioutil.ReadFile(filepath.Join(pathroot, "refguide.json"))
+	jsonBytes, err := ioutil.ReadFile(filepath.Join(pathroot, sourcefile))
 	if err != nil {
 		return err
 	}
