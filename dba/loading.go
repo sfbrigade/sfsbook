@@ -23,28 +23,24 @@ func OpenBleve(persistentroot string) (bleve.Index, error) {
 
 		log.Printf("Indexing the provided datafile...")
 		// create a mapping
-		indexMapping, err := buildIndexMapping()
-		if err != nil {
-			// Partial success at success leaves a dbpath that will interfere with
-			// trying again later so always clean up.
-			os.RemoveAll(dbpath)
-			return nil, err
-		}
+		indexMapping := allDocumentMapping(IndexDocumentMap{
+			"resource": buildResourceDocumentMapping(),
+		})
 		bi, err = bleve.New(dbpath, indexMapping)
 		if err != nil {
-			os.RemoveAll(dbpath)
-			return nil, err
+			goto cleanup
 		}
 
 		if err = indexDatabase(bi, persistentroot); err != nil {
-			os.RemoveAll(dbpath)
-			return nil, err
+			goto cleanup
 		}
 	} else if err != nil {
-		os.RemoveAll(dbpath)
-		return nil, err
+		goto cleanup
 	}
 	return bi, nil
+cleanup:
+	os.RemoveAll(dbpath)
+	return nil, err
 }
 
 const sourcefile = "refguide.json"

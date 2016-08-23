@@ -65,7 +65,7 @@ func TestIndexResourcet(t *testing.T) {
 	// Create a database. Should succeed.
 	db, err := OpenBleve(tmpdir)
 	if err != nil {
-		t.Fatal("OpenBleve failed to open an index a testdata", err)
+		t.Fatal("OpenBleve failed to open and index some testdata", err)
 	}
 	defer db.Close()
 
