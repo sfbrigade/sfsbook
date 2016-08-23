@@ -8,6 +8,10 @@ import (
 	"github.com/blevesearch/bleve/analysis/language/en"
 )
 
+// IndexDocumentMap associates the document type (key) with
+// the document type's index mapping (value) for a single database.
+type IndexDocumentMap map[string]*bleve.DocumentMapping
+
 // This code is largely inspired by the bleve beer-search demo application.
 // Keeps all the state in the bleve database.
 
@@ -111,7 +115,6 @@ func buildResourceDocumentMapping() *bleve.DocumentMapping {
 	return resourceEntryMapping
 }
 
-type IndexDocumentMap map[string]*bleve.DocumentMapping
 
 // allDocumentMapping creates a new top-level mapping for an entire database
 // from the provided map of per-document mappings. (Per Bleve terminology, the

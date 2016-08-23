@@ -12,9 +12,23 @@ import (
 	"github.com/pborman/uuid"
 )
 
+
+// IndexFactory specifies how to name and populate a database.
+type IndexFactory interface {
+	// The file name for the database.
+	Name() string
+
+	// LoadStartData populates a newly-created empty database from
+	// pre-existing data.
+	LoadStartData(idx bleve.Index, root string) error
+
+	// Mapping returns IndexMapping for this database.
+	Mapping()  *bleve.IndexMapping 
+}
+
 // OpenBleve opens the backing database or builds it if it doesn't exist.
-func OpenBleve(persistentroot string) (bleve.Index, error) {
-	dbpath := filepath.Join(persistentroot, "state", "sfsbook.bleve")
+func OpenBleve(persistentroot string, dxf  IndexFactory) (bleve.Index, error) {
+	dbpath := filepath.Join(persistentroot, "state", dxf.Name())
 	bi, err := bleve.Open(dbpath)
 	if err == bleve.ErrorIndexPathDoesNotExist {
 		// TODO(rjkroege): Might consider making the path configurable. Or something.
@@ -22,16 +36,12 @@ func OpenBleve(persistentroot string) (bleve.Index, error) {
 		// later.
 
 		log.Printf("Indexing the provided datafile...")
-		// create a mapping
-		indexMapping := allDocumentMapping(IndexDocumentMap{
-			"resource": buildResourceDocumentMapping(),
-		})
-		bi, err = bleve.New(dbpath, indexMapping)
+		bi, err = bleve.New(dbpath, dxf.Mapping())
 		if err != nil {
 			goto cleanup
 		}
 
-		if err = indexDatabase(bi, persistentroot); err != nil {
+		if err = dxf.LoadStartData(bi, persistentroot); err != nil {
 			goto cleanup
 		}
 	} else if err != nil {
@@ -45,7 +55,21 @@ cleanup:
 
 const sourcefile = "refguide.json"
 
-func indexDatabase(i bleve.Index, pathroot string) error {
+type RefGuideType string
+
+func (g RefGuideType) Name() string {
+	return string(g)
+}
+
+func (_ RefGuideType) Mapping() *bleve.IndexMapping {
+	 return  allDocumentMapping(IndexDocumentMap{
+			"resource": buildResourceDocumentMapping(),
+		})
+}
+
+var RefGuide = RefGuideType("sfsbook.bleve")
+
+func (_ RefGuideType) LoadStartData(i bleve.Index, pathroot string) error {
 	log.Println("Indexing... now")
 
 	jsonBytes, err := ioutil.ReadFile(filepath.Join(pathroot, sourcefile))

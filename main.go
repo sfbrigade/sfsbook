@@ -20,7 +20,7 @@ func main() {
 	}
 
 	setup.ConstructNecessaryStartingState(pth)
-	index, err := dba.OpenBleve(pth)
+	index, err := dba.OpenBleve(pth, dba.RefGuide)
 	if err != nil {
 		log.Fatalln("No database! Giving up:", err)
 	}
