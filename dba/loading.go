@@ -12,7 +12,6 @@ import (
 	"github.com/pborman/uuid"
 )
 
-
 // IndexFactory specifies how to name and populate a database.
 type IndexFactory interface {
 	// The file name for the database.
@@ -23,11 +22,11 @@ type IndexFactory interface {
 	LoadStartData(idx bleve.Index, root string) error
 
 	// Mapping returns IndexMapping for this database.
-	Mapping()  *bleve.IndexMapping 
+	Mapping() *bleve.IndexMapping
 }
 
 // OpenBleve opens the backing database or builds it if it doesn't exist.
-func OpenBleve(persistentroot string, dxf  IndexFactory) (bleve.Index, error) {
+func OpenBleve(persistentroot string, dxf IndexFactory) (bleve.Index, error) {
 	dbpath := filepath.Join(persistentroot, "state", dxf.Name())
 	bi, err := bleve.Open(dbpath)
 	if err == bleve.ErrorIndexPathDoesNotExist {
@@ -62,9 +61,9 @@ func (g RefGuideType) Name() string {
 }
 
 func (_ RefGuideType) Mapping() *bleve.IndexMapping {
-	 return  allDocumentMapping(IndexDocumentMap{
-			"resource": buildResourceDocumentMapping(),
-		})
+	return allDocumentMapping(IndexDocumentMap{
+		"resource": buildResourceDocumentMapping(),
+	})
 }
 
 var RefGuide = RefGuideType("sfsbook.bleve")

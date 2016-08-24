@@ -37,7 +37,6 @@ var ignoredFieldMapping *bleve.FieldMapping
 var dateTimeMapping *bleve.FieldMapping
 var boolFieldMapping *bleve.FieldMapping
 
-
 // init makes all of the mappings that we use. They can be reused.
 func init() {
 	// a generic reusable mapping for english text
@@ -58,13 +57,12 @@ func init() {
 	// a date/time mapping
 	// I believe that this is good like this. I will have to experiment.
 	dateTimeMapping = bleve.NewDateTimeFieldMapping()
-	
+
 	// a generic reusable mapping for booleans
 	boolFieldMapping = bleve.NewBooleanFieldMapping()
 }
 
-
-// buildCommentIndexMapping 
+// buildCommentIndexMapping
 // TODO(rjk): Comments are not supported yet. This code requires additional
 // attention.
 func buildCommentIndexMapping() *bleve.DocumentMapping {
@@ -80,7 +78,6 @@ func buildCommentIndexMapping() *bleve.DocumentMapping {
 	commentEntryMapping.AddFieldMappingsAt("body", englishTextFieldMapping)
 	return commentEntryMapping
 }
-
 
 // buildResourceDocumentMapping builds the mappings needed for resource guide
 // entries.
@@ -114,7 +111,6 @@ func buildResourceDocumentMapping() *bleve.DocumentMapping {
 
 	return resourceEntryMapping
 }
-
 
 // allDocumentMapping creates a new top-level mapping for an entire database
 // from the provided map of per-document mappings. (Per Bleve terminology, the
