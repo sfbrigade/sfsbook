@@ -7,6 +7,7 @@ import (
 	"github.com/sfbrigade/sfsbook/dba"
 	"github.com/sfbrigade/sfsbook/server"
 	"github.com/sfbrigade/sfsbook/setup"
+	"github.com/sfbrigade/sfsbook/dba/fieldmap"
 )
 
 func main() {
@@ -20,7 +21,7 @@ func main() {
 	}
 
 	setup.ConstructNecessaryStartingState(pth)
-	index, err := dba.OpenBleve(pth, dba.RefGuide)
+	index, err := dba.OpenBleve(pth, fieldmap.RefGuide)
 	if err != nil {
 		log.Fatalln("No database! Giving up:", err)
 	}

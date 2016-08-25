@@ -9,6 +9,8 @@ import (
 	"sort"
 	"testing"
 
+	"github.com/sfbrigade/sfsbook/dba/fieldmap"
+
 	"log"
 )
 
@@ -48,12 +50,12 @@ func TestIndexResourcet(t *testing.T) {
 	// defer os.RemoveAll(tmpdir)
 
 	// Create a database. Should fail because one or more of the paths doesn't exist.
-	if _, err := OpenBleve(tmpdir, RefGuide); err == nil {
+	if _, err := OpenBleve(tmpdir, fieldmap.RefGuide); err == nil {
 		t.Fatal("OpenBleve succeeded adding a non-existent starter database when it should have failed", err)
 	}
 
 	// Stick some data in the file.
-	file, err := os.Create(filepath.Join(tmpdir, sourcefile))
+	file, err := os.Create(filepath.Join(tmpdir, "refguide.json"))
 	if err != nil {
 		t.Fatal("can't openfile in tmp directory", tmpdir, "because", err)
 	}
@@ -63,7 +65,7 @@ func TestIndexResourcet(t *testing.T) {
 	file.Close()
 
 	// Create a database. Should succeed.
-	db, err := OpenBleve(tmpdir, RefGuide)
+	db, err := OpenBleve(tmpdir, fieldmap.RefGuide)
 	if err != nil {
 		t.Fatal("OpenBleve failed to open and index some testdata", err)
 	}
