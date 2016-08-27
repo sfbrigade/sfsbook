@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"log"
 	"os"
 
@@ -11,6 +12,8 @@ import (
 )
 
 func main() {
+	flag.Parse()
+
 	// TODO(rjk): make the logging configurable in a useful way.
 	// TODO(rjk): make the log useful.
 	log.Println("sfsbook starting")

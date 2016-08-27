@@ -3,8 +3,8 @@ package fieldmap
 import (
 	"encoding/json"
 	"io/ioutil"
-	"path/filepath"
 	"log"
+	"path/filepath"
 	"time"
 
 	"github.com/blevesearch/bleve"
@@ -102,8 +102,5 @@ func (_ RefGuideType) LoadStartData(i bleve.Index, pathroot string) error {
 		return err
 	}
 	log.Println("done Indexing...")
-
-	// TODO(rjk): add some comments and default password setup here.
-
 	return nil
 }

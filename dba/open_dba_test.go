@@ -47,7 +47,7 @@ func TestIndexResourcet(t *testing.T) {
 	if err != nil {
 		t.Fatal("can't make a temporary directory", err)
 	}
-	// defer os.RemoveAll(tmpdir)
+	defer os.RemoveAll(tmpdir)
 
 	// Create a database. Should fail because one or more of the paths doesn't exist.
 	if _, err := OpenBleve(tmpdir, fieldmap.RefGuide); err == nil {

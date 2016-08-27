@@ -6,7 +6,7 @@ import (
 	"github.com/blevesearch/bleve"
 )
 
- // This code is largely inspired by the bleve beer-search demo application.
+// This code is largely inspired by the bleve beer-search demo application.
 // Keeps all the state in the bleve database.
 
 // TODO(rjk): Relocate the comment code.

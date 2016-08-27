@@ -1,7 +1,6 @@
 package dba
 
 import (
-	"log"
 	"os"
 	"path/filepath"
 
@@ -30,7 +29,6 @@ func OpenBleve(persistentroot string, dxf IndexFactory) (bleve.Index, error) {
 		// At present, tries to be smart for development. I'll worry about deployment
 		// later.
 
-		log.Printf("Indexing the provided datafile...")
 		bi, err = bleve.New(dbpath, dxf.Mapping())
 		if err != nil {
 			goto cleanup
@@ -47,4 +45,3 @@ cleanup:
 	os.RemoveAll(dbpath)
 	return nil, err
 }
-
