@@ -1,3 +1,6 @@
 [submodule "vendor/github.com/pborman/uuid"]
 	path = vendor/github.com/pborman/uuid
 	url = https://github.com/pborman/uuid
+[submodule "vendor/github.com/blevesearch/bleve"]
+	path = vendor/github.com/blevesearch/bleve
+	url = https://github.com/blevesearch/bleve
