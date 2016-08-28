@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"time"
 
 	"github.com/blevesearch/bleve"
 	"github.com/blevesearch/bleve/analysis/analyzers/keyword_analyzer"
@@ -12,10 +13,6 @@ import (
 )
 
 // buildPasswordDocumentMapping makes a mapping for the password file.
-// The password database contains only the mapping from username to
-// password hash.All other user data is stored in a different database.
-// This pattern reduces the chance of accidentally leaking password data
-// in user information queries.
 func buildPasswordEntryMapping() *bleve.DocumentMapping {
 	passwordFieldMapping := bleve.NewTextFieldMapping()
 	passwordFieldMapping.Index = false
@@ -36,9 +33,13 @@ func buildPasswordEntryMapping() *bleve.DocumentMapping {
 
 	// passwordEntryMapping is a document for each user.
 	passwordEntryMapping := bleve.NewDocumentMapping()
+
+	passwordEntryMapping.DefaultAnalyzer = keyword_analyzer.Name
 	passwordEntryMapping.AddFieldMappingsAt("username", keywordFieldMapping)
 	passwordEntryMapping.AddFieldMappingsAt("passwordhash", passwordFieldMapping)
 	passwordEntryMapping.AddFieldMappingsAt("cost", costFieldMapping)
+	passwordEntryMapping.AddFieldMappingsAt("account_created", dateTimeMapping)
+	passwordEntryMapping.AddFieldMappingsAt("last_login", dateTimeMapping)
 
 	return passwordEntryMapping
 }
@@ -72,11 +73,13 @@ func (_ PasswordFileType) LoadStartData(i bleve.Index, pathroot string) error {
 			"name":         "volunteer",
 			"cost":         string(bcrypt.DefaultCost),
 			"passwordhash": "open",
+			"role":         "volunteer",
 		},
 		map[string]interface{}{
 			"name":         "admin",
 			"cost":         string(bcrypt.DefaultCost),
 			"passwordhash": "sesame",
+			"role":         "admin",
 		},
 	}
 
@@ -96,6 +99,8 @@ func (_ PasswordFileType) LoadStartData(i bleve.Index, pathroot string) error {
 			continue
 		}
 		r["passwordhash"] = string(hash)
+
+		r["account_created"] = time.Now()
 
 		// NB: in Bleve, the argument map must have supported types or else
 		// Bleve gives up on the field. This makes a certain amount of sense but

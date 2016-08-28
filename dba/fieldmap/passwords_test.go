@@ -39,11 +39,14 @@ func TestPasswordFile(t *testing.T) {
 	}
 
 	// Search the database.
-	for _, uname_passwd := range [][]string{[]string{"admin", "sesame"}, []string{"volunteer", "open"}} {
+	for _, uname_passwd := range [][]string{
+		[]string{"admin", "sesame", "admin"},
+		[]string{"volunteer", "open", "volunteer"},
+	} {
 		uname := uname_passwd[0]
 		sreq := bleve.NewSearchRequest(bleve.NewMatchQuery(uname))
 		// Note that the result only contains the fields specified here.
-		sreq.Fields = []string{"name", "cost", "passwordhash"}
+		sreq.Fields = []string{"name", "cost", "passwordhash", "role"}
 
 		searchResults, err := db.Search(sreq)
 		if err != nil {
@@ -71,5 +74,10 @@ func TestPasswordFile(t *testing.T) {
 		if err := bcrypt.CompareHashAndPassword([]byte(pw), []byte(passwd)); err != nil {
 			t.Errorf("password %s not encoded in a way (%#v) that we can use it to decode %v", passwd, pw, err)
 		}
+
+		if got, want := sr.Fields["role"].(string), uname_passwd[2]; got != want {
+			t.Error("role wrong got", got, "want", want)
+		}
+
 	}
 }
