@@ -18,4 +18,17 @@ We're using the wiki to share our research findings, notes on the project, and d
 
 If you want to get started on the research initives we're currently working on, first check out our [Research Guidelines](https://github.com/sfbrigade/stop-violence/wiki/Research-Guidelines). After reading through the guidelines, if you want to help us conduct research you can find interview and observation guides that will get you out into the field and collecting data in the [Research Tools section](https://github.com/sfbrigade/stop-violence/wiki/Research-Tools)
 
-Want to help us design some research? Reach out to Tony (@tsmuse) on the Brigade Slack, or by email, tony [at] notjustprettypictures.com
+Want to help us design some research? Reach out to Karl (@karlton) on the Brigade Slack.
+
+## Development
+The sfsbook application backend is written in [Go](http://golang.org). So install Go (use [homebrew](http://brew.sh) on MacOS for example) and then `git clone` this repository. Build the server like so:
+
+```
+go build
+```
+
+and you should end up with a server called `sfsbook` ready to run at the top level. The server will manufacture some getting started state in `./state`, dump a varying amount of logging and be ready to browse to at [https://localhost:10443/index.html](https://localhost:10443/index.html). 
+
+If you're interested in helping with development, reach out ot Rob (@rjkroege) on the Brigade Slack.
+  
+
