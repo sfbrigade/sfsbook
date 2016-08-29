@@ -7,14 +7,13 @@ import (
 
 	"github.com/blevesearch/bleve"
 	"github.com/sfbrigade/sfsbook/dba"
-	"gopkg.in/tylerb/graceful.v1"
 )
 
 // MakeServer creates a graceful.Server serving from the specificed address.
 // The contents of pathroot are served.
 // Conceivably, it's possible that passing the bi through here is a layering violation?
 // TODO(rjk): I'm convinced, it's a layering violation. Make it go away.
-func MakeServer(address, pathroot string, bi bleve.Index) *graceful.Server {
+func MakeServer(address, pathroot string, bi bleve.Index) *http.Server {
 	log.Println("MakeServer", address, pathroot)
 	m := http.NewServeMux()
 
@@ -24,12 +23,11 @@ func MakeServer(address, pathroot string, bi bleve.Index) *graceful.Server {
 	m.Handle("/search.html", MakeTemplatedServer(ff, dba.MakeQueryResultsGenerator(bi)))
 	m.Handle("/", MakeTemplatedServer(ff, dba.MakeStubGenerator(bi)))
 
-	srv := &graceful.Server{
-		Timeout: 5 * time.Second,
-		Server: &http.Server{
-			Addr:    address,
-			Handler: m,
-		},
+	srv := &http.Server{
+		ReadTimeout: 5 * time.Second,
+		WriteTimeout: 5 * time.Second,
+		Addr:    address,
+		Handler: m,
 	}
 	return srv
 }
