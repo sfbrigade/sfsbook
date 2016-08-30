@@ -40,9 +40,9 @@ func TestPasswordFile(t *testing.T) {
 
 	// Search the database.
 	for _, uname_passwd := range [][]string{
-		[]string{"admin", "sesame", "admin"},
-		[]string{"volunteer", "open", "volunteer"},
-	} {
+				[]string{"admin", "sesame", "admin"}, 
+				[]string{"volunteer", "open", "volunteer"},
+			} {
 		uname := uname_passwd[0]
 		sreq := bleve.NewSearchRequest(bleve.NewMatchQuery(uname))
 		// Note that the result only contains the fields specified here.
@@ -50,12 +50,13 @@ func TestPasswordFile(t *testing.T) {
 
 		searchResults, err := db.Search(sreq)
 		if err != nil {
-			t.Error("couldn't search the password file", err)
+			// Is this what lies underneath my error cases.
+			t.Fatal("couldn't search the password file", err)
 			continue
 		}
 
 		if len(searchResults.Hits) != 1 {
-			t.Error("expected 1 match for", uname, "but got", len(searchResults.Hits))
+			t.Fatal("expected 1 match for", uname, "but got", len(searchResults.Hits))
 			continue
 		}
 
@@ -78,6 +79,6 @@ func TestPasswordFile(t *testing.T) {
 		if got, want := sr.Fields["role"].(string), uname_passwd[2]; got != want {
 			t.Error("role wrong got", got, "want", want)
 		}
-
+		
 	}
 }
