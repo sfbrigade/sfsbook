@@ -9,7 +9,6 @@ import (
 	"strings"
 )
 
-// TODO(rjk): This will probably require additional fields.
 type staticServer GlobalState
 
 

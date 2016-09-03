@@ -42,6 +42,8 @@ func (gs *templatedServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		respondWithError(w, fmt.Sprintln("Server error", err))
 	}
 
+	// TODO(rjk): I need to do something smarter about caching.
+	// I removed the cache of templates pending the global cache.
 	gs.ServeForStrings(str, w, req)
 }
 
