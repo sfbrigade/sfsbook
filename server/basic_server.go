@@ -1,7 +1,6 @@
 package server
 
 import (
-	"log"
 	"net/http"
 	"time"
 
@@ -14,19 +13,12 @@ import (
 // TODO(rjk): I'm convinced, it's a layering violation. Make it go away.
 // TODO(rjk): redirect to from http to https.
 func MakeServer(address string, global *GlobalState) *http.Server {
-	log.Println("MakeServer", address, global.Sitedir)
 	m := http.NewServeMux()
 
-	// Have I chained this in the right direction?
-	// i.e.: why is the file-finder at the bottom?
-	// Because... it has to be?
-	// File-finder is inside the server.
-
-	ff := MakeFileFinder(global)
-	m.Handle("/js/", MakeStaticServer(ff))
-	m.Handle("/resources/", MakeResourceServer(ff, dba.MakeResourceResultsGenerator(global.ResourceGuide)))
-	m.Handle("/search.html", MakeTemplatedServer(ff, dba.MakeQueryResultsGenerator(global.ResourceGuide)))
-	m.Handle("/", MakeTemplatedServer(ff, dba.MakeStubGenerator(global.ResourceGuide)))
+	m.Handle("/js/", MakeStaticServer(global))
+	m.Handle("/resources/", MakeResourceServer(global, dba.MakeResourceResultsGenerator(global.ResourceGuide)))
+	m.Handle("/search.html", MakeTemplatedServer(global, dba.MakeQueryResultsGenerator(global.ResourceGuide)))
+	m.Handle("/", MakeTemplatedServer(global, dba.MakeStubGenerator(global.ResourceGuide)))
 
 	// TODO(rjk): why no https config here?
 	srv := &http.Server{

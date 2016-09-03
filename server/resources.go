@@ -13,14 +13,10 @@ import (
 	"github.com/sfbrigade/sfsbook/dba"
 )
 
-type resourceServer struct {
-	templatedServer
-}
+type resourceServer templatedServer
 
-func MakeResourceServer(ff *FileFinder, g dba.Generator) *resourceServer {
-	return &resourceServer{
-		templatedServer: *MakeTemplatedServer(ff, g),
-	}
+func MakeResourceServer(global  *GlobalState, g dba.Generator) *resourceServer {
+	return (*resourceServer)(MakeTemplatedServer(global, g))
 }
 
 func (gs *resourceServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
@@ -61,7 +57,11 @@ func (gs *resourceServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		dbreq.PostArgs = req.PostForm
 	}
 
-	if err := gs.ff.StreamOrString(sn, gs, w, dbreq); err != nil {
+	str, err := gs.global.GetAsString(sn)
+	if err != nil {
+		// TODO(rjk): Rationalize error handling here. There needs to be a 404 page.
 		respondWithError(w, fmt.Sprintln("Server error", err))
 	}
+
+	((*templatedServer)(gs)).ServeForStrings(str, w, dbreq)
 }
