@@ -1,7 +1,4 @@
-package setup
-
-
-// TODO(rjk): move this to server package
+package server
 
 import (
 	"fmt"
@@ -12,26 +9,24 @@ import (
 	"github.com/blevesearch/bleve"
 	"github.com/sfbrigade/sfsbook/dba"
 	"github.com/sfbrigade/sfsbook/dba/fieldmap"
-
+	"github.com/sfbrigade/sfsbook/setup"
 )
 
 // GlobalState is state shared across all server requests.
 type GlobalState struct {
 	Persistentroot string
-	Sitedir string
-	
+	Sitedir        string
+
 	// Cache.
 
 	// Databases
 	ResourceGuide bleve.Index
-	PasswordFile bleve.Index
+	PasswordFile  bleve.Index
 
 	// Cookie keys
-	
 
 	// Flags
 	Immutable bool
-
 }
 
 // MakeGlobalRequestState builds all the global state shared between all
@@ -51,7 +46,7 @@ func MakeGlobalState(persistentroot string) (*GlobalState, error) {
 	sitedir := filepath.Join(persistentroot, "site")
 
 	// make keys
-	if err := MakeKeys(pth); err != nil {
+	if err := setup.MakeKeys(pth); err != nil {
 		return nil, fmt.Errorf("Don't have and can't make keys.", err)
 	}
 
@@ -71,9 +66,9 @@ func MakeGlobalState(persistentroot string) (*GlobalState, error) {
 
 	return &GlobalState{
 		Persistentroot: persistentroot,
-		Sitedir: sitedir,
-		ResourceGuide: resourceguide,
-		PasswordFile: passwordfile,
-		Immutable: immutable,
+		Sitedir:        sitedir,
+		ResourceGuide:  resourceguide,
+		PasswordFile:   passwordfile,
+		Immutable:      immutable,
 	}, nil
 }

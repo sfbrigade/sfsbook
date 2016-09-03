@@ -6,8 +6,6 @@ import (
 	"time"
 
 	"github.com/sfbrigade/sfsbook/dba"
-	"github.com/sfbrigade/sfsbook/setup"
-
 )
 
 // MakeServer creates a Server serving from the specified address.
@@ -15,7 +13,7 @@ import (
 // Conceivably, it's possible that passing the bi through here is a layering violation?
 // TODO(rjk): I'm convinced, it's a layering violation. Make it go away.
 // TODO(rjk): redirect to from http to https.
-func MakeServer(address string, global *setup.GlobalState) *http.Server {
+func MakeServer(address string, global *GlobalState) *http.Server {
 	log.Println("MakeServer", address, global.Sitedir)
 	m := http.NewServeMux()
 
@@ -32,13 +30,13 @@ func MakeServer(address string, global *setup.GlobalState) *http.Server {
 
 	// TODO(rjk): why no https config here?
 	srv := &http.Server{
-		ReadTimeout: 5 * time.Second,
+		ReadTimeout:  5 * time.Second,
 		WriteTimeout: 5 * time.Second,
-		Addr:    address,
-		Handler: m,
+		Addr:         address,
+		Handler:      m,
 
 		// TLS config?
-		
+
 	}
 	return srv
 }

@@ -1,4 +1,5 @@
 package server
+
 // This module of package server is responsible for processing resuts for
 // a specific named resource.
 
@@ -17,11 +18,10 @@ type resourceServer struct {
 }
 
 func MakeResourceServer(ff *FileFinder, g dba.Generator) *resourceServer {
-	return &resourceServer{ 
+	return &resourceServer{
 		templatedServer: *MakeTemplatedServer(ff, g),
 	}
 }
-
 
 func (gs *resourceServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	sn := req.URL.Path
@@ -30,7 +30,7 @@ func (gs *resourceServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 
 	// Path is expected to be of the form /resources/<uuid>.html
 	if path.Ext(sn) != ".html" {
-		respondWithError(w, "bad extension: " + path.Ext(sn))
+		respondWithError(w, "bad extension: "+path.Ext(sn))
 		return
 	}
 
@@ -65,6 +65,3 @@ func (gs *resourceServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		respondWithError(w, fmt.Sprintln("Server error", err))
 	}
 }
-
-
-

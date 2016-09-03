@@ -11,19 +11,19 @@ import (
 	"github.com/sfbrigade/sfsbook/dba"
 )
 
-// templatedServer is a 
+// templatedServer is a
 type templatedServer struct {
 	sync.Mutex
 	templates map[string]*template.Template
-	ff *FileFinder
+	ff        *FileFinder
 
 	generator dba.Generator
 }
 
 func MakeTemplatedServer(ff *FileFinder, g dba.Generator) *templatedServer {
-	return &templatedServer{ 
+	return &templatedServer{
 		templates: make(map[string]*template.Template),
-		ff: ff,
+		ff:        ff,
 		generator: g,
 	}
 }
@@ -43,7 +43,7 @@ func (gs *templatedServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	}
 }
 
-// ServeString caches the parsed templates. 
+// ServeString caches the parsed templates.
 func (gs *templatedServer) ServeForString(s string, w http.ResponseWriter, req interface{}) {
 	gs.Lock()
 	template, ok := gs.templates[s]

@@ -6,7 +6,6 @@ import (
 	"os"
 
 	"github.com/sfbrigade/sfsbook/server"
-	"github.com/sfbrigade/sfsbook/setup"
 )
 
 func main() {
@@ -21,7 +20,7 @@ func main() {
 		log.Fatalln("Wow! No CWD. Giving up.", err)
 	}
 
-	global, err := setup.MakeGlobalState(pth)
+	global, err := server.MakeGlobalState(pth)
 	if err != nil {
 		log.Fatalln("Can't make global state:", err)
 	}
