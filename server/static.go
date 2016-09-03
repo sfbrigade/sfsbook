@@ -12,12 +12,12 @@ import (
 
 // TODO(rjk): This will probably require additional fields.
 type staticServer struct {
-	ff *fileFinder
+	ff *FileFinder
 }
 
 
 
-func MakeStaticServer(ff *fileFinder) *staticServer {
+func MakeStaticServer(ff *FileFinder) *staticServer {
 	return &staticServer{ff: ff}
 }
 

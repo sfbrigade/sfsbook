@@ -5,29 +5,40 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/blevesearch/bleve"
 	"github.com/sfbrigade/sfsbook/dba"
+	"github.com/sfbrigade/sfsbook/setup"
+
 )
 
-// MakeServer creates a graceful.Server serving from the specificed address.
+// MakeServer creates a Server serving from the specificed address.
 // The contents of pathroot are served.
 // Conceivably, it's possible that passing the bi through here is a layering violation?
 // TODO(rjk): I'm convinced, it's a layering violation. Make it go away.
-func MakeServer(address, pathroot string, bi bleve.Index) *http.Server {
-	log.Println("MakeServer", address, pathroot)
+// TODO(rjk): redirect to from http to https.
+func MakeServer(address string, global *setup.GlobalState) *http.Server {
+	log.Println("MakeServer", address, global.Sitedir)
 	m := http.NewServeMux()
 
-	ff := makeFileFinder(pathroot)
-	m.Handle("/js/", MakeStaticServer(ff))
-	m.Handle("/resources/", MakeResourceServer(ff, dba.MakeResourceResultsGenerator(bi)))
-	m.Handle("/search.html", MakeTemplatedServer(ff, dba.MakeQueryResultsGenerator(bi)))
-	m.Handle("/", MakeTemplatedServer(ff, dba.MakeStubGenerator(bi)))
+	// Have I chained this in the right direction?
+	// i.e.: why is the file-finder at the bottom?
+	// Because... it has to be?
+	// File-finder is inside the server.
 
+	ff := MakeFileFinder(global)
+	m.Handle("/js/", MakeStaticServer(ff))
+	m.Handle("/resources/", MakeResourceServer(ff, dba.MakeResourceResultsGenerator(global.ResourceGuide)))
+	m.Handle("/search.html", MakeTemplatedServer(ff, dba.MakeQueryResultsGenerator(global.ResourceGuide)))
+	m.Handle("/", MakeTemplatedServer(ff, dba.MakeStubGenerator(global.ResourceGuide)))
+
+	// TODO(rjk): why no https config here?
 	srv := &http.Server{
 		ReadTimeout: 5 * time.Second,
 		WriteTimeout: 5 * time.Second,
 		Addr:    address,
 		Handler: m,
+
+		// TLS config?
+		
 	}
 	return srv
 }

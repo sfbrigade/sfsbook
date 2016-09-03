@@ -1,45 +1,79 @@
 package setup
 
+
+// TODO(rjk): move this to server package
+
 import (
+	"fmt"
 	"log"
 	"os"
 	"path/filepath"
+
+	"github.com/blevesearch/bleve"
+	"github.com/sfbrigade/sfsbook/dba"
+	"github.com/sfbrigade/sfsbook/dba/fieldmap"
+
 )
 
-func MakeKeys(pth string) error {
-	certpth := filepath.Join(pth, "cert.pem")
-	keypth := filepath.Join(pth, "key.pem")
+// GlobalState is state shared across all server requests.
+type GlobalState struct {
+	Persistentroot string
+	Sitedir string
+	
+	// Cache.
 
-	makeNew := false
-	if _, err := os.Stat(certpth); err != nil {
-		makeNew = true
-	}
-	if _, err := os.Stat(keypth); err != nil {
-		makeNew = true
-	}
+	// Databases
+	ResourceGuide bleve.Index
+	PasswordFile bleve.Index
 
-	if makeNew {
-		return makeTestKeys(certpth, keypth)
-	}
-	return nil
+	// Cookie keys
+	
+
+	// Flags
+	Immutable bool
+
 }
 
-// ConstructNecessaryStartingState builds all the necessary state except the database
-// to get started, placing it in the persistentpath/"state". Call this function first to make
-// sure that the path exists and can be written.
-func ConstructNecessaryStartingState(persistentroot string) {
+// MakeGlobalRequestState builds all the global state shared between all
+// requests including the contents of the persistentroot`/state/'
+// directory, the database connections, the global cache and cookie
+// authentication keys.
+func MakeGlobalState(persistentroot string) (*GlobalState, error) {
 	pth := filepath.Join(persistentroot, "state")
 	log.Println("hello from setup, creating state in", pth)
 
 	if err := os.MkdirAll(pth, 0777); err != nil {
-		log.Fatalln("Couldn't make directory", pth, "because", err)
+		return nil, fmt.Errorf("Couldn't make directory", pth, "because", err)
 	}
 
-	// make key
+	// It is unnecessary to create the site directory because if it doesn't exist,
+	// resources will be compiled in.
+	sitedir := filepath.Join(persistentroot, "site")
+
+	// make keys
 	if err := MakeKeys(pth); err != nil {
-		log.Fatalln("Don't have and can't make keys.", err)
+		return nil, fmt.Errorf("Don't have and can't make keys.", err)
 	}
 
-	// TODO(rjk): Re-write or setup a database.
+	resourceguide, err := dba.OpenBleve(persistentroot, fieldmap.RefGuide)
+	if err != nil {
+		return nil, fmt.Errorf("Can't open/create the resource guide database: %v", err)
+	}
 
+	immutable := false
+	passwordfile, err := dba.OpenBleve(persistentroot, fieldmap.PasswordFile)
+	if err != nil {
+		log.Println("Operating in read-only mode because can't open/create user database:", err)
+		immutable = true
+	}
+
+	// TODO(rjk): Setup cookies. Setup the global cache.
+
+	return &GlobalState{
+		Persistentroot: persistentroot,
+		Sitedir: sitedir,
+		ResourceGuide: resourceguide,
+		PasswordFile: passwordfile,
+		Immutable: immutable,
+	}, nil
 }

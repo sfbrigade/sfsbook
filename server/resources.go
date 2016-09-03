@@ -16,7 +16,7 @@ type resourceServer struct {
 	templatedServer
 }
 
-func MakeResourceServer(ff *fileFinder, g dba.Generator) *resourceServer {
+func MakeResourceServer(ff *FileFinder, g dba.Generator) *resourceServer {
 	return &resourceServer{ 
 		templatedServer: *MakeTemplatedServer(ff, g),
 	}

@@ -7,6 +7,8 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+
+	"github.com/sfbrigade/sfsbook/setup"
 )
 
 //go:generate go run ../generator/tool/generateresources.go -output embedded_resources.go -prefix ../site/ ../site
@@ -24,20 +26,19 @@ type Serve interface {
 	ServeForString(s string, w http.ResponseWriter, req interface{}) 
 }
 
-type fileFinder struct {
-	// The full path of the site directory in which dynamically processed
-	// resources would be found.
-	sitepath string
+// TODO(rjk): This is wrong. It should really be that the Global state is constructed by
+// including a FileFinder instance. And then the global state would provide the
+// methods of the FileFinder. And all of this should get relocated to server.
+type FileFinder setup.GlobalState
+
+func MakeFileFinder(global *setup.GlobalState) *FileFinder {
+	// Types have to align. This isn't very good code.
+	return (*FileFinder)(global)
 }
 
-func makeFileFinder(pathroot string) *fileFinder {
-	return &fileFinder{
-		sitepath: filepath.Join(pathroot, "site"),
-	}
-}
-
-func (ff *fileFinder) StreamOrString(upath string, serve Serve, w http.ResponseWriter, req interface{}) error {
-	fpath := filepath.Join(ff.sitepath, upath)
+// Given an Url, 
+func (ff *FileFinder) StreamOrString(upath string, serve Serve, w http.ResponseWriter, req interface{}) error {
+	fpath := filepath.Join(ff.Sitedir, upath)
 	log.Println(upath, fpath)
 		
 	if _, err := os.Stat(fpath); err != nil {

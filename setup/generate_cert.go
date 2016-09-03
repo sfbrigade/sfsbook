@@ -21,6 +21,7 @@ import (
 	"math/big"
 	"net"
 	"os"
+	"path/filepath"
 	"strings"
 	"time"
 )
@@ -121,5 +122,27 @@ func makeTestKeys(certpth, keypth string) error {
 	}
 	pem.Encode(keyOut, blk)
 	//	log.Println("written", keypth)
+	return nil
+}
+
+// Code here down is not from the Go distribution.
+
+// MakeKeys creates the https keys in the persistent server root
+// specificed by pth..
+func MakeKeys(pth string) error {
+	certpth := filepath.Join(pth, "cert.pem")
+	keypth := filepath.Join(pth, "key.pem")
+
+	makeNew := false
+	if _, err := os.Stat(certpth); err != nil {
+		makeNew = true
+	}
+	if _, err := os.Stat(keypth); err != nil {
+		makeNew = true
+	}
+
+	if makeNew {
+		return makeTestKeys(certpth, keypth)
+	}
 	return nil
 }

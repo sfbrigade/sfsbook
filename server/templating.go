@@ -15,12 +15,12 @@ import (
 type templatedServer struct {
 	sync.Mutex
 	templates map[string]*template.Template
-	ff *fileFinder
+	ff *FileFinder
 
 	generator dba.Generator
 }
 
-func MakeTemplatedServer(ff *fileFinder, g dba.Generator) *templatedServer {
+func MakeTemplatedServer(ff *FileFinder, g dba.Generator) *templatedServer {
 	return &templatedServer{ 
 		templates: make(map[string]*template.Template),
 		ff: ff,
