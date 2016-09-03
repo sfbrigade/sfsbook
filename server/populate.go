@@ -16,9 +16,6 @@ import (
 type GlobalState struct {
 	EmbeddableResources
 
-	// Why do I need? Only for setup?
-	Persistentroot string
-
 	// Cache.
 
 	// Databases
@@ -71,7 +68,6 @@ func MakeGlobalState(persistentroot string) (*GlobalState, error) {
 
 	return &GlobalState{
 		EmbeddableResources: *MakeEmbeddableResource(sitedir),
-		Persistentroot: persistentroot,
 		ResourceGuide:  resourceguide,
 		PasswordFile:   passwordfile,
 		Immutable:      immutable,
