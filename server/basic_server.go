@@ -10,7 +10,7 @@ import (
 
 )
 
-// MakeServer creates a Server serving from the specificed address.
+// MakeServer creates a Server serving from the specified address.
 // The contents of pathroot are served.
 // Conceivably, it's possible that passing the bi through here is a layering violation?
 // TODO(rjk): I'm convinced, it's a layering violation. Make it go away.
