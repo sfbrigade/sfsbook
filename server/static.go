@@ -10,12 +10,11 @@ import (
 )
 
 // TODO(rjk): This will probably require additional fields.
-type staticServer struct {
-	ff *FileFinder
-}
+type staticServer GlobalState
 
-func MakeStaticServer(ff *FileFinder) *staticServer {
-	return &staticServer{ff: ff}
+
+func MakeStaticServer(global *GlobalState) *staticServer {
+	return (*staticServer)(global)
 }
 
 func (gs *staticServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
@@ -27,9 +26,14 @@ func (gs *staticServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		w.Header().Add("Content-Type", "application/javascript")
 	}
 
-	if err := gs.ff.StreamOrString(sn, gs, w, req); err != nil {
+	str, err := gs.GetAsString(sn)
+	if err != nil {
+		// TODO(rjk): Rationalize error handling here. There needs to be a 404 page.
 		respondWithError(w, fmt.Sprintln("Server error", err))
 	}
+
+	// TODO(rjk): Refactor this.
+	gs.ServeForString(str, w, req)
 }
 
 func (gs *staticServer) ServeForString(s string, w http.ResponseWriter, req interface{}) {

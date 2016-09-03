@@ -14,8 +14,10 @@ import (
 
 // GlobalState is state shared across all server requests.
 type GlobalState struct {
+	EmbeddableResources
+
+	// Why do I need? Only for setup?
 	Persistentroot string
-	Sitedir        string
 
 	// Cache.
 
@@ -42,8 +44,11 @@ func MakeGlobalState(persistentroot string) (*GlobalState, error) {
 	}
 
 	// It is unnecessary to create the site directory because if it doesn't exist,
-	// resources will be compiled in.
 	sitedir := filepath.Join(persistentroot, "site")
+	if _, err := os.Stat(sitedir); err != nil {
+		log.Println("There is no site directory so all resources must be embedded.")
+		sitedir = ""
+	}
 
 	// make keys
 	if err := setup.MakeKeys(pth); err != nil {
@@ -65,8 +70,8 @@ func MakeGlobalState(persistentroot string) (*GlobalState, error) {
 	// TODO(rjk): Setup cookies. Setup the global cache.
 
 	return &GlobalState{
+		EmbeddableResources: *MakeEmbeddableResource(sitedir),
 		Persistentroot: persistentroot,
-		Sitedir:        sitedir,
 		ResourceGuide:  resourceguide,
 		PasswordFile:   passwordfile,
 		Immutable:      immutable,
