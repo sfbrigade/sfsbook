@@ -9,18 +9,14 @@ import (
 	"strings"
 )
 
-
 // TODO(rjk): This will probably require additional fields.
 type staticServer struct {
 	ff *FileFinder
 }
 
-
-
 func MakeStaticServer(ff *FileFinder) *staticServer {
 	return &staticServer{ff: ff}
 }
-
 
 func (gs *staticServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	sn := req.URL.Path
