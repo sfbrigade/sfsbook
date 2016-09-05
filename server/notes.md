@@ -81,3 +81,15 @@ inside of the
 
 ## Summary
 The flow has become apparent. I must restructure the code.
+
+## Caching
+I want to minimize the amount of work that I need to do for a given page.
+What constitutes the final form of a page? Baked output as served to the
+requesting UA. This should be cached. What uniquely identifies this?
+
+*  resource path
+*  post arguments
+*  user uuid
+
+Wait! Shouldn't I benchmark first? Profile. Look at data? Do the simplest
+thing? Maybe it doesn't matter. And will never matter.
