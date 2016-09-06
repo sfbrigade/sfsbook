@@ -13,15 +13,15 @@ import (
 type templatedServer struct {
 	sync.Mutex
 	templates map[string]*template.Template
-	global        *GlobalState
+	global    *GlobalState
 
 	generator dba.Generator
 }
 
-func MakeTemplatedServer(global  *GlobalState, g dba.Generator) *templatedServer {
+func MakeTemplatedServer(global *GlobalState, g dba.Generator) *templatedServer {
 	return &templatedServer{
 		templates: make(map[string]*template.Template),
-		global:        global,
+		global:    global,
 		generator: g,
 	}
 }

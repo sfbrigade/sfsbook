@@ -10,7 +10,6 @@ import (
 
 type staticServer GlobalState
 
-
 func MakeStaticServer(global *GlobalState) *staticServer {
 	return (*staticServer)(global)
 }
