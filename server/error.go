@@ -15,6 +15,6 @@ func (e Error) Error() string {
 }
 
 var errorMessages = map[Error]string{
-	ErrorNoSuchEmbeddedResource:                        "No embedded resource with the given path exists",
-	ErrorNoSuchFileResource:                  "No file resource with the given path exists",
+	ErrorNoSuchEmbeddedResource: "No embedded resource with the given path exists",
+	ErrorNoSuchFileResource:     "No file resource with the given path exists",
 }

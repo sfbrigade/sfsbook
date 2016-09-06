@@ -15,7 +15,7 @@ import (
 
 type resourceServer templatedServer
 
-func MakeResourceServer(global  *GlobalState, g dba.Generator) *resourceServer {
+func MakeResourceServer(global *GlobalState, g dba.Generator) *resourceServer {
 	return (*resourceServer)(MakeTemplatedServer(global, g))
 }
 

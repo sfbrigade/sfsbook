@@ -2,11 +2,13 @@ package server
 
 import (
 	"fmt"
+	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
 
 	"github.com/blevesearch/bleve"
+	"github.com/gorilla/securecookie"
 	"github.com/sfbrigade/sfsbook/dba"
 	"github.com/sfbrigade/sfsbook/dba/fieldmap"
 	"github.com/sfbrigade/sfsbook/setup"
@@ -16,16 +18,44 @@ import (
 type GlobalState struct {
 	EmbeddableResources
 
-	// Cache.
+	// Cache when I need one.
 
 	// Databases
 	ResourceGuide bleve.Index
 	PasswordFile  bleve.Index
 
-	// Cookie keys
+	// Cookie management.
+	securecookie.SecureCookie
 
 	// Flags
 	Immutable bool
+}
+
+// makeCookie builds and saves a cookie.
+// TODO(rjk): Add automatic cookie rotation with aging and batches.
+func makeCookie(statepath, cookiename string) ([]byte, error) {
+	path := filepath.Join(statepath, cookiename)
+	key, err := ioutil.ReadFile(path)
+	if err != nil {
+		log.Println("making new cookie", cookiename)
+		key := securecookie.GenerateRandomKey(32)
+		if key == nil {
+			return nil, fmt.Errorf("No cookie for %s and can't make one", cookiename)
+		}
+
+		// TODO(rjk): Make sure that the umask is set appropriately.
+		cookiefile, err := os.Create(path)
+		if err != nil {
+			return nil, fmt.Errorf("Can't create a %s to hold new cookie: %v",
+				path, err)
+		}
+
+		if n, err := cookiefile.Write(key); err != nil || n != len(key) {
+			return nil, fmt.Errorf("Can't write new cookie %s.  len is %d instead of %d or error: %v",
+				path, n, len(key), err)
+		}
+	}
+	return key, nil
 }
 
 // MakeGlobalRequestState builds all the global state shared between all
@@ -33,11 +63,11 @@ type GlobalState struct {
 // directory, the database connections, the global cache and cookie
 // authentication keys.
 func MakeGlobalState(persistentroot string) (*GlobalState, error) {
-	pth := filepath.Join(persistentroot, "state")
-	log.Println("hello from setup, creating state in", pth)
+	statepath := filepath.Join(persistentroot, "state")
+	log.Println("hello from setup, creating state in", statepath)
 
-	if err := os.MkdirAll(pth, 0777); err != nil {
-		return nil, fmt.Errorf("Couldn't make directory", pth, "because", err)
+	if err := os.MkdirAll(statepath, 0777); err != nil {
+		return nil, fmt.Errorf("Couldn't make directory", statepath, "because", err)
 	}
 
 	// It is unnecessary to create the site directory because if it doesn't exist,
@@ -48,7 +78,7 @@ func MakeGlobalState(persistentroot string) (*GlobalState, error) {
 	}
 
 	// make keys
-	if err := setup.MakeKeys(pth); err != nil {
+	if err := setup.MakeKeys(statepath); err != nil {
 		return nil, fmt.Errorf("Don't have and can't make keys.", err)
 	}
 
@@ -64,12 +94,21 @@ func MakeGlobalState(persistentroot string) (*GlobalState, error) {
 		immutable = true
 	}
 
-	// TODO(rjk): Setup cookies. Setup the global cache.
+	// Make cookie keys.
+	hashKey, err := makeCookie(statepath, "hashkey.dat")
+	if err != nil {
+		return nil, err
+	}
+	blockKey, err := makeCookie(statepath, "blockkey.dat")
+	if err != nil {
+		return nil, err
+	}
 
 	return &GlobalState{
 		EmbeddableResources: *MakeEmbeddableResource(sitedir),
-		ResourceGuide:  resourceguide,
-		PasswordFile:   passwordfile,
-		Immutable:      immutable,
+		SecureCookie:        *securecookie.New(hashKey, blockKey),
+		ResourceGuide:       resourceguide,
+		PasswordFile:        passwordfile,
+		Immutable:           immutable,
 	}, nil
 }

@@ -14,7 +14,7 @@ import (
 // directory actually constructs the embedded resources using tooling
 // from the generator package.
 
-type  EmbeddableResources struct {
+type EmbeddableResources struct {
 	sitedir string
 }
 
@@ -30,11 +30,11 @@ func MakeEmbeddableResource(sitedir string) *EmbeddableResources {
 
 func (er *EmbeddableResources) alwaysGetEmbedded(upath string) (string, error) {
 	// TODO(rjk): Resources should be compressed.
-		res, ok := Resources[upath]
-		if !ok {
-			return "", Error(ErrorNoSuchEmbeddedResource)
-		}
-		return res, nil
+	res, ok := Resources[upath]
+	if !ok {
+		return "", Error(ErrorNoSuchEmbeddedResource)
+	}
+	return res, nil
 }
 
 // GetAsString retrieves file upath from either the embedded
