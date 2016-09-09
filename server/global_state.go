@@ -2,13 +2,11 @@ package server
 
 import (
 	"fmt"
-	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
 
 	"github.com/blevesearch/bleve"
-	"github.com/gorilla/securecookie"
 	"github.com/sfbrigade/sfsbook/dba"
 	"github.com/sfbrigade/sfsbook/dba/fieldmap"
 	"github.com/sfbrigade/sfsbook/setup"
@@ -24,39 +22,12 @@ type GlobalState struct {
 	ResourceGuide bleve.Index
 	PasswordFile  bleve.Index
 
-	// Cookie management.
-	securecookie.SecureCookie
+	UserState
 
 	// Flags
 	Immutable bool
 }
 
-// makeCookie builds and saves a cookie.
-// TODO(rjk): Add automatic cookie rotation with aging and batches.
-func makeCookie(statepath, cookiename string) ([]byte, error) {
-	path := filepath.Join(statepath, cookiename)
-	key, err := ioutil.ReadFile(path)
-	if err != nil {
-		log.Println("making new cookie", cookiename)
-		key := securecookie.GenerateRandomKey(32)
-		if key == nil {
-			return nil, fmt.Errorf("No cookie for %s and can't make one", cookiename)
-		}
-
-		// TODO(rjk): Make sure that the umask is set appropriately.
-		cookiefile, err := os.Create(path)
-		if err != nil {
-			return nil, fmt.Errorf("Can't create a %s to hold new cookie: %v",
-				path, err)
-		}
-
-		if n, err := cookiefile.Write(key); err != nil || n != len(key) {
-			return nil, fmt.Errorf("Can't write new cookie %s.  len is %d instead of %d or error: %v",
-				path, n, len(key), err)
-		}
-	}
-	return key, nil
-}
 
 // MakeGlobalRequestState builds all the global state shared between all
 // requests including the contents of the persistentroot`/state/'
@@ -87,6 +58,7 @@ func MakeGlobalState(persistentroot string) (*GlobalState, error) {
 		return nil, fmt.Errorf("Can't open/create the resource guide database: %v", err)
 	}
 
+	// This is unnecessary. The auth scheme should take care of it.
 	immutable := false
 	passwordfile, err := dba.OpenBleve(persistentroot, fieldmap.PasswordFile)
 	if err != nil {
@@ -94,19 +66,14 @@ func MakeGlobalState(persistentroot string) (*GlobalState, error) {
 		immutable = true
 	}
 
-	// Make cookie keys.
-	hashKey, err := makeCookie(statepath, "hashkey.dat")
-	if err != nil {
-		return nil, err
-	}
-	blockKey, err := makeCookie(statepath, "blockkey.dat")
+	userstate, err := MakeUserState(statepath)
 	if err != nil {
 		return nil, err
 	}
 
 	return &GlobalState{
 		EmbeddableResources: *MakeEmbeddableResource(sitedir),
-		SecureCookie:        *securecookie.New(hashKey, blockKey),
+		UserState:        *userstate,
 		ResourceGuide:       resourceguide,
 		PasswordFile:        passwordfile,
 		Immutable:           immutable,

@@ -15,7 +15,12 @@ func MakeStaticServer(global *GlobalState) *staticServer {
 }
 
 func (gs *staticServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
-	// TODO(rjk): Do auth lookup here.
+	// I would prefer magic. But this is easy to reason about.
+	if nreq, hasauthtoken := gs.WithDecodedUserCookie(w, req); hasauthtoken  {
+		return
+	} else {
+		req = nreq
+	}	
 
 	sn := req.URL.Path
 	// Filename-specific actions.
@@ -24,6 +29,8 @@ func (gs *staticServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		w.Header().Add("Content-Type", "application/javascript")
 	}
 
+	// TODO(rjk): Test here that we are allowed to serve this resource to this user.
+	
 	str, err := gs.GetAsString(sn)
 	if err != nil {
 		// TODO(rjk): Rationalize error handling here. There needs to be a 404 page.
