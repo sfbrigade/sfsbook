@@ -97,6 +97,7 @@ func makeCookie(statepath, cookiename string) ([]byte, error) {
 }
 
 // MakeUserState builds an instance of the user mangement facility.
+// TODO(rjk): add the state here...
 func MakeUserState(statepath string) (*UserState, error) {
 	// Make cookie keys.
 	hashKey, err := makeCookie(statepath, "hashkey.dat")

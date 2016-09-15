@@ -47,9 +47,8 @@ func (gs *templatedServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	gs.ServeForStrings(str, w, req)
 }
 
-// ServeStream implementation re-parses the template each time and then
-// executes it. The presumption is that in stream serving mode, a single developer
-// is using the software.
+// ServeForStrings implementation re-parses the template each time and then
+// executes it. 
 func (gs *templatedServer) ServeForStrings(templatestr string, w http.ResponseWriter, req interface{}) {
 	// TODO(rjk): Logs, perf measurements, etc.
 	template, err := template.New("htmlbase").Parse(string(templatestr))

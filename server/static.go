@@ -15,11 +15,13 @@ func MakeStaticServer(global *GlobalState) *staticServer {
 }
 
 func (gs *staticServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
-	// I would prefer magic. But this is easy to reason about.
+	// I would prefer magic. But this is easy to reason about. I need the magic.
+	// Augment req with authtoken.
+	// I think that I should wrap. And wrap again. (Isn't this yet more refactoring?)
 	if nreq, hasauthtoken := gs.WithDecodedUserCookie(w, req); hasauthtoken  {
-		return
-	} else {
 		req = nreq
+	} else {
+		return
 	}	
 
 	sn := req.URL.Path
