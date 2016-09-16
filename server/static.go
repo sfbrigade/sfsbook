@@ -8,22 +8,14 @@ import (
 	"path"
 )
 
-type staticServer GlobalState
+type staticServer embeddableResources
 
-func MakeStaticServer(global *GlobalState) *staticServer {
-	return (*staticServer)(global)
+// makeStaticHandler makes a new http.Handler for static content.
+func (hf *HandlerFactory) makeStaticHandler() http.Handler {
+	return (*staticServer)(makeEmbeddableResource(hf.sitedir))
 }
 
 func (gs *staticServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
-	// I would prefer magic. But this is easy to reason about. I need the magic.
-	// Augment req with authtoken.
-	// I think that I should wrap. And wrap again. (Isn't this yet more refactoring?)
-	if nreq, hasauthtoken := gs.WithDecodedUserCookie(w, req); hasauthtoken  {
-		req = nreq
-	} else {
-		return
-	}	
-
 	sn := req.URL.Path
 	// Filename-specific actions.
 	switch path.Ext(sn) {
@@ -32,8 +24,9 @@ func (gs *staticServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	}
 
 	// TODO(rjk): Test here that we are allowed to serve this resource to this user.
-	
-	str, err := gs.GetAsString(sn)
+	log.Println("user cookie", *GetCookie(req))
+
+	str, err := (*embeddableResources)(gs).GetAsString(sn)
 	if err != nil {
 		// TODO(rjk): Rationalize error handling here. There needs to be a 404 page.
 		respondWithError(w, fmt.Sprintln("Server error", err))

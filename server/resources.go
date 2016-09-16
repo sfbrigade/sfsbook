@@ -15,7 +15,7 @@ import (
 
 type resourceServer templatedServer
 
-func MakeResourceServer(global *GlobalState, g dba.Generator) *resourceServer {
+func MakeResourceServer(global *HandlerFactory, g dba.Generator) *resourceServer {
 	return (*resourceServer)(MakeTemplatedServer(global, g))
 }
 
@@ -57,7 +57,7 @@ func (gs *resourceServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		dbreq.PostArgs = req.PostForm
 	}
 
-	str, err := gs.global.GetAsString(sn)
+	str, err := gs.embr.GetAsString(sn)
 	if err != nil {
 		// TODO(rjk): Rationalize error handling here. There needs to be a 404 page.
 		respondWithError(w, fmt.Sprintln("Server error", err))

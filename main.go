@@ -20,13 +20,13 @@ func main() {
 		log.Fatalln("Wow! No CWD. Giving up.", err)
 	}
 
-	global, err := server.MakeGlobalState(pth)
+	handlerfactory, err := server.MakeHandlerFactory(pth)
 	if err != nil {
-		log.Fatalln("Can't make global state:", err)
+		log.Fatalln("Can't make HandlerFactory:", err)
 	}
 
-	// I don't think that I actually use the keys
-	srv := server.MakeServer(":10443", global)
+	// I don't think that I actually use the certificates properly.
+	srv := server.MakeServer(":10443", handlerfactory)
 	server.Start(pth, srv)
 
 }

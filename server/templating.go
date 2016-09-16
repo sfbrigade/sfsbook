@@ -13,15 +13,15 @@ import (
 type templatedServer struct {
 	sync.Mutex
 	templates map[string]*template.Template
-	global    *GlobalState
+	embr    *embeddableResources
 
 	generator dba.Generator
 }
 
-func MakeTemplatedServer(global *GlobalState, g dba.Generator) *templatedServer {
+func MakeTemplatedServer(hf *HandlerFactory, g dba.Generator) *templatedServer {
 	return &templatedServer{
 		templates: make(map[string]*template.Template),
-		global:    global,
+		embr:    makeEmbeddableResource(hf.sitedir),
 		generator: g,
 	}
 }
@@ -36,7 +36,7 @@ func (gs *templatedServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		respondWithError(w, fmt.Sprintln("invalid form parameters", err))
 	}
 
-	str, err := gs.global.GetAsString(sn)
+	str, err := gs.embr.GetAsString(sn)
 	if err != nil {
 		// TODO(rjk): Rationalize error handling here. There needs to be a 404 page.
 		respondWithError(w, fmt.Sprintln("Server error", err))
@@ -48,7 +48,7 @@ func (gs *templatedServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 }
 
 // ServeForStrings implementation re-parses the template each time and then
-// executes it. 
+// executes it.
 func (gs *templatedServer) ServeForStrings(templatestr string, w http.ResponseWriter, req interface{}) {
 	// TODO(rjk): Logs, perf measurements, etc.
 	template, err := template.New("htmlbase").Parse(string(templatestr))

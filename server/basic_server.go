@@ -12,13 +12,13 @@ import (
 // Conceivably, it's possible that passing the bi through here is a layering violation?
 // TODO(rjk): I'm convinced, it's a layering violation. Make it go away.
 // TODO(rjk): redirect to from http to https.
-func MakeServer(address string, global *GlobalState) *http.Server {
+func MakeServer(address string, hf *HandlerFactory) *http.Server {
 	m := http.NewServeMux()
 
-	m.Handle("/js/", MakeStaticServer(global))
-	m.Handle("/resources/", MakeResourceServer(global, dba.MakeResourceResultsGenerator(global.ResourceGuide)))
-	m.Handle("/search.html", MakeTemplatedServer(global, dba.MakeQueryResultsGenerator(global.ResourceGuide)))
-	m.Handle("/", MakeTemplatedServer(global, dba.MakeStubGenerator(global.ResourceGuide)))
+	m.Handle("/js/", hf.makeCookieHandler(hf.makeStaticHandler()))
+	m.Handle("/resources/", MakeResourceServer(hf, dba.MakeResourceResultsGenerator(hf.resourceguide)))
+	m.Handle("/search.html", MakeTemplatedServer(hf, dba.MakeQueryResultsGenerator(hf.resourceguide)))
+	m.Handle("/", MakeTemplatedServer(hf, dba.MakeStubGenerator(hf.resourceguide)))
 
 	// TODO(rjk): why no https config here?
 	srv := &http.Server{
