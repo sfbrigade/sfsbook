@@ -12,28 +12,31 @@ import (
 	"github.com/sfbrigade/sfsbook/setup"
 )
 
-// GlobalState is state shared across all server requests.
-type GlobalState struct {
-	EmbeddableResources
+// HandlerFactory contains all state needed to construct the various
+// specialized http.Handler instances provided by the server. Once
+// a HandlerFactory exists, it can vend handlers without errors.
+type HandlerFactory struct {
+	statepath string
+	sitedir   string
 
 	// Cache when I need one.
 
 	// Databases
-	ResourceGuide bleve.Index
-	PasswordFile  bleve.Index
+	resourceguide bleve.Index
+	passwordfile  bleve.Index
 
-	UserState
+	cookietool *cookieTooling
 
 	// Flags
 	Immutable bool
 }
 
-
-// MakeGlobalRequestState builds all the global state shared between all
-// requests including the contents of the persistentroot`/state/'
+// MakeHandlerFactory does possibly error-generating setup for all
+// asepcts of the global state including the contents of the persistentroot`/state/'
 // directory, the database connections, the global cache and cookie
-// authentication keys.
-func MakeGlobalState(persistentroot string) (*GlobalState, error) {
+// authentication keys. The provided HandlerFactory can then vends various
+// specialized http.Handler instances using this state without errors.
+func MakeHandlerFactory(persistentroot string) (*HandlerFactory, error) {
 	statepath := filepath.Join(persistentroot, "state")
 	log.Println("hello from setup, creating state in", statepath)
 
@@ -58,6 +61,11 @@ func MakeGlobalState(persistentroot string) (*GlobalState, error) {
 		return nil, fmt.Errorf("Can't open/create the resource guide database: %v", err)
 	}
 
+	cookietool, err := makeCookieTooling(statepath)
+	if err != nil { 
+		return nil, err
+	}
+
 	// This is unnecessary. The auth scheme should take care of it.
 	immutable := false
 	passwordfile, err := dba.OpenBleve(persistentroot, fieldmap.PasswordFile)
@@ -66,16 +74,12 @@ func MakeGlobalState(persistentroot string) (*GlobalState, error) {
 		immutable = true
 	}
 
-	userstate, err := MakeUserState(statepath)
-	if err != nil {
-		return nil, err
-	}
-
-	return &GlobalState{
-		EmbeddableResources: *MakeEmbeddableResource(sitedir),
-		UserState:        *userstate,
-		ResourceGuide:       resourceguide,
-		PasswordFile:        passwordfile,
-		Immutable:           immutable,
+	return &HandlerFactory{
+		statepath:     statepath,
+		sitedir:       sitedir,
+		resourceguide: resourceguide,
+		passwordfile:  passwordfile,
+		Immutable:     immutable,
+		cookietool: cookietool,
 	}, nil
 }

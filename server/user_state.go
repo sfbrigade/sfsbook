@@ -7,15 +7,15 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"path/filepath"	
+	"path/filepath"
 	"time"
 
-	"github.com/pborman/uuid"
 	"github.com/gorilla/securecookie"
-
+	"github.com/pborman/uuid"
 )
 
-// Capability is a set of capabilities. Sized because the 
+// Capability is a set of capabilities. Sized because we may need
+// to transmit it over an IPC boundary.
 type Capability int64
 
 const (
@@ -23,7 +23,6 @@ const (
 	CapabilityAnonymous Capability = 0
 )
 
-// Constant Capability makes a bitmask.
 const (
 	// This is also the default.
 	CapabilityViewPublicResourceEntry Capability = 1 << iota
@@ -36,7 +35,7 @@ const (
 
 	CapabilityEditResource
 
-	CapabilityViewUsers	
+	CapabilityViewUsers
 	CapabilityInivteNewUser
 	CapabilityEditUsers
 
@@ -46,27 +45,33 @@ const (
 	CapabilityReauthenticate
 )
 
-
-// UserCookie is encrypted via securecookie facilities
-// and set as a cookie on the interaction with the remote UA.
+// UserCookie is data stored in the auth cookie. It's encrypted via
+// the securecookie facilities and set as a cookie on the interaction with
+// the remote UA. It holds the identity and capability of the UA.
+// I presume that the cookie encrypting is sufficiently secure to
+// defeat an attempt to decrypt, alter the capability and reencode.
 type UserCookie struct {
-	// The user identifier. 
+	// The user identifier.
 	uuid uuid.UUID
 
 	// A mask of capabilities.
 	capability Capability
-	
+
 	// The time that the cookie was created.
 	timestamp time.Time
 }
 
-
 // TODO(rjk): Add the ability to check that a given uuid needs to be
 // revalidated.
 
-type UserState struct {
+// cookieHandler is the state for an implementation of http.Handler that
+// can invoke its delegatehandler with a decoded auth cookie context.
+type cookieHandler struct {
 	securecookie.SecureCookie
-	revokelist []uuid.UUID
+
+	// TODO(rjk): Implement revocation.
+	revokelist      []uuid.UUID
+	delegate http.Handler
 }
 
 // makeCookie builds and saves a cookie.
@@ -96,76 +101,70 @@ func makeCookie(statepath, cookiename string) ([]byte, error) {
 	return key, nil
 }
 
-// MakeUserState builds an instance of the user mangement facility.
-// TODO(rjk): add the state here...
-func MakeUserState(statepath string) (*UserState, error) {
-	// Make cookie keys.
-	hashKey, err := makeCookie(statepath, "hashkey.dat")
-	if err != nil {
-		return nil, err
-	}
-	blockKey, err := makeCookie(statepath, "blockkey.dat")
-	if err != nil {
-		return nil, err
-	}
+// cookieTooling contains the cookie-related tooling for the HandlerFactory.
+type cookieTooling struct {
+	hashkey, blockkey []byte
+}
 
-	return &UserState{
-		SecureCookie:        *securecookie.New(hashKey, blockKey),
-		revokelist: make([]uuid.UUID, 0, 10),
+// makeCookieTooling constructs cookie tooling for the HandlerFactory.
+func makeCookieTooling(statepath string) 	(*cookieTooling, error) {
+	hashkey, err := makeCookie(statepath, "hashkey.dat")
+	if err != nil {
+		return nil, err
+	}
+	blockkey, err := makeCookie(statepath, "blockkey.dat")
+	if err != nil {
+		return nil, err
+	}
+	return &cookieTooling{
+		hashkey:  hashkey,
+		blockkey: blockkey,
 	}, nil
 }
 
+// MakeUserStateHandler builds a http.Handler that can
+// decrypt auth cookies. See ServeHTTP below.
+func (hf *HandlerFactory) makeCookieHandler(delegate http.Handler) http.Handler {
+	return &cookieHandler{
+		SecureCookie:    *securecookie.New(hf.cookietool.hashkey, hf.cookietool.blockkey),
+		revokelist:      make([]uuid.UUID, 0, 10),
+		delegate: delegate,
+	}
+}
 
 const SessionCookieName = "session"
-const COOKIE = 1
+const UserCookieStateName = "usercookiestate"
 
-// WithDecodedUserCookie updates the given http.Request with a decoded
-// instance of the cookie or updates the response to redirect
-// appropriately and returns true if the req was successfully udpated.
-// TODO(rjk): Fix up this comment.
-func (um *UserState) WithDecodedUserCookie(w http.ResponseWriter, req *http.Request)  (*http.Request, bool) {
+// GetCookie retrieves the UserState from the context.
+func GetCookie(req *http.Request) *UserCookie {
+	// It's a fatal error to put anything other than a *UserCookie in slot
+	// UserCookieStateName.
+	return req.Context().Value(UserCookieStateName).(*UserCookie)
+}
+
+// ServeHTTP updates the given http.Request with a decoded
+// instance of the auth cookie or updates the response to redirect
+// appropriately.
+func (cf *cookieHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	cookie, err := req.Cookie(SessionCookieName)
 	usercookie := new(UserCookie)
 	if err == nil {
 		// This request has a cookie.
-		if err = um.Decode(SessionCookieName, cookie.Value, usercookie); err != nil {
+		if err = cf.Decode(SessionCookieName, cookie.Value, usercookie); err != nil {
 			log.Println("request had a cookie but it was not decodeable:", err)
+			// TODO(rjk):
 			// redirect to the login page with an appropriate error message.
 		}
 		log.Println("request had a cookie and I could decode it", *usercookie)
-
-		// TODO(rjk): Handle revocation here, re-sign-in etc.
-		return req, false
-
-        } else {
+		// TODO(rjk): Test here for revocation, cookie rotation, etc.
+	} else {
 		log.Println("anonymous access")
 		usercookie.capability = CapabilityAnonymous
 	}
 
-	// Do I actually need to put this on the request? Only if the user state is shipped to another
-	// service? i.e. This code is unnecessary? I should return a usercookie object?
-	// the real reason to stick this data in the context is to support a not-in-process database layer?
-	return req.WithContext(context.WithValue(req.Context(), COOKIE, usercookie)), true
+	cf.delegate.ServeHTTP(w, req.WithContext(
+		context.WithValue(
+			req.Context(), UserCookieStateName, usercookie)))
 }
 
-// TODO(rjk): write me. Select users who have a cookie vended with capabilities but 
-// have had their rights changed. Set this list of uuids. Force the complicated case. And handle
-// TODO(rjk): this needs lots of tests (that aren't flaky?)
-// TODO(rjk): this is on GlobalState.
-//func (GlobalState*) InitializeRevokeUuidList() {
-//}
-
-
-// Might want versions on Context?
-func  RequestIsAnonymous(req *http.Request) bool {
-	uc := (req.Context().Value(COOKIE)).(*UserCookie)
-	return (uc.capability & CapabilityAnonymous) != 0
-}
-
-func RequestHasCapability(req *http.Request, cap Capability) bool {
-	uc := (req.Context().Value(COOKIE)).(*UserCookie)
-	return (uc.capability & cap)!= 0
-}
-
-//func RequestUuid(req *http.Request) uuid.UUID {
-//}
+// TODO(rjk): Need a mechanism for revoking credentials.

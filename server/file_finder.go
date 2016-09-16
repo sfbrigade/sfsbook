@@ -14,21 +14,21 @@ import (
 // directory actually constructs the embedded resources using tooling
 // from the generator package.
 
-type EmbeddableResources struct {
+type embeddableResources struct {
 	sitedir string
 }
 
-// MakeEmbeddableResource returns a new EmbeddableResource. If
+// makeEmbeddableResource returns a new EmbeddableResource. If
 // sitedir is empty, all resources will be taken from the internal resource
 // source.
-func MakeEmbeddableResource(sitedir string) *EmbeddableResources {
+func makeEmbeddableResource(sitedir string) *embeddableResources {
 	log.Println("MakeEmbeddableResource server for", sitedir)
-	return &EmbeddableResources{
+	return &embeddableResources{
 		sitedir: sitedir,
 	}
 }
 
-func (er *EmbeddableResources) alwaysGetEmbedded(upath string) (string, error) {
+func (er *embeddableResources) alwaysGetEmbedded(upath string) (string, error) {
 	// TODO(rjk): Resources should be compressed.
 	res, ok := Resources[upath]
 	if !ok {
@@ -40,7 +40,7 @@ func (er *EmbeddableResources) alwaysGetEmbedded(upath string) (string, error) {
 // GetAsString retrieves file upath from either the embedded
 // storage or from disk. It returns either a string containing the
 // resource or an error if the file could not be retrieved.
-func (er *EmbeddableResources) GetAsString(upath string) (string, error) {
+func (er *embeddableResources) GetAsString(upath string) (string, error) {
 	if er.sitedir == "" {
 		return er.alwaysGetEmbedded(upath)
 	}
