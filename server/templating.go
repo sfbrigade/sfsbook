@@ -13,15 +13,15 @@ import (
 type templatedServer struct {
 	sync.Mutex
 	templates map[string]*template.Template
-	embr    *embeddableResources
+	embr      *embeddableResources
 
 	generator dba.Generator
 }
 
-func MakeTemplatedServer(hf *HandlerFactory, g dba.Generator) *templatedServer {
+func makeTemplatedHandler(hf *HandlerFactory, g dba.Generator) *templatedServer {
 	return &templatedServer{
 		templates: make(map[string]*template.Template),
-		embr:    makeEmbeddableResource(hf.sitedir),
+		embr:      makeEmbeddableResource(hf.sitedir),
 		generator: g,
 	}
 }

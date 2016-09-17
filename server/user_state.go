@@ -70,8 +70,8 @@ type cookieHandler struct {
 	securecookie.SecureCookie
 
 	// TODO(rjk): Implement revocation.
-	revokelist      []uuid.UUID
-	delegate http.Handler
+	revokelist []uuid.UUID
+	delegate   http.Handler
 }
 
 // makeCookie builds and saves a cookie.
@@ -107,7 +107,7 @@ type cookieTooling struct {
 }
 
 // makeCookieTooling constructs cookie tooling for the HandlerFactory.
-func makeCookieTooling(statepath string) 	(*cookieTooling, error) {
+func makeCookieTooling(statepath string) (*cookieTooling, error) {
 	hashkey, err := makeCookie(statepath, "hashkey.dat")
 	if err != nil {
 		return nil, err
@@ -126,9 +126,9 @@ func makeCookieTooling(statepath string) 	(*cookieTooling, error) {
 // decrypt auth cookies. See ServeHTTP below.
 func (hf *HandlerFactory) makeCookieHandler(delegate http.Handler) http.Handler {
 	return &cookieHandler{
-		SecureCookie:    *securecookie.New(hf.cookietool.hashkey, hf.cookietool.blockkey),
-		revokelist:      make([]uuid.UUID, 0, 10),
-		delegate: delegate,
+		SecureCookie: *securecookie.New(hf.cookietool.hashkey, hf.cookietool.blockkey),
+		revokelist:   make([]uuid.UUID, 0, 10),
+		delegate:     delegate,
 	}
 }
 
