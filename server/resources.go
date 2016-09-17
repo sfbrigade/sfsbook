@@ -15,8 +15,8 @@ import (
 
 type resourceServer templatedServer
 
-func MakeResourceServer(global *HandlerFactory, g dba.Generator) *resourceServer {
-	return (*resourceServer)(makeTemplatedHandler(global, g))
+func MakeResourceServer(hf *HandlerFactory, g dba.Generator) *resourceServer {
+	return (*resourceServer)(hf.makeTemplatedHandler(g))
 }
 
 func (gs *resourceServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
