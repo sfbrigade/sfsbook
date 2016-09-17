@@ -62,7 +62,7 @@ func MakeHandlerFactory(persistentroot string) (*HandlerFactory, error) {
 	}
 
 	cookietool, err := makeCookieTooling(statepath)
-	if err != nil { 
+	if err != nil {
 		return nil, err
 	}
 
@@ -80,6 +80,6 @@ func MakeHandlerFactory(persistentroot string) (*HandlerFactory, error) {
 		resourceguide: resourceguide,
 		passwordfile:  passwordfile,
 		Immutable:     immutable,
-		cookietool: cookietool,
+		cookietool:    cookietool,
 	}, nil
 }

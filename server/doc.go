@@ -2,8 +2,8 @@ package server
 
 // The source code is arranged in the following pattern. There are
 // two kinds of init: handler factory tooling and handler creation.
-//  Tooling contains all error-causing init. 
-// 
+//  Tooling contains all error-causing init.
+//
 // A client
 // of the server package creates a HandlerFactory object and can take
 // action (as desired) to correct error situations.
@@ -12,7 +12,7 @@ package server
 // methods named make*Tooling create the tooling that is kept in
 // the HandlerFactory object.
 //
-// Once the HandlerFactory is built, then it can make handlers. 
+// Once the HandlerFactory is built, then it can make handlers.
 // http.Handler creation may not return errors, only http.Handler
 // implementations.
 //
