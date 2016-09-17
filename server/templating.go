@@ -18,7 +18,7 @@ type templatedServer struct {
 	generator dba.Generator
 }
 
-func makeTemplatedHandler(hf *HandlerFactory, g dba.Generator) *templatedServer {
+func (hf *HandlerFactory) makeTemplatedHandler(g dba.Generator) *templatedServer {
 	return &templatedServer{
 		templates: make(map[string]*template.Template),
 		embr:      makeEmbeddableResource(hf.sitedir),
