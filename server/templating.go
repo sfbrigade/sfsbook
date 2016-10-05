@@ -43,10 +43,8 @@ func (gs *templatedServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	gs.serveForStrings(str, w, req)
 }
 
-
 // TODO(rjk): I think that this is not quite right code structure.
 // instead, there needs to be a dbareq re-writing layer.
-
 
 // serveForStrings implementation re-parses the template each time and then
 // executes it.
