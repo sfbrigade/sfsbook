@@ -17,7 +17,7 @@ func MakeServer(address string, hf *HandlerFactory) *http.Server {
 
 	m.Handle("/js/", hf.makeCookieHandler(hf.makeStaticHandler()))
 
-	m.Handle("/resources/", 
+	m.Handle("/resources/",
 		hf.makeCookieHandler(
 			hf.makeResourceHandler(dba.MakeResourceResultsGenerator(hf.resourceguide))))
 
