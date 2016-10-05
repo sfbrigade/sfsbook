@@ -16,9 +16,18 @@ func MakeServer(address string, hf *HandlerFactory) *http.Server {
 	m := http.NewServeMux()
 
 	m.Handle("/js/", hf.makeCookieHandler(hf.makeStaticHandler()))
-	m.Handle("/resources/", MakeResourceServer(hf, dba.MakeResourceResultsGenerator(hf.resourceguide)))
-	m.Handle("/search.html", hf.makeTemplatedHandler(dba.MakeQueryResultsGenerator(hf.resourceguide)))
-	m.Handle("/", hf.makeCookieHandler(hf.makeTemplatedHandler(dba.MakeStubGenerator(hf.resourceguide))))
+
+	m.Handle("/resources/", 
+		hf.makeCookieHandler(
+			hf.makeResourceHandler(dba.MakeResourceResultsGenerator(hf.resourceguide))))
+
+	m.Handle("/search.html",
+		hf.makeCookieHandler(
+			hf.makeTemplatedHandler(dba.MakeQueryResultsGenerator(hf.resourceguide))))
+
+	m.Handle("/",
+		hf.makeCookieHandler(
+			hf.makeTemplatedHandler(dba.MakeStubGenerator(hf.resourceguide))))
 
 	// TODO(rjk): why no https config here?
 	srv := &http.Server{

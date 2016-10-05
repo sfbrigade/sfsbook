@@ -4,23 +4,19 @@ import (
 	"fmt"
 	"html/template"
 	"net/http"
-	"sync"
 
 	"github.com/sfbrigade/sfsbook/dba"
 )
 
-// templatedServer is a
+// templatedServer is a server instance that uses results from generator
+// to populate a Go template.
 type templatedServer struct {
-	sync.Mutex
-	templates map[string]*template.Template
 	embr      *embeddableResources
-
 	generator dba.Generator
 }
 
 func (hf *HandlerFactory) makeTemplatedHandler(g dba.Generator) *templatedServer {
 	return &templatedServer{
-		templates: make(map[string]*template.Template),
 		embr:      makeEmbeddableResource(hf.sitedir),
 		generator: g,
 	}
@@ -44,12 +40,17 @@ func (gs *templatedServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 
 	// TODO(rjk): I need to do something smarter about caching.
 	// I removed the cache of templates pending the global cache.
-	gs.ServeForStrings(str, w, req)
+	gs.serveForStrings(str, w, req)
 }
 
-// ServeForStrings implementation re-parses the template each time and then
+
+// TODO(rjk): I think that this is not quite right code structure.
+// instead, there needs to be a dbareq re-writing layer.
+
+
+// serveForStrings implementation re-parses the template each time and then
 // executes it.
-func (gs *templatedServer) ServeForStrings(templatestr string, w http.ResponseWriter, req interface{}) {
+func (gs *templatedServer) serveForStrings(templatestr string, w http.ResponseWriter, req interface{}) {
 	// TODO(rjk): Logs, perf measurements, etc.
 	template, err := template.New("htmlbase").Parse(string(templatestr))
 	if err != nil {
