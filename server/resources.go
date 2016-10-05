@@ -15,7 +15,7 @@ import (
 
 type resourceServer templatedServer
 
-func MakeResourceServer(hf *HandlerFactory, g dba.Generator) *resourceServer {
+func (hf *HandlerFactory) makeResourceHandler(g dba.Generator) *resourceServer {
 	return (*resourceServer)(hf.makeTemplatedHandler(g))
 }
 
@@ -63,5 +63,5 @@ func (gs *resourceServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		respondWithError(w, fmt.Sprintln("Server error", err))
 	}
 
-	((*templatedServer)(gs)).ServeForStrings(str, w, dbreq)
+	((*templatedServer)(gs)).serveForStrings(str, w, dbreq)
 }
