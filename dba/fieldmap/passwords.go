@@ -40,6 +40,7 @@ func buildPasswordEntryMapping() *bleve.DocumentMapping {
 	passwordEntryMapping.AddFieldMappingsAt("cost", costFieldMapping)
 	passwordEntryMapping.AddFieldMappingsAt("account_created", dateTimeMapping)
 	passwordEntryMapping.AddFieldMappingsAt("last_login", dateTimeMapping)
+	passwordEntryMapping.AddFieldMappingsAt("display_name", keywordFieldMapping)
 
 	return passwordEntryMapping
 }
@@ -74,12 +75,14 @@ func (_ PasswordFileType) LoadStartData(i bleve.Index, pathroot string) error {
 			"cost":         string(bcrypt.DefaultCost),
 			"passwordhash": "open",
 			"role":         "volunteer",
+			"display_name": "Pikachu Helper",
 		},
 		map[string]interface{}{
 			"name":         "admin",
 			"cost":         string(bcrypt.DefaultCost),
 			"passwordhash": "sesame",
 			"role":         "admin",
+			"display_name": "Pokemon Guardian",
 		},
 	}
 
