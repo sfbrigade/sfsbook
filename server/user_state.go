@@ -171,3 +171,11 @@ func (cf *cookieHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 }
 
 // TODO(rjk): Need a mechanism for revoking credentials.
+
+func (u *UserCookie) IsAuthed() bool {
+	return u.capability != CapabilityAnonymous
+}
+
+func (u *UserCookie) DisplayName() string {
+	return u.display_name
+}

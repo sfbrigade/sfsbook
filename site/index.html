@@ -3,6 +3,17 @@
 <script type="text/javascript" src="js/example.js"></script>
 </head>
 <body>
+
+{{/* TODO(rjk): Make the components of the page into subtemplates. */}}
+{{if .DecodedCookie.IsAuthed}}
+{{with .DecodedCookie}}
+<p>Welcome {{.DisplayName}}</p>
+{{end}}
+{{else}}
+You are not signed in. <a href="/login.html">Login?</a>
+{{end}}
+
+{{with .Results}}
 <p>Show that I've wired up getting content from within the app server: {{.Message}}</p>
 <p>Show that I've successfully wired up getting JavaScript to load. (Otherwise the button wouldn't work.)</p>
 <button onclick="addSomething();">Click Me Now!</button>
@@ -16,6 +27,7 @@
 </form>
 
 <div id="insertPoint"></div>
+{{end}}
 
 </body>
 </html>
