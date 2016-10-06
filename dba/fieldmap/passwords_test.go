@@ -40,13 +40,13 @@ func TestPasswordFile(t *testing.T) {
 
 	// Search the database.
 	for _, uname_passwd := range [][]string{
-				[]string{"admin", "sesame", "admin"}, 
-				[]string{"volunteer", "open", "volunteer"},
+				[]string{"admin", "sesame", "admin", "Pokemon Guardian"}, 
+				[]string{"volunteer", "open", "volunteer", "Pikachu Helper"},
 			} {
 		uname := uname_passwd[0]
 		sreq := bleve.NewSearchRequest(bleve.NewMatchQuery(uname))
 		// Note that the result only contains the fields specified here.
-		sreq.Fields = []string{"name", "cost", "passwordhash", "role"}
+		sreq.Fields = []string{"name", "cost", "passwordhash", "role", "display_name"}
 
 		searchResults, err := db.Search(sreq)
 		if err != nil {
@@ -79,6 +79,10 @@ func TestPasswordFile(t *testing.T) {
 		if got, want := sr.Fields["role"].(string), uname_passwd[2]; got != want {
 			t.Error("role wrong got", got, "want", want)
 		}
+		if got, want := sr.Fields["display_name"].(string), uname_passwd[3]; got != want {
+			t.Error("display_name wrong got", got, "want", want)
+		}
 		
 	}
 }
+
