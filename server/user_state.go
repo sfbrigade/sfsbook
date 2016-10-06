@@ -59,6 +59,9 @@ type UserCookie struct {
 
 	// The time that the cookie was created.
 	timestamp time.Time
+
+	// The user's display_name
+	display_name string
 }
 
 // TODO(rjk): Add the ability to check that a given uuid needs to be
