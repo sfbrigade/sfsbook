@@ -35,7 +35,6 @@ func (gs *resourceServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	sn = "/resources/resource.html"
 
 	// TODO(rjk): Validate the uuid here and error-out if it's non-sensical.
-
 	dbreq := &dba.ResourceRequest{
 		Uuid: uuid,
 	}
@@ -63,5 +62,7 @@ func (gs *resourceServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		respondWithError(w, fmt.Sprintln("Server error", err))
 	}
 
-	((*templatedServer)(gs)).serveForStrings(str, w, dbreq)
+	results := gs.generator.ForRequest(dbreq)
+
+	((*templatedServer)(gs)).serveForStrings(w, req, str, results)
 }

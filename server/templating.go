@@ -38,17 +38,25 @@ func (gs *templatedServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		respondWithError(w, fmt.Sprintln("Server error", err))
 	}
 
+	results := gs.generator.ForRequest(req)
+
 	// TODO(rjk): I need to do something smarter about caching.
 	// I removed the cache of templates pending the global cache.
-	gs.serveForStrings(str, w, req)
+	gs.serveForStrings(w, req, str, results)
 }
 
 // TODO(rjk): I think that this is not quite right code structure.
 // instead, there needs to be a dbareq re-writing layer.
 
-// serveForStrings implementation re-parses the template each time and then
-// executes it.
-func (gs *templatedServer) serveForStrings(templatestr string, w http.ResponseWriter, req interface{}) {
+type templateParameters struct {
+	Results       dba.GeneratedResult
+	DecodedCookie *UserCookie
+}
+
+// serveForStrings implementation re-parses the template from templatestr
+// and executes it with a templateParameters object.
+// TODO(rjk): figure out how to cache this as necessary.
+func (gs *templatedServer) serveForStrings(w http.ResponseWriter, req *http.Request, templatestr string, result dba.GeneratedResult) {
 	// TODO(rjk): Logs, perf measurements, etc.
 	template, err := template.New("htmlbase").Parse(string(templatestr))
 	if err != nil {
@@ -56,9 +64,14 @@ func (gs *templatedServer) serveForStrings(templatestr string, w http.ResponseWr
 		return
 	}
 
-	generatedResult := gs.generator.ForRequest(req)
-	generatedResult.SetDebug(true)
-	if err := template.Execute(w, generatedResult); err != nil {
+	// TODO(rjk): This needs to be set differently. Instead of always.
+	result.SetDebug(true)
+	tp := &templateParameters{
+		Results:       result,
+		DecodedCookie: GetCookie(req),
+	}
+
+	if err := template.Execute(w, tp); err != nil {
 		respondWithError(w, fmt.Sprintln("Can't execute template", err))
 	}
 }
