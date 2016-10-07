@@ -25,6 +25,12 @@ func MakeServer(address string, hf *HandlerFactory) *http.Server {
 		hf.makeCookieHandler(
 			hf.makeTemplatedHandler(dba.MakeQueryResultsGenerator(hf.resourceguide))))
 
+	// TODO(rjk): need to wire up the login data
+	// Having the cookie data lets me handle the situation of someone navigating here
+	// in error.
+	m.Handle("/login.html",
+		hf.makeCookieHandler(hf.makeLoginHandler()))
+
 	m.Handle("/",
 		hf.makeCookieHandler(
 			hf.makeTemplatedHandler(dba.MakeStubGenerator(hf.resourceguide))))
