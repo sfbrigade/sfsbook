@@ -42,21 +42,24 @@ func (gs *templatedServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 
 	// TODO(rjk): I need to do something smarter about caching.
 	// I removed the cache of templates pending the global cache.
-	gs.serveForStrings(w, req, str, results)
+	parseAndExecuteTemplate(w, req, str, results)
 }
 
 // TODO(rjk): I think that this is not quite right code structure.
 // instead, there needs to be a dbareq re-writing layer.
 
 type templateParameters struct {
-	Results       dba.GeneratedResult
+	Results       interface{}
 	DecodedCookie *UserCookie
 }
 
-// serveForStrings implementation re-parses the template from templatestr
-// and executes it with a templateParameters object.
-// TODO(rjk): figure out how to cache this as necessary.
-func (gs *templatedServer) serveForStrings(w http.ResponseWriter, req *http.Request, templatestr string, result dba.GeneratedResult) {
+// parseAndExecuteTemplate implementation re-parses the template from templatestr
+// and executes it with a templateParameters object. This is a utility method to be
+// used from anywhere that the provided template is to be used.
+// TODO(rjk): add caching of results.
+// TODO(rjk): permit many arguments. They need to get bundled into a kv-store
+// that keeps things more flexible.
+func parseAndExecuteTemplate(w http.ResponseWriter, req *http.Request, templatestr string, result interface{}) {
 	// TODO(rjk): Logs, perf measurements, etc.
 	template, err := template.New("htmlbase").Parse(string(templatestr))
 	if err != nil {
@@ -64,8 +67,7 @@ func (gs *templatedServer) serveForStrings(w http.ResponseWriter, req *http.Requ
 		return
 	}
 
-	// TODO(rjk): This needs to be set differently. Instead of always.
-	result.SetDebug(true)
+	// Also, I need to make result optional so this is the wrong way to proceed.
 	tp := &templateParameters{
 		Results:       result,
 		DecodedCookie: GetCookie(req),

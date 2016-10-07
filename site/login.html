@@ -4,6 +4,16 @@
 <body>
 <!-- need to add a status bar -->
 
+<a href="/index.html">Back to Search</a>
+
+{{if .DecodedCookie.IsAuthed}}
+<p>You're already signed in!</p>
+<p>Maybe there should be a way to sign out here!</p>
+<p>Thanks for signing out</p>
+<p>Redirecting to home?</p>
+{{else}}
+
+
 <p>Sign-in to edit, view comments, invite people, etc.</p>
 
 <!-- we will redirect on success to index.html  -->
@@ -23,14 +33,9 @@
 <div class="button">
 <input type="submit" value="Login" />
 </div>
-
-<div class="button">
-<input type="submit" value="Cancel" />
 </div>
-</div>
-
 </form>
-
+{{end}}
 
 
 </body>
