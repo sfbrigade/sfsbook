@@ -1,4 +1,5 @@
 package server
+
 // This module of package server is responsible for processing resuts for
 // a specific named resource.
 
@@ -12,16 +13,11 @@ import (
 	"github.com/sfbrigade/sfsbook/dba"
 )
 
-type resourceServer struct {
-	templatedServer
-}
+type resourceServer templatedServer
 
-func MakeResourceServer(ff *fileFinder, g dba.Generator) *resourceServer {
-	return &resourceServer{ 
-		templatedServer: *MakeTemplatedServer(ff, g),
-	}
+func (hf *HandlerFactory) makeResourceHandler(g dba.Generator) *resourceServer {
+	return (*resourceServer)(hf.makeTemplatedHandler(g))
 }
-
 
 func (gs *resourceServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	sn := req.URL.Path
@@ -30,7 +26,7 @@ func (gs *resourceServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 
 	// Path is expected to be of the form /resources/<uuid>.html
 	if path.Ext(sn) != ".html" {
-		respondWithError(w, "bad extension: " + path.Ext(sn))
+		respondWithError(w, "bad extension: "+path.Ext(sn))
 		return
 	}
 
@@ -39,7 +35,6 @@ func (gs *resourceServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	sn = "/resources/resource.html"
 
 	// TODO(rjk): Validate the uuid here and error-out if it's non-sensical.
-
 	dbreq := &dba.ResourceRequest{
 		Uuid: uuid,
 	}
@@ -61,10 +56,14 @@ func (gs *resourceServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		dbreq.PostArgs = req.PostForm
 	}
 
-	if err := gs.ff.StreamOrString(sn, gs, w, dbreq); err != nil {
+	str, err := gs.embr.GetAsString(sn)
+	if err != nil {
+		// TODO(rjk): Rationalize error handling here. There needs to be a 404 page.
 		respondWithError(w, fmt.Sprintln("Server error", err))
 	}
+
+	// TODO(rjk): The debug flag needs to not always be set but be configurable.
+	results := gs.generator.ForRequest(dbreq)
+	results.SetDebug(true)
+	parseAndExecuteTemplate(w, req, str, results)
 }
-
-
-

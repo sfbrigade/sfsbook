@@ -3,27 +3,21 @@ package server
 import (
 	"fmt"
 	"html/template"
-	"io"
-	"io/ioutil"
 	"net/http"
-	"sync"
 
 	"github.com/sfbrigade/sfsbook/dba"
 )
 
-// templatedServer is a 
+// templatedServer is a server instance that uses results from generator
+// to populate a Go template.
 type templatedServer struct {
-	sync.Mutex
-	templates map[string]*template.Template
-	ff *fileFinder
-
+	embr      *embeddableResources
 	generator dba.Generator
 }
 
-func MakeTemplatedServer(ff *fileFinder, g dba.Generator) *templatedServer {
-	return &templatedServer{ 
-		templates: make(map[string]*template.Template),
-		ff: ff,
+func (hf *HandlerFactory) makeTemplatedHandler(g dba.Generator) *templatedServer {
+	return &templatedServer{
+		embr:      makeEmbeddableResource(hf.sitedir),
 		generator: g,
 	}
 }
@@ -38,48 +32,34 @@ func (gs *templatedServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		respondWithError(w, fmt.Sprintln("invalid form parameters", err))
 	}
 
-	if err := gs.ff.StreamOrString(sn, gs, w, req); err != nil {
+	str, err := gs.embr.GetAsString(sn)
+	if err != nil {
+		// TODO(rjk): Rationalize error handling here. There needs to be a 404 page.
 		respondWithError(w, fmt.Sprintln("Server error", err))
 	}
+
+	results := gs.generator.ForRequest(req)
+
+	// TODO(rjk): I need to do something smarter about caching.
+	// I removed the cache of templates pending the global cache.
+	parseAndExecuteTemplate(w, req, str, results)
 }
 
-// ServeString caches the parsed templates. 
-func (gs *templatedServer) ServeForString(s string, w http.ResponseWriter, req interface{}) {
-	gs.Lock()
-	template, ok := gs.templates[s]
-	gs.Unlock()
+// TODO(rjk): I think that this is not quite right code structure.
+// instead, there needs to be a dbareq re-writing layer.
 
-	if !ok {
-		var err error
-		template, err = template.New("htmlbase").Parse(s)
-		if err != nil {
-			respondWithError(w, fmt.Sprintln("Can't parse template", err))
-			return
-		}
-		gs.Lock()
-		if _, ok := gs.templates[s]; !ok {
-			gs.templates[s] = template
-		}
-		gs.Unlock()
-	}
-
-	// TODO(rjk): plumb the state into here and wire it up in some way.
-	// The basic idea: there's a different staticServer instance for each of the
-	// the various files.
-	if err := template.Execute(w, gs.generator.ForRequest(req)); err != nil {
-		respondWithError(w, fmt.Sprintln("Can't execute template", err))
-	}
+type templateParameters struct {
+	Results       interface{}
+	DecodedCookie *UserCookie
 }
 
-// ServeStream implementation re-parses the template each time and then
-// executes it. The presumption is that in stream serving mode, a single developer
-// is using the software.
-func (gs *templatedServer) ServeForStream(reader io.Reader, w http.ResponseWriter, req interface{}) {
-	templatestr, err := ioutil.ReadAll(reader)
-	if err != nil {
-		respondWithError(w, fmt.Sprintln("Can't read source file", err))
-		return
-	}
+// parseAndExecuteTemplate implementation re-parses the template from templatestr
+// and executes it with a templateParameters object. This is a utility method to be
+// used from anywhere that the provided template is to be used.
+// TODO(rjk): add caching of results.
+// TODO(rjk): permit many arguments. They need to get bundled into a kv-store
+// that keeps things more flexible.
+func parseAndExecuteTemplate(w http.ResponseWriter, req *http.Request, templatestr string, result interface{}) {
 	// TODO(rjk): Logs, perf measurements, etc.
 	template, err := template.New("htmlbase").Parse(string(templatestr))
 	if err != nil {
@@ -87,9 +67,13 @@ func (gs *templatedServer) ServeForStream(reader io.Reader, w http.ResponseWrite
 		return
 	}
 
-	generatedResult := gs.generator.ForRequest(req)
-	generatedResult.SetDebug(true)
-	if err := template.Execute(w, generatedResult); err != nil {
+	// Also, I need to make result optional so this is the wrong way to proceed.
+	tp := &templateParameters{
+		Results:       result,
+		DecodedCookie: GetCookie(req),
+	}
+
+	if err := template.Execute(w, tp); err != nil {
 		respondWithError(w, fmt.Sprintln("Can't execute template", err))
 	}
 }

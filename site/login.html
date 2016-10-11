@@ -1,0 +1,42 @@
+<html>
+<head>
+</head>
+<body>
+<!-- need to add a status bar -->
+
+<a href="/index.html">Back to Search</a>
+
+{{if .DecodedCookie.IsAuthed}}
+<p>You're already signed in!</p>
+<p>Maybe there should be a way to sign out here!</p>
+<p>Thanks for signing out</p>
+<p>Redirecting to home?</p>
+{{else}}
+
+
+<p>Sign-in to edit, view comments, invite people, etc.</p>
+
+<!-- we will redirect on success to index.html  -->
+<form action="/login.html" method="post">
+
+<div class="onefield">
+<label for="username">User name:</label>
+<input id="username" type="text" name="username" size="30" ./>
+</div>
+
+<div class="onefield">
+<label for="password">Password</label>
+<input id="password" type="password" name="password" maxlength="30" ./>
+</div>
+
+<div class="buttonbar">
+<div class="button">
+<input type="submit" value="Login" />
+</div>
+</div>
+</form>
+{{end}}
+
+
+</body>
+</html>

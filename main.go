@@ -5,10 +5,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/sfbrigade/sfsbook/dba"
 	"github.com/sfbrigade/sfsbook/server"
-	"github.com/sfbrigade/sfsbook/setup"
-	"github.com/sfbrigade/sfsbook/dba/fieldmap"
 )
 
 func main() {
@@ -23,13 +20,13 @@ func main() {
 		log.Fatalln("Wow! No CWD. Giving up.", err)
 	}
 
-	setup.ConstructNecessaryStartingState(pth)
-	index, err := dba.OpenBleve(pth, fieldmap.RefGuide)
+	handlerfactory, err := server.MakeHandlerFactory(pth)
 	if err != nil {
-		log.Fatalln("No database! Giving up:", err)
+		log.Fatalln("Can't make HandlerFactory:", err)
 	}
 
-	srv := server.MakeServer(":10443", pth, index)
+	// I don't think that I actually use the certificates properly.
+	srv := server.MakeServer(":10443", handlerfactory)
 	server.Start(pth, srv)
 
 }

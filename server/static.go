@@ -6,45 +6,37 @@ import (
 	"log"
 	"net/http"
 	"path"
-	"strings"
 )
 
+type staticServer embeddableResources
 
-// TODO(rjk): This will probably require additional fields.
-type staticServer struct {
-	ff *fileFinder
+// makeStaticHandler makes a new http.Handler for static content.
+func (hf *HandlerFactory) makeStaticHandler() http.Handler {
+	return (*staticServer)(makeEmbeddableResource(hf.sitedir))
 }
-
-
-
-func MakeStaticServer(ff *fileFinder) *staticServer {
-	return &staticServer{ff: ff}
-}
-
 
 func (gs *staticServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	sn := req.URL.Path
-
 	// Filename-specific actions.
 	switch path.Ext(sn) {
 	case ".js":
 		w.Header().Add("Content-Type", "application/javascript")
 	}
 
-	if err := gs.ff.StreamOrString(sn, gs, w, req); err != nil {
+	// TODO(rjk): Test here that we are allowed to serve this resource to this user.
+	log.Println("user cookie", *GetCookie(req))
+
+	str, err := (*embeddableResources)(gs).GetAsString(sn)
+	if err != nil {
+		// TODO(rjk): Rationalize error handling here. There needs to be a 404 page.
 		respondWithError(w, fmt.Sprintln("Server error", err))
 	}
-}
 
-func (gs *staticServer) ServeForString(s string, w http.ResponseWriter, req interface{}) {
-	reader := strings.NewReader(s)
-	gs.ServeForStream(reader, w, req)
-}
+	// TODO(rjk): Auth validation here.
+	// TODO(rjk): Figure out how I describe the auth requirements.
 
-func (gs *staticServer) ServeForStream(reader io.Reader, w http.ResponseWriter, req interface{}) {
-	if _, err := io.Copy(w, reader); err != nil {
-		log.Println("could not copy to the request body ", err)
-		respondWithError(w, fmt.Sprintln("Can't copy: ", err))
-		return
+	if n, err := io.WriteString(w, str); err != nil || n != len(str) {
+		log.Println("couldn't write string to ResponseWriter, wrote",
+			n, "of", len(str), "or received error", err)
 	}
 }
