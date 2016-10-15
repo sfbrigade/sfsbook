@@ -7,9 +7,8 @@
 <a href="/index.html">Back to Search</a>
 
 {{if .DecodedCookie.IsAuthed}}
-<p>You're already signed in!</p>
-<p>Maybe there should be a way to sign out here!</p>
-<p>Thanks for signing out</p>
+<p>Welcome {{.DecodedCookie.DisplayName}}. You're already signed in!</p>
+<p>Signout instead?</p>
 <p>Redirecting to home?</p>
 {{else}}
 
