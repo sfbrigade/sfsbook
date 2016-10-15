@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 
 	"github.com/blevesearch/bleve"
+	"github.com/gorilla/securecookie"
 	"github.com/sfbrigade/sfsbook/dba"
 	"github.com/sfbrigade/sfsbook/dba/fieldmap"
 	"github.com/sfbrigade/sfsbook/setup"
@@ -25,7 +26,7 @@ type HandlerFactory struct {
 	resourceguide bleve.Index
 	passwordfile  bleve.Index
 
-	cookietool *cookieTooling
+	cookiecodec *securecookie.SecureCookie
 
 	// Flags
 	Immutable bool
@@ -61,7 +62,7 @@ func MakeHandlerFactory(persistentroot string) (*HandlerFactory, error) {
 		return nil, fmt.Errorf("Can't open/create the resource guide database: %v", err)
 	}
 
-	cookietool, err := makeCookieTooling(statepath)
+	cookiecodec, err := makeCookieTooling(statepath)
 	if err != nil {
 		return nil, err
 	}
@@ -80,6 +81,6 @@ func MakeHandlerFactory(persistentroot string) (*HandlerFactory, error) {
 		resourceguide: resourceguide,
 		passwordfile:  passwordfile,
 		Immutable:     immutable,
-		cookietool:    cookietool,
+		cookiecodec:    cookiecodec,
 	}, nil
 }

@@ -5,8 +5,13 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"net/url"
+	"time"
 
+	"golang.org/x/crypto/bcrypt"
 	"github.com/blevesearch/bleve"
+	"github.com/gorilla/securecookie"
+	"github.com/pborman/uuid"
 )
 
 // This is written possibly incorrectly. Refactor later.
@@ -15,7 +20,7 @@ import (
 type loginServer struct {
 	embr      *embeddableResources
 	passwordfile  bleve.Index
-	cookietool *cookieTooling
+	cookiecodec *securecookie.SecureCookie
 }
 
 // makeLoginHandler returns a handler for login actions.
@@ -23,8 +28,29 @@ func (hf *HandlerFactory) makeLoginHandler() http.Handler {
 	return &loginServer{
 		embr:      makeEmbeddableResource(hf.sitedir),
 		passwordfile: hf.passwordfile,
-		cookietool: hf.cookietool,
+		cookiecodec: hf.cookiecodec,
 	}
+}
+
+// getValidatedString returns a string from the postform or an error
+// if there's something wrong with it.
+func getValidatedString(key string,  postform url.Values) (string, error) {
+	if len(postform[key]) != 1 {
+		return "", fmt.Errorf("key %s in POST data is invalid", key)
+	}
+	value := postform[key][0]
+
+	// Values need non-zero length.
+	if len(value) == 0 {
+		return "", fmt.Errorf("value for key %s in POST data is of 0 length", key)
+	}
+	return value, nil
+}
+
+
+type loginResult struct {
+	ValidSignOne bool
+	AttemptedSignOn bool
 }
 
 func (gs *loginServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
@@ -32,39 +58,117 @@ func (gs *loginServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 
 	log.Println("loginServer is handling request for", sn)
 
+	loginresult := new(loginResult)
+
 	if req.Method == "POST" {
+		loginresult.AttemptedSignOn = true
 		log.Println("handling Post of resource")
+
+		// TODO(rjk): rational logging of failed attempts.
+
 		if err := req.ParseForm(); err != nil {
 			respondWithError(w, fmt.Sprintln("bad uploaded form data to login: ", err))
 			return
 		}
 
 		// We only use the posted info.
+		// This dumps passwords in the clear in the log. 
+		// TODO(rjk): delete before landing this code.
 		log.Println("parsing form:")
 		for k, v := range req.PostForm {
 			log.Println("	", k, "		", v)
 		}
 
-		// dbreq.IsPost = true
-		// dbreq.PostArgs = req.PostForm
+		// TODO: must make sure that we count how many times the UA hammers
+		// on us. How do I track this if they clear the cookies? I presume that we
+		// do it by IP. Too many requests (of any kind) from any one IP need to
+		// get the connection dropped.
 
+		username, err := getValidatedString("username", req.PostForm)
+		if err != nil  {
+			log.Println("no username in Post", err)
+			goto end
+		}
+		password, err := getValidatedString("password", req.PostForm)
+		if err != nil  {
+			log.Println("no password in form")
+			goto end
+		}
 
-		// search for name
-		// get all the info
-		// if hash matches
-		// update the cookie
-		// if hash doesn't match, indicate that it's failed.
+		// Do database access.
+		sreq := bleve.NewSearchRequest(bleve.NewMatchQuery(username))
+		sreq.Fields = []string{"name", "cost", "passwordhash", "role", "display_name"}
 
-		// debug flag should not be part of the results database.
+		// This is an error case (something is wrong internally)
+		searchResults, err := gs.passwordfile.Search(sreq)
+		if err != nil {
+			respondWithError(w, fmt.Sprintln("database couldn't respond with useful results", err))
+		}
+
+		if len(searchResults.Hits) != 1 {
+			// This means that the user has entered an invalid username. But we don't
+			// tell the UA this.
+			log.Println("username mismatch")
+			goto end
+		}
+
+		sr := searchResults.Hits[0]
+		pw := sr.Fields["passwordhash"].(string)
+		if err := bcrypt.CompareHashAndPassword([]byte(pw), []byte(password)); err != nil {
+			// This means that the user has entered an invalid password.
+			// But we don't tell the UA this either.
+			log.Println("password mismatch")
+			goto end
+		}
+
+		// User has successfully signed on
+		log.Println("username: ", username, "has signed in")
+		loginresult.ValidSignOne = true
+
+		// TODO(rjk): force updating of password if DefaultCost has changed
+
+		// Build the cookie.
+		role :=  sr.Fields["role"].(string)
+		
+		usercookie := new(UserCookie)
+		usercookie.uuid = uuid.UUID(sr.ID)
+		usercookie.display_name = sr.Fields["display_name"].(string)
+		usercookie.timestamp = time.Now()
+
+		// TODO(rjk): Consider storing the capability in the user data record.
+		switch role {
+		case "admin":
+			usercookie.capability = CapabilityAdministrator
+		case "volunteer":
+			usercookie.capability = CapabilityVolunteer
+		}
+
+		log.Println("usercookie", usercookie)
+
+		if encoded, err := gs.cookiecodec.Encode(SessionCookieName, usercookie); err == nil {
+			cookie := &http.Cookie{
+				Name:  SessionCookieName,
+				Value: encoded,
+				Path:  "/",
+			}
+			http.SetCookie(w, cookie)
+		} else {
+			// I'm not sure what to do here.
+			// I think this means that the user can't have a cookie.
+			// i.e. we make a sad page.
+			respondWithError(w, fmt.Sprintln("Server cookie error", err))
+		}
 	}
+
+end:
 
 	str, err := gs.embr.GetAsString(sn)
 	if err != nil {
 		// TODO(rjk): Rationalize error handling here. There needs to be a 404 page.
 		respondWithError(w, fmt.Sprintln("Server error", err))
+		return
 	}
 
-	// Interim. Clearly wrong.
-	//results := dba.MakeStubGenerator(gs.passwordfile).ForRequest(req)
-	parseAndExecuteTemplate(w, req, str, nil)
+	// do the redirect?
+	parseAndExecuteTemplate(w, req, str, loginresult)
 }

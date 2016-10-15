@@ -17,6 +17,15 @@
 <p>Sign-in to edit, view comments, invite people, etc.</p>
 
 <!-- we will redirect on success to index.html  -->
+
+{{with .Results}}
+
+{{if .AttemptedSignOn}}
+<p>
+Incorrect username and password combination. Maybe try again?
+</p>
+{{end}}
+
 <form action="/login.html" method="post">
 
 <div class="onefield">
@@ -37,6 +46,7 @@
 </form>
 {{end}}
 
+{{end}}
 
 </body>
 </html>

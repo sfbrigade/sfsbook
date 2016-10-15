@@ -45,6 +45,11 @@ const (
 	CapabilityReauthenticate
 )
 
+const (
+	CapabilityAdministrator = CapabilityViewUsers | CapabilityInivteNewUser | CapabilityEditUsers | CapabilityViewPublicResourceEntry
+	CapabilityVolunteer = CapabilityViewPublicResourceEntry | CapabilityViewOwnVolunteerComment | CapabilityViewOtherVolunteerComment | CapabilityEditOwnVolunteerComment | CapabilityEditResource | CapabilityInivteNewUser
+)
+
 // UserCookie is data stored in the auth cookie. It's encrypted via
 // the securecookie facilities and set as a cookie on the interaction with
 // the remote UA. It holds the identity and capability of the UA.
@@ -70,16 +75,16 @@ type UserCookie struct {
 // cookieHandler is the state for an implementation of http.Handler that
 // can invoke its delegatehandler with a decoded auth cookie context.
 type cookieHandler struct {
-	securecookie.SecureCookie
+	cookiecodec *securecookie.SecureCookie
 
 	// TODO(rjk): Implement revocation.
 	revokelist []uuid.UUID
 	delegate   http.Handler
 }
 
-// makeCookie builds and saves a cookie.
+// makeCookieCryptoKey constructs a cryptokey stored in cookiename
 // TODO(rjk): Add automatic cookie rotation with aging and batches.
-func makeCookie(statepath, cookiename string) ([]byte, error) {
+func makeCookieCryptoKey(statepath, cookiename string) ([]byte, error) {
 	path := filepath.Join(statepath, cookiename)
 	key, err := ioutil.ReadFile(path)
 	if err != nil {
@@ -104,34 +109,27 @@ func makeCookie(statepath, cookiename string) ([]byte, error) {
 	return key, nil
 }
 
-// cookieTooling contains the cookie-related tooling for the HandlerFactory.
-type cookieTooling struct {
-	hashkey, blockkey []byte
-}
-
 // makeCookieTooling constructs cookie tooling for the HandlerFactory.
-func makeCookieTooling(statepath string) (*cookieTooling, error) {
-	hashkey, err := makeCookie(statepath, "hashkey.dat")
+func makeCookieTooling(statepath string) (*securecookie.SecureCookie, error) {
+	hashkey, err := makeCookieCryptoKey(statepath, "hashkey.dat")
 	if err != nil {
 		return nil, err
 	}
-	blockkey, err := makeCookie(statepath, "blockkey.dat")
+	blockkey, err := makeCookieCryptoKey(statepath, "blockkey.dat")
 	if err != nil {
 		return nil, err
 	}
-	return &cookieTooling{
-		hashkey:  hashkey,
-		blockkey: blockkey,
-	}, nil
+
+	return securecookie.New(hashkey, blockkey), nil
 }
 
 // MakeUserStateHandler builds a http.Handler that can
 // decrypt auth cookies. See ServeHTTP below.
 func (hf *HandlerFactory) makeCookieHandler(delegate http.Handler) http.Handler {
 	return &cookieHandler{
-		SecureCookie: *securecookie.New(hf.cookietool.hashkey, hf.cookietool.blockkey),
-		revokelist:   make([]uuid.UUID, 0, 10),
-		delegate:     delegate,
+		cookiecodec: hf.cookiecodec,
+		revokelist:  make([]uuid.UUID, 0, 10),
+		delegate:    delegate,
 	}
 }
 
@@ -153,7 +151,7 @@ func (cf *cookieHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	usercookie := new(UserCookie)
 	if err == nil {
 		// This request has a cookie.
-		if err = cf.Decode(SessionCookieName, cookie.Value, usercookie); err != nil {
+		if err = cf.cookiecodec.Decode(SessionCookieName, cookie.Value, usercookie); err != nil {
 			log.Println("request had a cookie but it was not decodeable:", err)
 			// TODO(rjk):
 			// redirect to the login page with an appropriate error message.
