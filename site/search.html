@@ -3,7 +3,16 @@
 <script type="text/javascript" src="js/example.js"></script>
 </head>
 <body>
-<p>Search results for the query: {{.Query}}</p>
+{{if .DecodedCookie.IsAuthed}}
+{{with .DecodedCookie}}
+<p>Welcome {{.DisplayName}}</p>
+{{end}}
+{{else}}
+You are not signed in. <a href="/login.html">Login?</a>
+{{end}}
+
+{{with .Results}}
+<p>Search results for the query: {{.Query}}  <a href="/index.html">Different search?<a></p>
 
 <ul>
 {{range .Resources}}
@@ -17,6 +26,6 @@
 	</li>
 {{end}}
 </ul>
-
+{{end}}
 </body>
 </html>

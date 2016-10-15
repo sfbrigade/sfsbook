@@ -2,6 +2,16 @@
 <head>
 </head>
 <body>
+{{if .DecodedCookie.IsAuthed}}
+{{with .DecodedCookie}}
+<p>Welcome {{.DisplayName}}</p>
+{{end}}
+{{else}}
+You are not signed in. <a href="/login.html">Login?</a>
+{{end}}
+
+{{with .Results}}
+
 <div><a href="/index.html">Home</a></div>
 {{if .Success}}
 <p>Resource Details</p>
@@ -103,6 +113,7 @@ Debugging output
 </dl>
 </div>
 <hr>
+{{end}}
 {{end}}
 </body>
 </html>

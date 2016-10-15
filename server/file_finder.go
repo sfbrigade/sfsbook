@@ -1,10 +1,8 @@
 package server
 
 import (
-	"fmt"
-	"io"
+	"io/ioutil"
 	"log"
-	"net/http"
 	"os"
 	"path/filepath"
 )
@@ -16,47 +14,49 @@ import (
 // directory actually constructs the embedded resources using tooling
 // from the generator package.
 
-// Serve provides entry points that the file finder uses to actually
-// serve content.
-type Serve interface {
-	// The desired content is available as a file.
-	ServeForStream(reader io.Reader, w http.ResponseWriter, req interface{})
-	ServeForString(s string, w http.ResponseWriter, req interface{}) 
+type embeddableResources struct {
+	sitedir string
 }
 
-type fileFinder struct {
-	// The full path of the site directory in which dynamically processed
-	// resources would be found.
-	sitepath string
-}
-
-func makeFileFinder(pathroot string) *fileFinder {
-	return &fileFinder{
-		sitepath: filepath.Join(pathroot, "site"),
+// makeEmbeddableResource returns a new EmbeddableResource. If
+// sitedir is empty, all resources will be taken from the internal resource
+// source.
+func makeEmbeddableResource(sitedir string) *embeddableResources {
+	log.Println("MakeEmbeddableResource server for", sitedir)
+	return &embeddableResources{
+		sitedir: sitedir,
 	}
 }
 
-func (ff *fileFinder) StreamOrString(upath string, serve Serve, w http.ResponseWriter, req interface{}) error {
-	fpath := filepath.Join(ff.sitepath, upath)
+func (er *embeddableResources) alwaysGetEmbedded(upath string) (string, error) {
+	// TODO(rjk): Resources should be compressed.
+	res, ok := Resources[upath]
+	if !ok {
+		return "", Error(ErrorNoSuchEmbeddedResource)
+	}
+	return res, nil
+}
+
+// GetAsString retrieves file upath from either the embedded
+// storage or from disk. It returns either a string containing the
+// resource or an error if the file could not be retrieved.
+func (er *embeddableResources) GetAsString(upath string) (string, error) {
+	if er.sitedir == "" {
+		return er.alwaysGetEmbedded(upath)
+	}
+
+	fpath := filepath.Join(er.sitedir, upath)
 	log.Println(upath, fpath)
-		
+
 	if _, err := os.Stat(fpath); err != nil {
-		res, ok := Resources[upath]
-		if !ok {
-			log.Println("file", fpath, "missing from disk", err, "and also missing", upath, "from compiled in resource")
-			return fmt.Errorf("file %s missing from site directory: %v and also not compiled in", upath, err)
-		}
-		// TODO(rjk): Revisit/rationalize the handling of errors.
-		serve.ServeForString(res, w, req)
-		return nil
+		log.Println("EmbeddableResource.GetAsString: Have site:", er.sitedir, "configured but is missing resource", upath, "Trying embedded...")
+		return er.alwaysGetEmbedded(upath)
 	}
 
-	f, err := os.Open(fpath)
+	fileasbytes, err := ioutil.ReadFile(fpath)
 	if err != nil {
-		log.Println("problem opening file", fpath, err)
-		return fmt.Errorf("file %s missing from site: %v", upath,  err)
+		log.Println("EmbeddableResource.GetAsString: problem reading file", fpath, err)
+		return "", Error(ErrorNoSuchFileResource)
 	}
-	defer f.Close()
-	serve.ServeForStream(f, w, req)
-	return nil
+	return string(fileasbytes), nil
 }
