@@ -1,10 +1,11 @@
 <html>
 <head>
+<script type="text/javascript" src="/js/example.js"></script>
 </head>
 <body>
 {{if .DecodedCookie.IsAuthed}}
 {{with .DecodedCookie}}
-<p>Welcome {{.DisplayName}}</p>
+<p>Welcome {{.DisplayName}}  <button onclick="clearSessionCookie();">Sign out</button></p>
 {{end}}
 {{else}}
 You are not signed in. <a href="/login.html">Login?</a>

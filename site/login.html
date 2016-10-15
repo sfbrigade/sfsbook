@@ -1,5 +1,6 @@
 <html>
 <head>
+<script type="text/javascript" src="/js/example.js"></script>
 </head>
 <body>
 <!-- need to add a status bar -->
@@ -7,9 +8,9 @@
 <a href="/index.html">Back to Search</a>
 
 {{if .DecodedCookie.IsAuthed}}
-<p>Welcome {{.DecodedCookie.DisplayName}}. You're already signed in!</p>
-<p>Signout instead?</p>
-<p>Redirecting to home?</p>
+{{with .DecodedCookie}}
+<p>Welcome {{.DisplayName}}  <button onclick="clearSessionCookie();">Sign out</button></p>
+{{end}}
 {{else}}
 
 
