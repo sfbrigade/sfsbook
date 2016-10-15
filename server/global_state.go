@@ -81,6 +81,6 @@ func MakeHandlerFactory(persistentroot string) (*HandlerFactory, error) {
 		resourceguide: resourceguide,
 		passwordfile:  passwordfile,
 		Immutable:     immutable,
-		cookiecodec:    cookiecodec,
+		cookiecodec:   cookiecodec,
 	}, nil
 }

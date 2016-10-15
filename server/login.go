@@ -1,6 +1,5 @@
 package server
 
-
 import (
 	"fmt"
 	"log"
@@ -8,33 +7,33 @@ import (
 	"net/url"
 	"time"
 
-	"golang.org/x/crypto/bcrypt"
 	"github.com/blevesearch/bleve"
 	"github.com/gorilla/securecookie"
 	"github.com/pborman/uuid"
+	"golang.org/x/crypto/bcrypt"
 )
 
 // This is written possibly incorrectly. Refactor later.
 // I need more tests and more refactoring. my code arrangement leaves
 // much to be desired.
 type loginServer struct {
-	embr      *embeddableResources
-	passwordfile  bleve.Index
-	cookiecodec *securecookie.SecureCookie
+	embr         *embeddableResources
+	passwordfile bleve.Index
+	cookiecodec  *securecookie.SecureCookie
 }
 
 // makeLoginHandler returns a handler for login actions.
 func (hf *HandlerFactory) makeLoginHandler() http.Handler {
 	return &loginServer{
-		embr:      makeEmbeddableResource(hf.sitedir),
+		embr:         makeEmbeddableResource(hf.sitedir),
 		passwordfile: hf.passwordfile,
-		cookiecodec: hf.cookiecodec,
+		cookiecodec:  hf.cookiecodec,
 	}
 }
 
 // getValidatedString returns a string from the postform or an error
 // if there's something wrong with it.
-func getValidatedString(key string,  postform url.Values) (string, error) {
+func getValidatedString(key string, postform url.Values) (string, error) {
 	if len(postform[key]) != 1 {
 		return "", fmt.Errorf("key %s in POST data is invalid", key)
 	}
@@ -47,9 +46,8 @@ func getValidatedString(key string,  postform url.Values) (string, error) {
 	return value, nil
 }
 
-
 type loginResult struct {
-	ValidSignOne bool
+	ValidSignOne    bool
 	AttemptedSignOn bool
 }
 
@@ -72,7 +70,7 @@ func (gs *loginServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		}
 
 		// We only use the posted info.
-		// This dumps passwords in the clear in the log. 
+		// This dumps passwords in the clear in the log.
 		// TODO(rjk): delete before landing this code.
 		log.Println("parsing form:")
 		for k, v := range req.PostForm {
@@ -85,12 +83,12 @@ func (gs *loginServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		// get the connection dropped.
 
 		username, err := getValidatedString("username", req.PostForm)
-		if err != nil  {
+		if err != nil {
 			log.Println("no username in Post", err)
 			goto end
 		}
 		password, err := getValidatedString("password", req.PostForm)
-		if err != nil  {
+		if err != nil {
 			log.Println("no password in form")
 			goto end
 		}
@@ -128,19 +126,19 @@ func (gs *loginServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		// TODO(rjk): force updating of password if DefaultCost has changed
 
 		// Build the cookie.
-		role :=  sr.Fields["role"].(string)
-		
+		role := sr.Fields["role"].(string)
+
 		usercookie := new(UserCookie)
-		usercookie.uuid = uuid.UUID(sr.ID)
-		usercookie.display_name = sr.Fields["display_name"].(string)
-		usercookie.timestamp = time.Now()
+		usercookie.Uuid = uuid.UUID(sr.ID)
+		usercookie.Displayname = sr.Fields["display_name"].(string)
+		usercookie.Timestamp = time.Now()
 
 		// TODO(rjk): Consider storing the capability in the user data record.
 		switch role {
 		case "admin":
-			usercookie.capability = CapabilityAdministrator
+			usercookie.Capability = CapabilityAdministrator
 		case "volunteer":
-			usercookie.capability = CapabilityVolunteer
+			usercookie.Capability = CapabilityVolunteer
 		}
 
 		log.Println("usercookie", usercookie)

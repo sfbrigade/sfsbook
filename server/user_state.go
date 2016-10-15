@@ -16,16 +16,16 @@ import (
 
 // Capability is a set of capabilities. Sized because we may need
 // to transmit it over an IPC boundary.
-type Capability int64
+type CapabilityType int64
 
 const (
 	// Finding this Capability in a UserCookie implies that the uuid is empty.
-	CapabilityAnonymous Capability = 0
+	CapabilityAnonymous CapabilityType = 0
 )
 
 const (
 	// This is also the default.
-	CapabilityViewPublicResourceEntry Capability = 1 << iota
+	CapabilityViewPublicResourceEntry CapabilityType = 1 << iota
 	CapabilityViewOwnVolunteerComment
 	CapabilityViewOtherVolunteerComment
 
@@ -47,7 +47,7 @@ const (
 
 const (
 	CapabilityAdministrator = CapabilityViewUsers | CapabilityInivteNewUser | CapabilityEditUsers | CapabilityViewPublicResourceEntry
-	CapabilityVolunteer = CapabilityViewPublicResourceEntry | CapabilityViewOwnVolunteerComment | CapabilityViewOtherVolunteerComment | CapabilityEditOwnVolunteerComment | CapabilityEditResource | CapabilityInivteNewUser
+	CapabilityVolunteer     = CapabilityViewPublicResourceEntry | CapabilityViewOwnVolunteerComment | CapabilityViewOtherVolunteerComment | CapabilityEditOwnVolunteerComment | CapabilityEditResource | CapabilityInivteNewUser
 )
 
 // UserCookie is data stored in the auth cookie. It's encrypted via
@@ -57,16 +57,16 @@ const (
 // defeat an attempt to decrypt, alter the capability and reencode.
 type UserCookie struct {
 	// The user identifier.
-	uuid uuid.UUID
+	Uuid uuid.UUID
 
 	// A mask of capabilities.
-	capability Capability
+	Capability CapabilityType
 
 	// The time that the cookie was created.
-	timestamp time.Time
+	Timestamp time.Time
 
 	// The user's display_name
-	display_name string
+	Displayname string
 }
 
 // TODO(rjk): Add the ability to check that a given uuid needs to be
@@ -160,7 +160,7 @@ func (cf *cookieHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		// TODO(rjk): Test here for revocation, cookie rotation, etc.
 	} else {
 		log.Println("anonymous access")
-		usercookie.capability = CapabilityAnonymous
+		usercookie.Capability = CapabilityAnonymous
 	}
 
 	cf.delegate.ServeHTTP(w, req.WithContext(
@@ -171,9 +171,9 @@ func (cf *cookieHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 // TODO(rjk): Need a mechanism for revoking credentials.
 
 func (u *UserCookie) IsAuthed() bool {
-	return u.capability != CapabilityAnonymous
+	return u.Capability != CapabilityAnonymous
 }
 
 func (u *UserCookie) DisplayName() string {
-	return u.display_name
+	return u.Displayname
 }
