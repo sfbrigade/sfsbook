@@ -16,6 +16,7 @@ func MakeServer(address string, hf *HandlerFactory) *http.Server {
 	m := http.NewServeMux()
 
 	m.Handle("/js/", hf.makeCookieHandler(hf.makeStaticHandler()))
+	m.Handle("/css/", hf.makeCookieHandler(hf.makeStaticHandler()))
 
 	m.Handle("/resources/",
 		hf.makeCookieHandler(
