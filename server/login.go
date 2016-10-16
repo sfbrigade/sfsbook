@@ -46,6 +46,8 @@ func getValidatedString(key string, postform url.Values) (string, error) {
 	return value, nil
 }
 
+// TODO(rjk): It is conceivable that this could be computed from
+// the cookie state and this code could be simplified.
 type loginResult struct {
 	ValidSignOne    bool
 	AttemptedSignOn bool
@@ -128,7 +130,10 @@ func (gs *loginServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		// Build the cookie.
 		role := sr.Fields["role"].(string)
 
-		usercookie := new(UserCookie)
+		// We're downstream of the cookieHandler and so already have a
+		// usercookie. We've signed in successfully. So augment it. That
+		// way, all downstream code will have the correct context.
+		usercookie := GetCookie(req)
 		usercookie.Uuid = uuid.UUID(sr.ID)
 		usercookie.Displayname = sr.Fields["display_name"].(string)
 		usercookie.Timestamp = time.Now()
@@ -139,6 +144,8 @@ func (gs *loginServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 			usercookie.Capability = CapabilityAdministrator
 		case "volunteer":
 			usercookie.Capability = CapabilityVolunteer
+		default:
+			usercookie.Capability = CapabilityViewPublicResourceEntry
 		}
 
 		log.Println("usercookie", usercookie)
