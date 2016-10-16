@@ -21,6 +21,8 @@ func (gs *staticServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	switch path.Ext(sn) {
 	case ".js":
 		w.Header().Add("Content-Type", "application/javascript")
+	case ".css":
+		w.Header().Add("Content-Type", "text/css")
 	}
 
 	// TODO(rjk): Test here that we are allowed to serve this resource to this user.
