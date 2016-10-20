@@ -36,7 +36,8 @@ const (
 	CapabilityEditResource
 
 	CapabilityViewUsers
-	CapabilityInivteNewUser
+	CapabilityInviteNewVolunteer
+	CapabilityInviteNewAdmin
 	CapabilityEditUsers
 
 	// The user has been altered. Finding this key in
@@ -46,8 +47,8 @@ const (
 )
 
 const (
-	CapabilityAdministrator = CapabilityViewUsers | CapabilityInivteNewUser | CapabilityEditUsers | CapabilityViewPublicResourceEntry
-	CapabilityVolunteer     = CapabilityViewPublicResourceEntry | CapabilityViewOwnVolunteerComment | CapabilityViewOtherVolunteerComment | CapabilityEditOwnVolunteerComment | CapabilityEditResource | CapabilityInivteNewUser
+	CapabilityAdministrator = CapabilityViewUsers | CapabilityInviteNewVolunteer | CapabilityInviteNewAdmin | CapabilityEditUsers | CapabilityViewPublicResourceEntry
+	CapabilityVolunteer     = CapabilityViewPublicResourceEntry | CapabilityViewOwnVolunteerComment | CapabilityViewOtherVolunteerComment | CapabilityEditOwnVolunteerComment | CapabilityEditResource | CapabilityInviteNewVolunteer
 )
 
 // UserCookie is data stored in the auth cookie. It's encrypted via
@@ -177,3 +178,12 @@ func (u *UserCookie) IsAuthed() bool {
 func (u *UserCookie) DisplayName() string {
 	return u.Displayname
 }
+
+func (u *UserCookie) HasCapability(cap CapabilityType) bool {
+	return u.Capability & cap != 0
+}
+
+func (u *UserCookie) HasCapabilityEditResource() bool {
+	return u.HasCapability(CapabilityEditResource)
+}
+

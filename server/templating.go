@@ -38,6 +38,8 @@ func (gs *templatedServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		respondWithError(w, fmt.Sprintln("Server error", err))
 	}
 
+	// The req contains the cookie info. And so we can bound viewability
+	// in the database.
 	results := gs.generator.ForRequest(req)
 
 	// TODO(rjk): I need to do something smarter about caching.
