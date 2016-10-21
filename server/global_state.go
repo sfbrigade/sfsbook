@@ -27,9 +27,6 @@ type HandlerFactory struct {
 	passwordfile  bleve.Index
 
 	cookiecodec *securecookie.SecureCookie
-
-	// Flags
-	Immutable bool
 }
 
 // MakeHandlerFactory does possibly error-generating setup for all
@@ -67,12 +64,9 @@ func MakeHandlerFactory(persistentroot string) (*HandlerFactory, error) {
 		return nil, err
 	}
 
-	// This is unnecessary. The auth scheme should take care of it.
-	immutable := false
 	passwordfile, err := dba.OpenBleve(persistentroot, fieldmap.PasswordFile)
 	if err != nil {
 		log.Println("Operating in read-only mode because can't open/create user database:", err)
-		immutable = true
 	}
 
 	return &HandlerFactory{
@@ -80,7 +74,6 @@ func MakeHandlerFactory(persistentroot string) (*HandlerFactory, error) {
 		sitedir:       sitedir,
 		resourceguide: resourceguide,
 		passwordfile:  passwordfile,
-		Immutable:     immutable,
 		cookiecodec:   cookiecodec,
 	}, nil
 }
