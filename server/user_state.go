@@ -36,7 +36,8 @@ const (
 	CapabilityEditResource
 
 	CapabilityViewUsers
-	CapabilityInivteNewUser
+	CapabilityInviteNewVolunteer
+	CapabilityInviteNewAdmin
 	CapabilityEditUsers
 
 	// The user has been altered. Finding this key in
@@ -46,8 +47,8 @@ const (
 )
 
 const (
-	CapabilityAdministrator = CapabilityViewUsers | CapabilityInivteNewUser | CapabilityEditUsers | CapabilityViewPublicResourceEntry
-	CapabilityVolunteer     = CapabilityViewPublicResourceEntry | CapabilityViewOwnVolunteerComment | CapabilityViewOtherVolunteerComment | CapabilityEditOwnVolunteerComment | CapabilityEditResource | CapabilityInivteNewUser
+	CapabilityAdministrator = CapabilityViewUsers | CapabilityInviteNewVolunteer | CapabilityInviteNewAdmin | CapabilityEditUsers | CapabilityViewPublicResourceEntry
+	CapabilityVolunteer     = CapabilityViewPublicResourceEntry | CapabilityViewOwnVolunteerComment | CapabilityViewOtherVolunteerComment | CapabilityEditOwnVolunteerComment | CapabilityEditResource | CapabilityInviteNewVolunteer
 )
 
 // UserCookie is data stored in the auth cookie. It's encrypted via
@@ -88,8 +89,7 @@ func makeCookieCryptoKey(statepath, cookiename string) ([]byte, error) {
 	path := filepath.Join(statepath, cookiename)
 	key, err := ioutil.ReadFile(path)
 	if err != nil {
-		log.Println("making new cookie", cookiename)
-		key := securecookie.GenerateRandomKey(32)
+		key = securecookie.GenerateRandomKey(32)
 		if key == nil {
 			return nil, fmt.Errorf("No cookie for %s and can't make one", cookiename)
 		}
@@ -119,7 +119,6 @@ func makeCookieTooling(statepath string) (*securecookie.SecureCookie, error) {
 	if err != nil {
 		return nil, err
 	}
-
 	return securecookie.New(hashkey, blockkey), nil
 }
 
@@ -155,8 +154,9 @@ func (cf *cookieHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 			log.Println("request had a cookie but it was not decodeable:", err)
 			// TODO(rjk):
 			// redirect to the login page with an appropriate error message.
+			// Temporarily blacklist origin ip.
 		}
-		log.Println("request had a cookie and I could decode it", *usercookie)
+		// log.Println("request had a cookie and I could decode it", *usercookie)
 		// TODO(rjk): Test here for revocation, cookie rotation, etc.
 	} else {
 		log.Println("anonymous access")
@@ -176,4 +176,12 @@ func (u *UserCookie) IsAuthed() bool {
 
 func (u *UserCookie) DisplayName() string {
 	return u.Displayname
+}
+
+func (u *UserCookie) HasCapability(cap CapabilityType) bool {
+	return u.Capability&cap != 0
+}
+
+func (u *UserCookie) HasCapabilityEditResource() bool {
+	return u.HasCapability(CapabilityEditResource)
 }

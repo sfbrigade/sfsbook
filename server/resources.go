@@ -35,11 +35,14 @@ func (gs *resourceServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	sn = "/resources/resource.html"
 
 	// TODO(rjk): Validate the uuid here and error-out if it's non-sensical.
+	// TODO(rjk): I need to transport the req state into the dba code. Should I add uuid here to
+	// the req and send the req to the dba layer? That would be a better architectural
+	// fit?
 	dbreq := &dba.ResourceRequest{
 		Uuid: uuid,
 	}
 
-	if req.Method == "POST" {
+	if req.Method == "POST" && GetCookie(req).HasCapability(CapabilityEditResource) {
 		log.Println("handling Post of resource")
 		if err := req.ParseForm(); err != nil {
 			respondWithError(w, fmt.Sprintln("bad uploaded form data: ", err))

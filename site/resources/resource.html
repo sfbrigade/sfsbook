@@ -4,21 +4,21 @@
 <link href="/css/style.css" rel="stylesheet">
 </head>
 <body>
-{{if .DecodedCookie.IsAuthed}}
-{{with .DecodedCookie}}
-<p>Welcome {{.DisplayName}}  <button onclick="clearSessionCookie();">Sign out</button></p>
-{{end}}
-{{else}}
-You are not signed in. <a href="/login.html">Login?</a>
-{{end}}
-
-{{with .Results}}
-
 <div><a href="/index.html">Home</a></div>
-{{if .Success}}
+{{if .DecodedCookie.IsAuthed}}
+	{{with .DecodedCookie}}
+		<p>Welcome {{.DisplayName}}  <button onclick="clearSessionCookie();">Sign out</button></p>
+	{{end}}
+{{else}}
+	You are not signed in. <a href="/login.html">Login?</a>
+{{end}}
+
+
+{{if .Results.Success}}
+	{{if .DecodedCookie.HasCapabilityEditResource}}
+		{{with .Results}}
 <p>Resource Details</p>
 <div class="resource">
-
 <div>
 {{/* TODO(rjk): Prettier dates. */}}
 Resource first added to the guide on {{.Document.date_indexed}}.
@@ -88,14 +88,48 @@ Resource first added to the guide on {{.Document.date_indexed}}.
 <input type="submit" value="Discard Edits" />
 </div>
 </div>
-
 </form>
 </div>
-{{else}}
-{{/* Do I need to santiize Uuid? Almost certaintly */}}
-<p>Resource {{.Uuid}} isn't currently available. Sorry about that.</p>
-{{end}}
-{{if .Debug}}
+		{{end}} {{/* with .Results*/}}	
+	{{else}} {{/* .DecodedCookie.HasCapabilityEditResource */}}
+		{{with .Results}}
+<dl>
+	<dt>Name:</dt>
+	<dd>{{.Document.name}}</dd>
+
+	<dt>Categories:</dt>
+	<dd>{{.Document.categories}}</dd>
+
+	<dt>Description:</dt>
+	<dd>{{.Document.description}}</dd>
+
+	<dt>Services:</dt>
+	<dd>{{.Document.services}}</dd>
+
+	<dt>Email:</dt>
+	<dd>{{.Document.email}}</dd>
+
+	<dt>Address:</dt>
+	<dd>{{.Document.address}}</dd>
+
+	<dt>Languages:</dt>
+	<dd>{{.Document.languges}}</dd>
+
+	<dt>Populations Served::</dt>
+	<dd>{{.Document.pops_served}}</dd>
+
+	<dt>Website:</dt>
+	<dd>{{.Document.website}}</dd>
+</dl>
+		{{end}} {{/* with .Results*/}}	
+	{{end}} {{/* .DecodedCookie.HasCapabilityEditResource */}}
+{{else}} {{/* .DecodedCookie.Success */}}
+	<p>Resource {{.Uuid}} isn't currently available. Sorry about that.</p>
+{{end}} {{/* .DecodedCookie.Success */}}
+
+
+{{with .Results}}
+	{{if .Debug}}
 <hr>
 <div class="DebugOutput">
 Debugging output
@@ -115,7 +149,7 @@ Debugging output
 </dl>
 </div>
 <hr>
-{{end}}
-{{end}}
+	{{end}} {{/*.Debug*/}}
+{{end}} {{/* with .Results */}} 
 </body>
 </html>

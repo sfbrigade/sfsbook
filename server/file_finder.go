@@ -22,7 +22,6 @@ type embeddableResources struct {
 // sitedir is empty, all resources will be taken from the internal resource
 // source.
 func makeEmbeddableResource(sitedir string) *embeddableResources {
-	log.Println("MakeEmbeddableResource server for", sitedir)
 	return &embeddableResources{
 		sitedir: sitedir,
 	}
@@ -44,12 +43,9 @@ func (er *embeddableResources) GetAsString(upath string) (string, error) {
 	if er.sitedir == "" {
 		return er.alwaysGetEmbedded(upath)
 	}
-
 	fpath := filepath.Join(er.sitedir, upath)
-	log.Println(upath, fpath)
 
 	if _, err := os.Stat(fpath); err != nil {
-		log.Println("EmbeddableResource.GetAsString: Have site:", er.sitedir, "configured but is missing resource", upath, "Trying embedded...")
 		return er.alwaysGetEmbedded(upath)
 	}
 
