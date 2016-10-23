@@ -61,7 +61,7 @@ type templateParameters struct {
 // that keeps things more flexible.
 func parseAndExecuteTemplate(w http.ResponseWriter, req *http.Request, templatestr string, result interface{}) {
 	// TODO(rjk): Logs, perf measurements, etc.
-	template, err := template.ParseFiles("site/index.html", "site/header.html")
+	template, err := template.ParseFiles(templatestr, "site/header.html")
 	if err != nil {
 		respondWithError(w, fmt.Sprintln("Can't parse template", err))
 		return

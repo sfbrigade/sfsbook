@@ -5,14 +5,14 @@
 </head>
 <body>
 {{ template "header" . }}
-{{/* TODO(rjk): Make the components of the page into subtemplates. */}}
+<!-- {{/* TODO(rjk): Make the components of the page into subtemplates. */}}
 {{if .DecodedCookie.IsAuthed}}
 {{with .DecodedCookie}}
 <p>Welcome {{.DisplayName}}  <button onclick="clearSessionCookie();">Sign out</button></p>
 {{end}}
 {{else}}
 You are not signed in. <a href="/login.html">Login?</a>
-{{end}}
+{{end}} -->
 
 {{with .Results}}
 <p>Show that I've wired up getting content from within the app server: {{.Message}}</p>
