@@ -4,7 +4,6 @@
 <link href="/css/style.css" rel="stylesheet">
 </head>
 <body>
-	<!-- {{ template "header" . }} -->
 {{if .DecodedCookie.IsAuthed}}
 {{with .DecodedCookie}}
 <p>Welcome {{.DisplayName}}  <button onclick="clearSessionCookie();">Sign out</button></p>
