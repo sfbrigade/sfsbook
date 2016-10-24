@@ -179,3 +179,55 @@ func TestMakeCookieCodec(t *testing.T) {
 		t.Error("not encrypted?")
 	}
 }
+
+type delegateHandlerInvalidCookie struct {
+	t *testing.T
+}
+
+func (dh *delegateHandlerInvalidCookie) ServeHTTP(w http.ResponseWriter, req *http.Request) {
+	t := dh.t
+	uc := GetCookie(req)
+
+	if uc.IsAuthed() {
+		t.Error("delegate should not be authed")
+	}
+
+}
+
+func TestHazInvalidCookie(t *testing.T) {
+	statepath, err := ioutil.TempDir("", "sfsbook")
+	if err != nil {
+		t.Fatal("can't make a temporary directory", err)
+	}
+	defer os.RemoveAll(statepath)
+
+	cookiecodec, err := makeCookieTooling(statepath)
+	if err != nil {
+		t.Error("can't make cookie keys")
+		return
+	}
+
+	undertesthandler := &cookieHandler{
+		cookiecodec: cookiecodec,
+		delegate: &delegateHandlerInvalidCookie{
+			t: t,
+		},
+	}
+
+	testreq := httptest.NewRequest("GET", "https://sfsbook.org/index.html", nil)
+
+	// Add invalid cookie to the testreq.
+	testreq.AddCookie(&http.Cookie{
+		Name:  SessionCookieName,
+		Value: "beetlejuicebeetlejuicebeetlejuice",
+		Path:  "/",
+	})
+
+	recorder := httptest.NewRecorder()
+	undertesthandler.ServeHTTP(recorder, testreq)
+
+	result := recorder.Result()
+	if got, want := result.StatusCode, 400; got != want {
+		t.Errorf("bad response code: got %v, want %v", got, want)
+	}
+}
