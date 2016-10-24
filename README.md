@@ -30,4 +30,4 @@ go build
 
 and you should end up with a server called `sfsbook` ready to run at the top level. The server will manufacture some getting started state in `./state`, dump a varying amount of logging and be ready to browse to at [https://localhost:10443/index.html](https://localhost:10443/index.html).
 
-If you're interested in helping with development, check out our [Contributing Guidelines](sfsbook/Contributing.md) and reach out ot Rob (@rjkroege) on the Brigade Slack.
+If you're interested in helping with development, check out our [Contributing Guidelines](https://github.com/sfbrigade/sfsbook/Contributing.md) and reach out ot Rob (@rjkroege) on the Brigade Slack.
