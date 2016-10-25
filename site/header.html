@@ -5,7 +5,7 @@
 <link href="/css/style.css" rel="stylesheet">
 </head>
 <body>
-{{ template "header" . }}
+  {{ template "header" . }}
 {{/* TODO(rjk): Make the components of the page into subtemplates. */}}
 {{if .DecodedCookie.IsAuthed}}
 {{with .DecodedCookie}}
@@ -34,5 +34,5 @@ You are not signed in. <a href="/login.html">Login?</a>
 </body>
 </html>
 {{ define "header" }}
-<p>hi hello</p>
+<p>hi There</p>
 {{ end }}
