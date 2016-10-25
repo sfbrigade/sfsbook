@@ -64,7 +64,7 @@ type templateParameters struct {
 func parseAndExecuteTemplate(w http.ResponseWriter, req *http.Request, templatestr string, result interface{}) {
 	// TODO(rjk): Logs, perf measurements, etc.
 	//including "header.html" to illustrate that second header template is not being accessed and is not overwriting first, as it should
-	template, err := template.New("htmlbase").ParseFiles(string(templatestr), "header.html")
+	template, err := template.New("htmlbase").ParseFiles(string(templatestr), "site/header.html")
 	if err != nil {
 		respondWithError(w, fmt.Sprintln("Can't parse template", err))
 		return
