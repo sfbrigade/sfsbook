@@ -103,7 +103,12 @@ func (_ PasswordFileType) LoadStartData(i bleve.Index, pathroot string) error {
 		}
 	default:
 		return fmt.Errorf("There is no password file. Cowardly refusing to create a really insecure one without a command line flag.")
-	}
+	}
+
+	// TODO(rjk): easy refactoring... can save typing and improve correctness.
+	// want Create, Delete, Update right? All can batch.
+	// can use a struct? Fixed structs work?
+	
 
 	batch := i.NewBatch()
 	for _, r := range s {
