@@ -32,6 +32,9 @@ func MakeServer(address string, hf *HandlerFactory) *http.Server {
 	m.Handle("/login.html",
 		hf.makeCookieHandler(hf.makeLoginHandler()))
 
+	m.Handle("/usermgt/changepasswd.html",
+		hf.makeCookieHandler(hf.makePasswdChangeHandler()))
+
 	m.Handle("/",
 		hf.makeCookieHandler(
 			hf.makeTemplatedHandler(dba.MakeStubGenerator(hf.resourceguide))))
