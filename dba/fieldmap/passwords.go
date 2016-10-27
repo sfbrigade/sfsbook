@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"math/rand"
 	"time"
 
 	"github.com/blevesearch/bleve"
@@ -60,30 +61,48 @@ func (_ PasswordFileType) Mapping() *bleve.IndexMapping {
 
 var PasswordFile = PasswordFileType("password.bleve")
 
-var init_passwords = flag.Bool("init_passwords", false, "create a set of test passwords if none exist")
+var init_passwords = flag.Bool("init_passwords", false, "Create a set of insecure test passwords if none exist")
+var init_admin_password = flag.Bool("init_admin_password", false, "Create a secure admin password.")
 
 func (_ PasswordFileType) LoadStartData(i bleve.Index, pathroot string) error {
-	if !*init_passwords {
+	var s []map[string]interface{}
+
+	switch {
+	case *init_passwords && *init_admin_password:
+		return fmt.Errorf("Trying to make secure admin password and insecure test passwords is incompatible. Pick one.")
+	case *init_passwords:
+		s = []map[string]interface{}{
+			map[string]interface{}{
+				"name":         "volunteer",
+				"cost":         string(bcrypt.DefaultCost),
+				"passwordhash": "open",
+				"role":         "volunteer",
+				"display_name": "Pikachu Helper",
+			},
+			map[string]interface{}{
+				"name":         "admin",
+				"cost":         string(bcrypt.DefaultCost),
+				"passwordhash": "sesame",
+				"role":         "admin",
+				"display_name": "Pokemon Guardian",
+			},
+		}
+		log.Println("Setting up default password file. Warning! This is not secure. Seriously!")
+	case *init_admin_password:
+		// Need to generate a unique random string.
+		defaultpassword := RandStringBytesRmndr(8)
+		log.Printf("Admin password is %s. Please change immediately", defaultpassword)
+		s = []map[string]interface{}{
+			map[string]interface{}{
+				"name":         "admin",
+				"cost":         string(bcrypt.DefaultCost),
+				"passwordhash": defaultpassword,
+				"role":         "admin",
+				"display_name": "Default Administrator",
+			},
+		}
+	default:
 		return fmt.Errorf("There is no password file. Cowardly refusing to create a really insecure one without a command line flag.")
-	}
-
-	log.Println("Setting up default password file. Warning! This is not secure. Seriously!")
-
-	s := []map[string]interface{}{
-		map[string]interface{}{
-			"name":         "volunteer",
-			"cost":         string(bcrypt.DefaultCost),
-			"passwordhash": "open",
-			"role":         "volunteer",
-			"display_name": "Pikachu Helper",
-		},
-		map[string]interface{}{
-			"name":         "admin",
-			"cost":         string(bcrypt.DefaultCost),
-			"passwordhash": "sesame",
-			"role":         "admin",
-			"display_name": "Pokemon Guardian",
-		},
 	}
 
 	batch := i.NewBatch()
@@ -116,4 +135,20 @@ func (_ PasswordFileType) LoadStartData(i bleve.Index, pathroot string) error {
 		return err
 	}
 	return nil
+}
+
+// This code is copied from:
+// http://stackoverflow.com/questions/22892120/how-to-generate-a-random-string-of-a-fixed-length-in-golang
+// There is no need to over-engineer a solution for something that shouldn't
+// be invoked that often.
+
+const letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
+// RandStringBytesRmndr returns a random character string of length n.
+func RandStringBytesRmndr(n int) string {
+	b := make([]byte, n)
+	for i := range b {
+		b[i] = letters[rand.Int63()%int64(len(letters))]
+	}
+	return string(b)
 }
