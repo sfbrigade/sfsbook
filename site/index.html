@@ -8,7 +8,7 @@
 {{/* TODO(rjk): Make the components of the page into subtemplates. */}}
 {{if .DecodedCookie.IsAuthed}}
 {{with .DecodedCookie}}
-<p>Welcome {{.DisplayName}}  <button onclick="clearSessionCookie();">Sign out</button></p>
+<p>Welcome {{.DisplayName}}  <button onclick="clearSessionCookie();">Sign out</button> <a href="/usermgt/changepasswd.html">Change Password</a></p>
 {{end}}
 {{else}}
 You are not signed in. <a href="/login.html">Login?</a>

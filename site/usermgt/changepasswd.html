@@ -1,0 +1,55 @@
+<html>
+<head>
+<script type="text/javascript" src="/js/example.js"></script>
+<link href="/css/style.css" rel="stylesheet">
+</head>
+<body>
+<!-- need to add a status bar -->
+
+<a href="/index.html">Back to Search</a>
+
+{{if .DecodedCookie.IsAuthed}}
+{{with .DecodedCookie}}
+<p>Welcome {{.DisplayName}}  <button onclick="clearSessionCookie();">Sign out</button></p>
+{{end}}
+
+{{with .Results}}
+{{if .ChangeAttemptedAndSucceeded}}
+<p>Your password has been sucessfullly updated</p>
+{{else}} {{/* if .ChangeAttemptedAndSucceeded */}}
+
+{{if .ChangeAttemptedAndFailed}}
+<p>There was a problem: {{.ReasonForFailure}}. Try again?</p>
+{{end}}
+
+<form action="/usermgt/changepasswd.html" method="post">
+
+<div class="onefield">
+<label for="oldpassword">Old Password</label>
+<input id="oldpassword" type="password" name="oldpassword" maxlength="30" ./>
+</div>
+
+<div class="onefield">
+<label for="newpassword">New Password</label>
+<input id="newpassword" type="password" name="newpassword" maxlength="30" ./>
+</div>
+<div class="onefield">
+<label for="newpasswordagain">New Password Again.</label>
+<input id="newpasswordagain" type="password" name="newpasswordagain" maxlength="30" ./>
+</div>
+
+<div class="buttonbar">
+<div class="button">
+<input type="submit" value="Change" />
+</div>
+</div>
+</form>
+{{end}} {{/* if .ChangeAttemptedAndSucceeded */}}
+{{end}} {{/* with .DecodedCookie */}}
+
+{{else}} {{/* if .DecodedCookie.IsAuthed */}}
+You aren't sign in. <a href="/login.html">Sign-in</a> before trying to change your password.
+{{end}} {{/* if .DecodedCookie.IsAuthed */}}
+
+</body>
+</html>
