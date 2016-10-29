@@ -11,40 +11,40 @@ import (
 type IndexDocumentMap map[string]*bleve.DocumentMapping
 
 // Standard field mappings. Use them everywhere.
-var englishTextFieldMapping *bleve.FieldMapping
-var keywordFieldMapping *bleve.FieldMapping
-var ignoredFieldMapping *bleve.FieldMapping
-var dateTimeMapping *bleve.FieldMapping
-var boolFieldMapping *bleve.FieldMapping
+var EnglishTextFieldMapping *bleve.FieldMapping
+var KeywordFieldMapping *bleve.FieldMapping
+var IgnoredFieldMapping *bleve.FieldMapping
+var DateTimeMapping *bleve.FieldMapping
+var BoolFieldMapping *bleve.FieldMapping
 
 // init makes all of the mappings that we use. A single instance of a
 // mapping such as englishTextMapping can be used for any number of
 // fields.
 func init() {
 	// a generic reusable mapping for english text
-	englishTextFieldMapping = bleve.NewTextFieldMapping()
-	englishTextFieldMapping.Analyzer = en.AnalyzerName
+	EnglishTextFieldMapping = bleve.NewTextFieldMapping()
+	EnglishTextFieldMapping.Analyzer = en.AnalyzerName
 
 	// a generic reusable mapping for keyword text
-	keywordFieldMapping = bleve.NewTextFieldMapping()
-	keywordFieldMapping.Analyzer = keyword_analyzer.Name
+	KeywordFieldMapping = bleve.NewTextFieldMapping()
+	KeywordFieldMapping.Analyzer = keyword_analyzer.Name
 
 	// a generic reusable mapping for ignored content.
-	ignoredFieldMapping = bleve.NewTextFieldMapping()
-	ignoredFieldMapping.Store = false
-	ignoredFieldMapping.Index = false
-	ignoredFieldMapping.IncludeTermVectors = false
-	ignoredFieldMapping.IncludeInAll = false
+	IgnoredFieldMapping = bleve.NewTextFieldMapping()
+	IgnoredFieldMapping.Store = false
+	IgnoredFieldMapping.Index = false
+	IgnoredFieldMapping.IncludeTermVectors = false
+	IgnoredFieldMapping.IncludeInAll = false
 
 	// a date/time mapping
 	// I believe that this is good like this. I will have to experiment.
-	dateTimeMapping = bleve.NewDateTimeFieldMapping()
+	DateTimeMapping = bleve.NewDateTimeFieldMapping()
 
 	// a generic reusable mapping for booleans
-	boolFieldMapping = bleve.NewBooleanFieldMapping()
+	BoolFieldMapping = bleve.NewBooleanFieldMapping()
 }
 
-// allDocumentMapping creates a new top-level mapping for an entire database
+// AllDocumentMapping creates a new top-level mapping for an entire database
 // from the provided map of per-document mappings. (Per Bleve terminology, the
 // database is conceptually an array of documents with an index of the document
 // contents that permits finding sets of documents. In sfsbook, the fundamental
@@ -54,7 +54,7 @@ func init() {
 // Each document must have a _type key that specifies this key value in order
 // to select the type of the document. Features like comments and edit auditing
 // will introduce additional document types.
-func allDocumentMapping(docMappings IndexDocumentMap) *bleve.IndexMapping {
+func AllDocumentMapping(docMappings IndexDocumentMap) *bleve.IndexMapping {
 	indexMapping := bleve.NewIndexMapping()
 
 	for k, v := range docMappings {

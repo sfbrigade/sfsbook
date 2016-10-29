@@ -41,7 +41,7 @@ func OpenBleve(persistentroot string, dxf IndexFactory) (bleve.Index, error) {
 			goto cleanup
 		}
 
-		// Re-open to work-around KV not done writing.		
+		// Re-open to work-around KV not done writing.
 		if bi, err = bleve.Open(dbpath); err != nil {
 			goto cleanup
 		}
