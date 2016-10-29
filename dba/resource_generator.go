@@ -81,7 +81,7 @@ func (qr *ResourceResultsGenerator) ForRequest(req interface{}) GeneratedResult 
 		return results
 	}
 
-	resultsMap, err := resultsMapFromDocument(doc)
+	resultsMap, err := MakeMapFromDocument(doc)
 	if err != nil {
 		log.Println("couldn't convert doc to resultsMap")
 		results.generatedResultCore.failureText = err.Error()

@@ -22,25 +22,25 @@ func buildResourceDocumentMapping() *bleve.DocumentMapping {
 
 	// With a default analyzer specified, we don't need to list the english field mappings.
 	// resourceEntryMapping.AddFieldMappingsAt("uuid", keywordFieldMapping)
-	resourceEntryMapping.AddFieldMappingsAt("email", keywordFieldMapping)
+	resourceEntryMapping.AddFieldMappingsAt("email", KeywordFieldMapping)
 
 	// TODO(rjk): Support the indexing of the hand_sort later. At the moment, this is not
 	// well structured. Later code will use the better-structured version of the data found
 	// in the csv.
-	resourceEntryMapping.AddFieldMappingsAt("hand_sort", ignoredFieldMapping)
-	resourceEntryMapping.AddFieldMappingsAt("website", keywordFieldMapping)
+	resourceEntryMapping.AddFieldMappingsAt("hand_sort", IgnoredFieldMapping)
+	resourceEntryMapping.AddFieldMappingsAt("website", KeywordFieldMapping)
 
 	// I note in passing that this can be populated from the hand_sort data.
 	// I might consider adding additional code to automatically freshen the data.
-	resourceEntryMapping.AddFieldMappingsAt("wheelchair", ignoredFieldMapping)
+	resourceEntryMapping.AddFieldMappingsAt("wheelchair", IgnoredFieldMapping)
 
 	// To track if we have been reviewed.
-	resourceEntryMapping.AddFieldMappingsAt("reviewed", boolFieldMapping)
+	resourceEntryMapping.AddFieldMappingsAt("reviewed", BoolFieldMapping)
 
 	// Time when this resource was first added to the database and last modified.
 	// TODO(rjk): Note need to track the edits.
-	resourceEntryMapping.AddFieldMappingsAt("date_indexed", dateTimeMapping)
-	resourceEntryMapping.AddFieldMappingsAt("date_modified", dateTimeMapping)
+	resourceEntryMapping.AddFieldMappingsAt("date_indexed", DateTimeMapping)
+	resourceEntryMapping.AddFieldMappingsAt("date_modified", DateTimeMapping)
 
 	return resourceEntryMapping
 }
@@ -54,7 +54,7 @@ func (g RefGuideType) Name() string {
 }
 
 func (_ RefGuideType) Mapping() *bleve.IndexMapping {
-	return allDocumentMapping(IndexDocumentMap{
+	return AllDocumentMapping(IndexDocumentMap{
 		"resource": buildResourceDocumentMapping(),
 	})
 }
@@ -62,7 +62,7 @@ func (_ RefGuideType) Mapping() *bleve.IndexMapping {
 var RefGuide = RefGuideType("sfsbook.bleve")
 
 func (_ RefGuideType) LoadStartData(i bleve.Index, pathroot string) error {
-	log.Println("Indexing... now")
+	log.Println("RefGuideType LoadStartData")
 
 	jsonBytes, err := ioutil.ReadFile(filepath.Join(pathroot, sourcefile))
 	if err != nil {

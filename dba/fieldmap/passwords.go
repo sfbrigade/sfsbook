@@ -36,12 +36,12 @@ func buildPasswordEntryMapping() *bleve.DocumentMapping {
 	passwordEntryMapping := bleve.NewDocumentMapping()
 
 	passwordEntryMapping.DefaultAnalyzer = keyword_analyzer.Name
-	passwordEntryMapping.AddFieldMappingsAt("username", keywordFieldMapping)
+	passwordEntryMapping.AddFieldMappingsAt("username", KeywordFieldMapping)
 	passwordEntryMapping.AddFieldMappingsAt("passwordhash", passwordFieldMapping)
 	passwordEntryMapping.AddFieldMappingsAt("cost", costFieldMapping)
-	passwordEntryMapping.AddFieldMappingsAt("account_created", dateTimeMapping)
-	passwordEntryMapping.AddFieldMappingsAt("last_login", dateTimeMapping)
-	passwordEntryMapping.AddFieldMappingsAt("display_name", keywordFieldMapping)
+	passwordEntryMapping.AddFieldMappingsAt("account_created", DateTimeMapping)
+	passwordEntryMapping.AddFieldMappingsAt("last_login", DateTimeMapping)
+	passwordEntryMapping.AddFieldMappingsAt("display_name", KeywordFieldMapping)
 
 	return passwordEntryMapping
 }
@@ -54,7 +54,7 @@ func (g PasswordFileType) Name() string {
 }
 
 func (_ PasswordFileType) Mapping() *bleve.IndexMapping {
-	return allDocumentMapping(IndexDocumentMap{
+	return AllDocumentMapping(IndexDocumentMap{
 		"password": buildPasswordEntryMapping(),
 	})
 }

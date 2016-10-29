@@ -6,8 +6,9 @@ import (
 	"github.com/blevesearch/bleve/document"
 )
 
-// resultsMapFromDocument builds a results object.
-func resultsMapFromDocument(doc *document.Document) (map[string]interface{}, error) {
+// MakeMapFromDocument builds a results object. This is a generally useful
+// ORM-like function for any document obtained from bleve.
+func MakeMapFromDocument(doc *document.Document) (map[string]interface{}, error) {
 	resultsMap := make(map[string]interface{})
 	allerrors := make([]error, 0)
 
@@ -30,6 +31,7 @@ func resultsMapFromDocument(doc *document.Document) (map[string]interface{}, err
 			}
 			resultsMap[t.Name()] = v
 		case *document.TextField:
+			// TODO(rjk): Is there a way to not convert this into a string?
 			resultsMap[t.Name()] = string(t.Value())
 		case *document.DateTimeField:
 			v, err := t.DateTime()
