@@ -37,7 +37,13 @@ func (gs *templatedServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		// TODO(rjk): Rationalize error handling here. There needs to be a 404 page.
 		respondWithError(w, fmt.Sprintln("Server error", err))
 	}
-	tmpl, err := gs.embr.GetAsString("/header.html")
+	hdr, err := gs.embr.GetAsString("/header.html")
+	if err != nil {
+		// TODO(rjk): Rationalize error handling here. There needs to be a 404 page.
+		respondWithError(w, fmt.Sprintln("Server error", err))
+		return
+	}
+	ftr, err := gs.embr.GetAsString("/footer.html")
 	if err != nil {
 		// TODO(rjk): Rationalize error handling here. There needs to be a 404 page.
 		respondWithError(w, fmt.Sprintln("Server error", err))
@@ -46,7 +52,7 @@ func (gs *templatedServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	// The req contains the cookie info. And so we can bound viewability
 	// in the database.
 	results := gs.generator.ForRequest(req)
-	templates := []string{str,tmpl}
+	templates := []string{str,hdr,ftr}
 	// TODO(rjk): I need to do something smarter about caching.
 	// I removed the cache of templates pending the global cache.
 	parseAndExecuteTemplate(w, req, templates, results)
