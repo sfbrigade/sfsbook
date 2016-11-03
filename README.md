@@ -27,6 +27,10 @@ The sfsbook application backend is written in [Go](http://golang.org). So instal
 go build
 ./sfsbook -init_passwords
 ```
+then after test passwords are constructed during the initial run, simply call
+```
+./sfsbook
+```
 
 and you should end up with a server called `sfsbook` ready to run at the top level. The server will manufacture some getting started state in `./state`, dump a varying amount of logging and be ready to browse to at [https://localhost:10443/index.html](https://localhost:10443/index.html).
 
