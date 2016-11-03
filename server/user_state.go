@@ -155,6 +155,7 @@ func (cf *cookieHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 			// TODO(rjk):
 			// redirect to the login page with an appropriate error message.
 			// Temporarily blacklist origin ip.
+			respondWithError(w, fmt.Sprintln("Malformed session cookie", err))
 		}
 		// log.Println("request had a cookie and I could decode it", *usercookie)
 		// TODO(rjk): Test here for revocation, cookie rotation, etc.

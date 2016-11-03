@@ -30,13 +30,13 @@ func (p comment) Type() string {
 func buildCommentIndexMapping() *bleve.DocumentMapping {
 	// commentEntryMapping is a document for each comment.
 	commentEntryMapping := bleve.NewDocumentMapping()
-	commentEntryMapping.AddFieldMappingsAt("uuid", keywordFieldMapping)
+	commentEntryMapping.AddFieldMappingsAt("uuid", KeywordFieldMapping)
 	// comment creation date.
 	// comment update date.
 	// the uid of the user.
-	commentEntryMapping.AddFieldMappingsAt("owner", keywordFieldMapping)
+	commentEntryMapping.AddFieldMappingsAt("owner", KeywordFieldMapping)
 	// comments can be vieweable by signed in user ("me", signed-in "volunteers", "world")
-	commentEntryMapping.AddFieldMappingsAt("viewability", keywordFieldMapping)
-	commentEntryMapping.AddFieldMappingsAt("body", englishTextFieldMapping)
+	commentEntryMapping.AddFieldMappingsAt("viewability", KeywordFieldMapping)
+	commentEntryMapping.AddFieldMappingsAt("body", EnglishTextFieldMapping)
 	return commentEntryMapping
 }
