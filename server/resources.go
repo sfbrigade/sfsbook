@@ -64,9 +64,15 @@ func (gs *resourceServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		// TODO(rjk): Rationalize error handling here. There needs to be a 404 page.
 		respondWithError(w, fmt.Sprintln("Server error", err))
 	}
-
+	tmpl, err := gs.embr.GetAsString("/header.html")
+	if err != nil {
+		// TODO(rjk): Rationalize error handling here. There needs to be a 404 page.
+		respondWithError(w, fmt.Sprintln("Server error", err))
+		return
+	}
 	// TODO(rjk): The debug flag needs to not always be set but be configurable.
 	results := gs.generator.ForRequest(dbreq)
 	results.SetDebug(true)
-	parseAndExecuteTemplate(w, req, str, results)
+	templates := []string{str,tmpl}
+	parseAndExecuteTemplate(w, req, templates, results)
 }

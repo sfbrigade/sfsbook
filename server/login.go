@@ -174,6 +174,13 @@ end:
 		return
 	}
 
+	tmpl, err := gs.embr.GetAsString("/header.html")
+	if err != nil {
+		// TODO(rjk): Rationalize error handling here. There needs to be a 404 page.
+		respondWithError(w, fmt.Sprintln("Server error", err))
+		return
+	}
+	templates := []string{str,tmpl}
 	// do the redirect?
-	parseAndExecuteTemplate(w, req, str, loginresult)
+	parseAndExecuteTemplate(w, req, templates, loginresult)
 }

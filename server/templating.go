@@ -37,14 +37,19 @@ func (gs *templatedServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		// TODO(rjk): Rationalize error handling here. There needs to be a 404 page.
 		respondWithError(w, fmt.Sprintln("Server error", err))
 	}
-
+	tmpl, err := gs.embr.GetAsString("/header.html")
+	if err != nil {
+		// TODO(rjk): Rationalize error handling here. There needs to be a 404 page.
+		respondWithError(w, fmt.Sprintln("Server error", err))
+		return
+	}
 	// The req contains the cookie info. And so we can bound viewability
 	// in the database.
 	results := gs.generator.ForRequest(req)
-
+	templates := []string{str,tmpl}
 	// TODO(rjk): I need to do something smarter about caching.
 	// I removed the cache of templates pending the global cache.
-	parseAndExecuteTemplate(w, req, str, results)
+	parseAndExecuteTemplate(w, req, templates, results)
 }
 
 // TODO(rjk): I think that this is not quite right code structure.
@@ -61,9 +66,14 @@ type templateParameters struct {
 // TODO(rjk): add caching of results.
 // TODO(rjk): permit many arguments. They need to get bundled into a kv-store
 // that keeps things more flexible.
-func parseAndExecuteTemplate(w http.ResponseWriter, req *http.Request, templatestr string, result interface{}) {
+func parseAndExecuteTemplate(w http.ResponseWriter, req *http.Request, templatestrings []string, result interface{}) {
 	// TODO(rjk): Logs, perf measurements, etc.
-	template, err := template.New("htmlbase").Parse(string(templatestr))
+	template, err := template.New("htmlbase").Parse(templatestrings[0])
+	if err != nil {
+		respondWithError(w, fmt.Sprintln("Can't parse template", err))
+		return
+	}
+	_, err = template.Parse(templatestrings[1])
 	if err != nil {
 		respondWithError(w, fmt.Sprintln("Can't parse template", err))
 		return
