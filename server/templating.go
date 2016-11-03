@@ -73,10 +73,12 @@ func parseAndExecuteTemplate(w http.ResponseWriter, req *http.Request, templates
 		respondWithError(w, fmt.Sprintln("Can't parse template", err))
 		return
 	}
-	_, err = template.Parse(templatestrings[1])
-	if err != nil {
-		respondWithError(w, fmt.Sprintln("Can't parse template", err))
-		return
+	for _, t := range templatestrings[1:] {
+		_, err = template.Parse(t)
+		if err != nil {
+			respondWithError(w, fmt.Sprintln("Can't parse template", err))
+			return
+		}
 	}
 
 	// Also, I need to make result optional so this is the wrong way to proceed.
