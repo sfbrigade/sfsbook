@@ -10,6 +10,7 @@ import (
 	"github.com/blevesearch/bleve"
 	"github.com/gorilla/securecookie"
 	"github.com/pborman/uuid"
+	"github.com/sfbrigade/sfsbook/dba"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -18,7 +19,7 @@ import (
 // much to be desired.
 type loginServer struct {
 	embr         *embeddableResources
-	passwordfile bleve.Index
+	passwordfile dba.PasswordIndex
 	cookiecodec  *securecookie.SecureCookie
 }
 

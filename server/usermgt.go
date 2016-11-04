@@ -5,14 +5,13 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/blevesearch/bleve"
 	"github.com/sfbrigade/sfsbook/dba"
 	"golang.org/x/crypto/bcrypt"
 )
 
 type passwordChange struct {
 	embr         *embeddableResources
-	passwordfile bleve.Index
+	passwordfile dba.PasswordIndex
 }
 
 // makePasswdChangeHandler returns a handler for changing the user password.
@@ -101,7 +100,7 @@ func (gs *passwordChange) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		uuid := GetCookie(req).Uuid
 		suuid := string(uuid)
 		// TODO(rjk): Would be nice if the bleve could use []byte as ids.
-		doc, err := gs.passwordfile.Document(suuid)
+		sr, err := gs.passwordfile.MapForDocument(suuid)
 		if err != nil {
 			// This signifies something perturbing: the uuid exists but is not in
 			// the DB. The most likely cause is that the user has been deleted.
@@ -110,18 +109,7 @@ func (gs *passwordChange) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 			// cannot be tampered with.
 			log.Println("oops! uuid in sesssion cookie not in database")
 			changeresult.ChangeAttemptedAndFailed = true
-			changeresult.ReasonForFailure = "Internal error"
-			goto end
-		}
-
-		// can use resultsMapFromDocument..
-		// note, we have to change access pattern. And write a test for it.
-		// TODO(rjk): go away and write a test for this.
-		sr, err := dba.MakeMapFromDocument(doc)
-		if err != nil {
-			log.Println("oops! ORM failed")
-			changeresult.ChangeAttemptedAndFailed = true
-			changeresult.ReasonForFailure = "Internal server error in the ORM"
+			changeresult.ReasonForFailure = "Account error. Please sign-out and sign-in again."
 			goto end
 		}
 
@@ -140,24 +128,18 @@ func (gs *passwordChange) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 
 		hash, err := bcrypt.GenerateFromPassword([]byte(newpassword), bcrypt.DefaultCost)
 		if err != nil {
-			log.Println("bcrypt didn't do its thing:", err)
-			changeresult.ChangeAttemptedAndFailed = true
-			changeresult.ReasonForFailure = "Internal server error in password encryption"
-			goto end
+			log.Println("bcrypt.GenerateFromPassword failed:", err)
+			respondWithError(w, fmt.Sprintln("bcrypt.GenerateFromPassword failed:", err))
+			return
 		}
 		sr["passwordhash"] = string(hash)
 
-		// TODO(rjk): Database code should not be here. Time to make some specific
-		// dba interfaces.
 		if err := gs.passwordfile.Index(string(suuid), sr); err != nil {
-			log.Println("failed 	to update password")
-			changeresult.ChangeAttemptedAndFailed = true
-			changeresult.ReasonForFailure = "Internal server error: inserting new password"
-			goto end
+			log.Println("passwordfile.Index failed", err)
+			respondWithError(w, fmt.Sprintln("passwordfile.Index failed", err))
+			return
 		}
-
 		changeresult.ChangeAttemptedAndSucceeded = true
-
 	}
 
 end:

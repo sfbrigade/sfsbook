@@ -24,7 +24,7 @@ type HandlerFactory struct {
 
 	// Databases
 	resourceguide bleve.Index
-	passwordfile  bleve.Index
+	passwordfile  dba.PasswordIndex
 
 	cookiecodec *securecookie.SecureCookie
 }
@@ -64,7 +64,7 @@ func MakeHandlerFactory(persistentroot string) (*HandlerFactory, error) {
 		return nil, err
 	}
 
-	passwordfile, err := dba.OpenBleve(persistentroot, fieldmap.PasswordFile)
+	passwordfile, err := dba.OpenPassword(persistentroot)
 	if err != nil {
 		log.Println("Operating in read-only mode because can't open/create user database:", err)
 	}
