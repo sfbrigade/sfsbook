@@ -5,6 +5,7 @@ import (
 	"path/filepath"
 
 	"github.com/blevesearch/bleve"
+	"github.com/blevesearch/bleve/mapping"
 )
 
 // IndexFactory specifies how to name and populate a database.
@@ -17,7 +18,7 @@ type IndexFactory interface {
 	LoadStartData(idx bleve.Index, root string) error
 
 	// Mapping returns IndexMapping for this database.
-	Mapping() *bleve.IndexMapping
+	Mapping() *mapping.IndexMappingImpl
 }
 
 // OpenBleve opens the backing database or builds it if it doesn't exist.

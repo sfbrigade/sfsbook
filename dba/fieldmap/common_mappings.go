@@ -2,20 +2,21 @@ package fieldmap
 
 import (
 	"github.com/blevesearch/bleve"
-	"github.com/blevesearch/bleve/analysis/analyzers/keyword_analyzer"
-	"github.com/blevesearch/bleve/analysis/language/en"
+	"github.com/blevesearch/bleve/mapping"
+	"github.com/blevesearch/bleve/analysis/analyzer/keyword"
+	"github.com/blevesearch/bleve/analysis/lang/en"
 )
 
 // IndexDocumentMap associates the document type (key) with
 // the document type's index mapping (value) for a single database.
-type IndexDocumentMap map[string]*bleve.DocumentMapping
+type IndexDocumentMap map[string]*mapping.DocumentMapping
 
 // Standard field mappings. Use them everywhere.
-var EnglishTextFieldMapping *bleve.FieldMapping
-var KeywordFieldMapping *bleve.FieldMapping
-var IgnoredFieldMapping *bleve.FieldMapping
-var DateTimeMapping *bleve.FieldMapping
-var BoolFieldMapping *bleve.FieldMapping
+var EnglishTextFieldMapping *mapping.FieldMapping
+var KeywordFieldMapping *mapping.FieldMapping
+var IgnoredFieldMapping *mapping.FieldMapping
+var DateTimeMapping *mapping.FieldMapping
+var BoolFieldMapping *mapping.FieldMapping
 
 // init makes all of the mappings that we use. A single instance of a
 // mapping such as englishTextMapping can be used for any number of
@@ -27,7 +28,7 @@ func init() {
 
 	// a generic reusable mapping for keyword text
 	KeywordFieldMapping = bleve.NewTextFieldMapping()
-	KeywordFieldMapping.Analyzer = keyword_analyzer.Name
+	KeywordFieldMapping.Analyzer = keyword.Name
 
 	// a generic reusable mapping for ignored content.
 	IgnoredFieldMapping = bleve.NewTextFieldMapping()
@@ -54,7 +55,7 @@ func init() {
 // Each document must have a _type key that specifies this key value in order
 // to select the type of the document. Features like comments and edit auditing
 // will introduce additional document types.
-func AllDocumentMapping(docMappings IndexDocumentMap) *bleve.IndexMapping {
+func AllDocumentMapping(docMappings IndexDocumentMap) *mapping.IndexMappingImpl {
 	indexMapping := bleve.NewIndexMapping()
 
 	for k, v := range docMappings {

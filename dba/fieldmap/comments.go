@@ -3,7 +3,7 @@ package fieldmap
 import (
 	"time"
 
-	"github.com/blevesearch/bleve"
+	"github.com/blevesearch/bleve/mapping"
 )
 
 // This code is largely inspired by the bleve beer-search demo application.
@@ -27,9 +27,9 @@ func (p comment) Type() string {
 // buildCommentIndexMapping
 // TODO(rjk): Comments are not supported yet. This code requires additional
 // attention.
-func buildCommentIndexMapping() *bleve.DocumentMapping {
+func buildCommentIndexMapping() *mapping.DocumentMapping {
 	// commentEntryMapping is a document for each comment.
-	commentEntryMapping := bleve.NewDocumentMapping()
+	commentEntryMapping := mapping.NewDocumentMapping()
 	commentEntryMapping.AddFieldMappingsAt("uuid", KeywordFieldMapping)
 	// comment creation date.
 	// comment update date.

@@ -8,19 +8,20 @@ import (
 	"time"
 
 	"github.com/blevesearch/bleve"
-	"github.com/blevesearch/bleve/analysis/analyzers/keyword_analyzer"
+	"github.com/blevesearch/bleve/mapping"
+	"github.com/blevesearch/bleve/analysis/analyzer/keyword"
 	"github.com/pborman/uuid"
 	"golang.org/x/crypto/bcrypt"
 )
 
 // buildPasswordDocumentMapping makes a mapping for the password file.
-func buildPasswordEntryMapping() *bleve.DocumentMapping {
+func buildPasswordEntryMapping() *mapping.DocumentMapping {
 	passwordFieldMapping := bleve.NewTextFieldMapping()
 	passwordFieldMapping.Index = false
 	passwordFieldMapping.Store = true
 	passwordFieldMapping.IncludeTermVectors = false
 	passwordFieldMapping.IncludeInAll = false
-	passwordFieldMapping.Analyzer = keyword_analyzer.Name
+	passwordFieldMapping.Analyzer = keyword.Name
 
 	// This mapping presumes that costs are less than 255. This might
 	// not always be true. I had used a number field (originally) but
@@ -30,12 +31,12 @@ func buildPasswordEntryMapping() *bleve.DocumentMapping {
 	costFieldMapping.IncludeTermVectors = false
 	costFieldMapping.IncludeInAll = false
 	costFieldMapping.Store = true
-	costFieldMapping.Analyzer = keyword_analyzer.Name
+	costFieldMapping.Analyzer = keyword.Name
 
 	// passwordEntryMapping is a document for each user.
 	passwordEntryMapping := bleve.NewDocumentMapping()
 
-	passwordEntryMapping.DefaultAnalyzer = keyword_analyzer.Name
+	passwordEntryMapping.DefaultAnalyzer = keyword.Name
 	passwordEntryMapping.AddFieldMappingsAt("username", KeywordFieldMapping)
 	passwordEntryMapping.AddFieldMappingsAt("passwordhash", passwordFieldMapping)
 	passwordEntryMapping.AddFieldMappingsAt("cost", costFieldMapping)
@@ -53,7 +54,7 @@ func (g PasswordFileType) Name() string {
 	return string(g)
 }
 
-func (_ PasswordFileType) Mapping() *bleve.IndexMapping {
+func (_ PasswordFileType) Mapping() *mapping.IndexMappingImpl {
 	return AllDocumentMapping(IndexDocumentMap{
 		"password": buildPasswordEntryMapping(),
 	})
