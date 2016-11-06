@@ -1,4 +1,4 @@
-package fieldmap
+package dba
 
 import (
 	"github.com/blevesearch/bleve"

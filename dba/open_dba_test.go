@@ -8,10 +8,6 @@ import (
 	"reflect"
 	"sort"
 	"testing"
-
-	"github.com/sfbrigade/sfsbook/dba/fieldmap"
-
-	"log"
 )
 
 const testdata = `[
@@ -43,14 +39,14 @@ const testdata = `[
 
 func TestIndexResourcet(t *testing.T) {
 	tmpdir, err := ioutil.TempDir("", "sfsbook")
-	log.Println(tmpdir)
+	//log.Println(tmpdir)
 	if err != nil {
 		t.Fatal("can't make a temporary directory", err)
 	}
 	defer os.RemoveAll(tmpdir)
 
 	// Create a database. Should fail because one or more of the paths doesn't exist.
-	if _, err := OpenBleve(tmpdir, fieldmap.RefGuide); err == nil {
+	if _, err := OpenBleve(tmpdir, RefGuide); err == nil {
 		t.Fatal("OpenBleve succeeded adding a non-existent starter database when it should have failed", err)
 	}
 
@@ -65,7 +61,7 @@ func TestIndexResourcet(t *testing.T) {
 	file.Close()
 
 	// Create a database. Should succeed.
-	db, err := OpenBleve(tmpdir, fieldmap.RefGuide)
+	db, err := OpenBleve(tmpdir, RefGuide)
 	if err != nil {
 		t.Fatal("OpenBleve failed to open and index some testdata", err)
 	}
