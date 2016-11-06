@@ -53,7 +53,7 @@ func MakeHandlerFactory(persistentroot string) (*HandlerFactory, error) {
 		return nil, fmt.Errorf("Don't have and can't make keys.", err)
 	}
 
-	resourceguide, err := dba.OpenBleve(persistentroot, fieldmap.RefGuide)
+	resourceguide, err := dba.OpenBleve(persistentroot, dba.RefGuide)
 	if err != nil {
 		return nil, fmt.Errorf("Can't open/create the resource guide database: %v", err)
 	}
