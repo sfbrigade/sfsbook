@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/blevesearch/bleve"
+	"github.com/blevesearch/bleve/search/query"
 )
 
 // QueryResultsGenerator does search queries against the resource book.
@@ -25,7 +26,7 @@ type ResourceResult struct {
 	Services    string
 }
 
-type queryResults struct {
+type querystringResults struct {
 	generatedResultCore
 
 	Query     string
@@ -44,43 +45,49 @@ func (qr *QueryResultsGenerator) ForRequest(param interface{}) GeneratedResult {
 	log.Println("req.Form", req.Form)
 
 	// This is dorky flow... I might want to do something different.
-	query := ""
+	querystring := ""
 
-	// TODO(rjk): validation of query parameters should happen in the web layer.
-	if q, ok := req.Form["query"]; ok {
+	// TODO(rjk): validation of querystring parameters should happen in the web layer.
+	if q, ok := req.Form["querystring"]; ok {
 		if len(q) > 0 {
-			query = q[0]
+			querystring = q[0]
 		}
 	}
 
-	results := &queryResults{
+	results := &querystringResults{
 		generatedResultCore: generatedResultCore{
 			success:     false,
-			failureText: "query had a sad",
+			failureText: "querystring had a sad",
 			debug:       false,
 		},
-		Query: query,
+		Query: querystring,
 	}
 
 	// Query goals (long term)?
 	// I think we need some way for the user to specify terms for search.
 
-	// Actually do a query against the database.
+	// Actually do a querystring against the database.
 	// how do I limit this to only some document types and fields?
-	// I don't know how to do that. SetField() on the query?
-	// create a more complicated query
+	// I don't know how to do that. SetField() on the querystring?
+	// create a more complicated querystring
 
 	// Add specific terms as "must"
-	// This makes a match query for the description field.
-	bq := bleve.NewBooleanQuery(
-		[]bleve.Query{},
-		[]bleve.Query{
-			bleve.NewMatchPhraseQuery(query).SetField("description"),
-			bleve.NewMatchPhraseQuery(query).SetField("services"),
-			bleve.NewMatchPhraseQuery(query).SetField("categories"),
-			bleve.NewMatchPhraseQuery(query).SetField("name"),
-		},
-		[]bleve.Query{})
+	// This makes a match querystring for the description field.
+	// TODO(rjk): It is conceivable that this is wrong.
+
+
+	middleq := make([]query.Query, 0, 4)
+	for _, k := range []string{"description", "services", "categories", "name" } {
+		q := query.NewMatchPhraseQuery(querystring)
+		q.SetField(k)
+		middleq = append(middleq, q)
+	}
+
+
+	bq := query.NewBooleanQuery(
+		[]query.Query{},
+		middleq,
+		[]query.Query{})
 
 	// Makes a search request.
 	searchRequest := bleve.NewSearchRequest(bq)
@@ -100,7 +107,7 @@ func (qr *QueryResultsGenerator) ForRequest(param interface{}) GeneratedResult {
 	// I need to rationalize the error handling..
 	if err != nil {
 		// TODO(rjk): update the FailureText
-		log.Println("query failed", err)
+		log.Println("querystring failed", err)
 		return results
 	}
 
