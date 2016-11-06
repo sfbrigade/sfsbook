@@ -2,7 +2,6 @@ package dba
 
 import (
 	"github.com/blevesearch/bleve"
-	"github.com/sfbrigade/sfsbook/dba/fieldmap"
 )
 
 // PasswordIndex is a minimal set of entry points into bleve.Index
@@ -14,11 +13,11 @@ type PasswordIndex interface {
 	MapForDocument(id string) (map[string]interface{}, error)
 }
 
-type BlevePasswordIndex struct {
+type blevePasswordIndex struct {
 	idx bleve.Index
 }
 
-func (pdoc *BlevePasswordIndex) MapForDocument(id string) (map[string]interface{}, error) {
+func (pdoc *blevePasswordIndex) MapForDocument(id string) (map[string]interface{}, error) {
 	idx := pdoc.idx
 	doc, err := idx.Document(id)
 	if err != nil {
@@ -27,18 +26,18 @@ func (pdoc *BlevePasswordIndex) MapForDocument(id string) (map[string]interface{
 	return MakeMapFromDocument(doc)
 }
 
-func (pdoc *BlevePasswordIndex) Search(req *bleve.SearchRequest) (*bleve.SearchResult, error) {
+func (pdoc *blevePasswordIndex) Search(req *bleve.SearchRequest) (*bleve.SearchResult, error) {
 	return pdoc.idx.Search(req)
 }
 
-func (pdoc *BlevePasswordIndex) Index(id string, data interface{}) error {
+func (pdoc *blevePasswordIndex) Index(id string, data interface{}) error {
 	return pdoc.idx.Index(id, data)
 }
 
 func OpenPassword(persistentroot string) (PasswordIndex, error) {
-	passwordfile, err := OpenBleve(persistentroot, fieldmap.PasswordFile)
+	passwordfile, err := OpenBleve(persistentroot, PasswordFile)
 	if err != nil {
 		return nil, err
 	}
-	return &BlevePasswordIndex{passwordfile}, err
+	return &blevePasswordIndex{passwordfile}, err
 }

@@ -10,8 +10,6 @@ import (
 	"github.com/blevesearch/bleve/mapping"
 	"github.com/blevesearch/bleve/analysis/analyzer/keyword"
 	"github.com/pborman/uuid"
-	"github.com/sfbrigade/sfsbook/dba/fieldmap"
-
 	"github.com/blevesearch/bleve/registry"
 )
 
@@ -32,17 +30,17 @@ func buildTestDocumentMapping() *mapping.DocumentMapping {
 	testDocumentMapping := bleve.NewDocumentMapping()
 	testDocumentMapping.DefaultAnalyzer = keyword.Name
 
-	testDocumentMapping.AddFieldMappingsAt("textfield", fieldmap.KeywordFieldMapping)
+	testDocumentMapping.AddFieldMappingsAt("textfield", KeywordFieldMapping)
 	testDocumentMapping.AddFieldMappingsAt("numberfield", numberMapping)
-	testDocumentMapping.AddFieldMappingsAt("datefield", fieldmap.DateTimeMapping)
-	testDocumentMapping.AddFieldMappingsAt("istruefield", fieldmap.BoolFieldMapping)
+	testDocumentMapping.AddFieldMappingsAt("datefield", DateTimeMapping)
+	testDocumentMapping.AddFieldMappingsAt("istruefield", BoolFieldMapping)
 
 	return testDocumentMapping
 }
 
 // Need a mapping for each type.
 func (_ TestDatabaseType) Mapping() *mapping.IndexMappingImpl {
-	return fieldmap.AllDocumentMapping(fieldmap.IndexDocumentMap{
+	return AllDocumentMapping(IndexDocumentMap{
 		"testdoc": buildTestDocumentMapping(),
 	})
 }
