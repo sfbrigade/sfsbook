@@ -1,11 +1,16 @@
 //  Copyright (c) 2014 Couchbase, Inc.
-//  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
-//  except in compliance with the License. You may obtain a copy of the License at
-//    http://www.apache.org/licenses/LICENSE-2.0
-//  Unless required by applicable law or agreed to in writing, software distributed under the
-//  License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-//  either express or implied. See the License for the specific language governing permissions
-//  and limitations under the License.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// 		http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 package boltdb
 
@@ -27,7 +32,7 @@ func (w *Writer) NewBatchEx(options store.KVBatchOptions) ([]byte, store.KVBatch
 	return make([]byte, options.TotalBytes), w.NewBatch(), nil
 }
 
-func (w *Writer) ExecuteBatch(batch store.KVBatch) error {
+func (w *Writer) ExecuteBatch(batch store.KVBatch) (err error) {
 
 	emulatedBatch, ok := batch.(*store.EmulatedBatch)
 	if !ok {
@@ -36,8 +41,21 @@ func (w *Writer) ExecuteBatch(batch store.KVBatch) error {
 
 	tx, err := w.store.db.Begin(true)
 	if err != nil {
-		return err
+		return
 	}
+	// defer function to ensure that once started,
+	// we either Commit tx or Rollback
+	defer func() {
+		// if nothing went wrong, commit
+		if err == nil {
+			// careful to catch error here too
+			err = tx.Commit()
+		} else {
+			// caller should see error that caused abort,
+			// not success or failure of Rollback itself
+			_ = tx.Rollback()
+		}
+	}()
 
 	bucket := tx.Bucket([]byte(w.store.bucket))
 	bucket.FillPercent = w.store.fillPercent
@@ -47,29 +65,29 @@ func (w *Writer) ExecuteBatch(batch store.KVBatch) error {
 		existingVal := bucket.Get(kb)
 		mergedVal, fullMergeOk := w.store.mo.FullMerge(kb, existingVal, mergeOps)
 		if !fullMergeOk {
-			return fmt.Errorf("merge operator returned failure")
+			err = fmt.Errorf("merge operator returned failure")
+			return
 		}
 		err = bucket.Put(kb, mergedVal)
 		if err != nil {
-			return err
+			return
 		}
 	}
 
 	for _, op := range emulatedBatch.Ops {
 		if op.V != nil {
-			err := bucket.Put(op.K, op.V)
+			err = bucket.Put(op.K, op.V)
 			if err != nil {
-				return err
+				return
 			}
 		} else {
-			err := bucket.Delete(op.K)
+			err = bucket.Delete(op.K)
 			if err != nil {
-				return err
+				return
 			}
 		}
 	}
-
-	return tx.Commit()
+	return
 }
 
 func (w *Writer) Close() error {

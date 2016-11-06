@@ -1,11 +1,16 @@
 //  Copyright (c) 2014 Couchbase, Inc.
-//  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
-//  except in compliance with the License. You may obtain a copy of the License at
-//    http://www.apache.org/licenses/LICENSE-2.0
-//  Unless required by applicable law or agreed to in writing, software distributed under the
-//  License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-//  either express or implied. See the License for the specific language governing permissions
-//  and limitations under the License.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// 		http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 package bleve
 
@@ -13,6 +18,7 @@ import (
 	"github.com/blevesearch/bleve/document"
 	"github.com/blevesearch/bleve/index"
 	"github.com/blevesearch/bleve/index/store"
+	"github.com/blevesearch/bleve/mapping"
 	"golang.org/x/net/context"
 )
 
@@ -35,7 +41,7 @@ func (b *Batch) Index(id string, data interface{}) error {
 		return ErrorEmptyID
 	}
 	doc := document.NewDocument(id)
-	err := b.index.Mapping().mapDocument(doc, data)
+	err := b.index.Mapping().MapDocument(doc, data)
 	if err != nil {
 		return err
 	}
@@ -91,11 +97,6 @@ func (b *Batch) Reset() {
 // Index() takes an input value, deduces a DocumentMapping for its type,
 // assigns string paths to its fields or values then applies field mappings on
 // them.
-//
-// If the value is a []byte, the indexer attempts to convert it to something
-// else using the ByteArrayConverter registered as
-// IndexMapping.ByteArrayConverter. By default, it interprets the value as a
-// JSON payload and unmarshals it to map[string]interface{}.
 //
 // The DocumentMapping used to index a value is deduced by the following rules:
 // 1) If value implements Classifier interface, resolve the mapping from Type().
@@ -176,27 +177,9 @@ type Index interface {
 	FieldDictRange(field string, startTerm []byte, endTerm []byte) (index.FieldDict, error)
 	FieldDictPrefix(field string, termPrefix []byte) (index.FieldDict, error)
 
-	// DumpAll returns a channel receiving all index rows as
-	// UpsideDownCouchRow, in lexicographic byte order. If the enumeration
-	// fails, an error is sent. The channel is closed once the enumeration
-	// completes or an error is encountered. The caller must consume all
-	// channel entries until the channel is closed to ensure the transaction
-	// and other resources associated with the enumeration are released.
-	//
-	// DumpAll exists for debugging and tooling purpose and may change in the
-	// future.
-	DumpAll() chan interface{}
-
-	// DumpDoc works like DumpAll but returns only StoredRows and
-	// TermFrequencyRows related to a document.
-	DumpDoc(id string) chan interface{}
-
-	// DumpFields works like DumpAll but returns only FieldRows.
-	DumpFields() chan interface{}
-
 	Close() error
 
-	Mapping() *IndexMapping
+	Mapping() mapping.IndexMapping
 
 	Stats() *IndexStat
 	StatsMap() map[string]interface{}
@@ -215,28 +198,33 @@ type Index interface {
 	Advanced() (index.Index, store.KVStore, error)
 }
 
-// A Classifier is an interface describing any object
-// which knows how to identify its own type.
-type Classifier interface {
-	Type() string
-}
-
 // New index at the specified path, must not exist.
 // The provided mapping will be used for all
 // Index/Search operations.
-func New(path string, mapping *IndexMapping) (Index, error) {
+func New(path string, mapping mapping.IndexMapping) (Index, error) {
 	return newIndexUsing(path, mapping, Config.DefaultIndexType, Config.DefaultKVStore, nil)
+}
+
+// NewMemOnly creates a memory-only index.
+// The contents of the index is NOT persisted,
+// and will be lost once closed.
+// The provided mapping will be used for all
+// Index/Search operations.
+func NewMemOnly(mapping mapping.IndexMapping) (Index, error) {
+	return newIndexUsing("", mapping, Config.DefaultIndexType, Config.DefaultMemKVStore, nil)
 }
 
 // NewUsing creates index at the specified path,
 // which must not already exist.
 // The provided mapping will be used for all
 // Index/Search operations.
-// The specified index type will be used
+// The specified index type will be used.
 // The specified kvstore implementation will be used
 // and the provided kvconfig will be passed to its
-// constructor.
-func NewUsing(path string, mapping *IndexMapping, indexType string, kvstore string, kvconfig map[string]interface{}) (Index, error) {
+// constructor. Note that currently the values of kvconfig must
+// be able to be marshaled and unmarshaled using the encoding/json library (used
+// when reading/writing the index metadata file).
+func NewUsing(path string, mapping mapping.IndexMapping, indexType string, kvstore string, kvconfig map[string]interface{}) (Index, error) {
 	return newIndexUsing(path, mapping, indexType, kvstore, kvconfig)
 }
 

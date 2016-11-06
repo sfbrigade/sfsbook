@@ -1,11 +1,16 @@
 //  Copyright (c) 2014 Couchbase, Inc.
-//  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
-//  except in compliance with the License. You may obtain a copy of the License at
-//    http://www.apache.org/licenses/LICENSE-2.0
-//  Unless required by applicable law or agreed to in writing, software distributed under the
-//  License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-//  either express or implied. See the License for the specific language governing permissions
-//  and limitations under the License.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// 		http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 package bleve
 
@@ -22,12 +27,12 @@ import (
 	"github.com/blevesearch/bleve/document"
 	"github.com/blevesearch/bleve/index"
 	"github.com/blevesearch/bleve/index/store"
-	"github.com/blevesearch/bleve/index/store/gtreap"
-	"github.com/blevesearch/bleve/index/upside_down"
+	"github.com/blevesearch/bleve/index/upsidedown"
+	"github.com/blevesearch/bleve/mapping"
 	"github.com/blevesearch/bleve/registry"
 	"github.com/blevesearch/bleve/search"
-	"github.com/blevesearch/bleve/search/collectors"
-	"github.com/blevesearch/bleve/search/facets"
+	"github.com/blevesearch/bleve/search/collector"
+	"github.com/blevesearch/bleve/search/facet"
 	"github.com/blevesearch/bleve/search/highlight"
 )
 
@@ -36,7 +41,7 @@ type indexImpl struct {
 	name  string
 	meta  *indexMeta
 	i     index.Index
-	m     *IndexMapping
+	m     mapping.IndexMapping
 	mutex sync.RWMutex
 	open  bool
 	stats *IndexStat
@@ -50,63 +55,19 @@ func indexStorePath(path string) string {
 	return path + string(os.PathSeparator) + storePath
 }
 
-func newMemIndex(indexType string, mapping *IndexMapping) (*indexImpl, error) {
-	rv := indexImpl{
-		path: "",
-		name: "mem",
-		m:    mapping,
-		meta: newIndexMeta(indexType, gtreap.Name, nil),
-	}
-
-	rv.stats = &IndexStat{i: &rv}
-
-	// open the index
-	indexTypeConstructor := registry.IndexTypeConstructorByName(rv.meta.IndexType)
-	if indexTypeConstructor == nil {
-		return nil, ErrorUnknownIndexType
-	}
-
-	var err error
-	rv.i, err = indexTypeConstructor(rv.meta.Storage, nil, Config.analysisQueue)
-	if err != nil {
-		return nil, err
-	}
-	err = rv.i.Open()
-	if err != nil {
-		return nil, err
-	}
-
-	// now persist the mapping
-	mappingBytes, err := json.Marshal(mapping)
-	if err != nil {
-		return nil, err
-	}
-	err = rv.i.SetInternal(mappingInternalKey, mappingBytes)
-	if err != nil {
-		return nil, err
-	}
-
-	// mark the index as open
-	rv.mutex.Lock()
-	defer rv.mutex.Unlock()
-	rv.open = true
-	indexStats.Register(&rv)
-	return &rv, nil
-}
-
-func newIndexUsing(path string, mapping *IndexMapping, indexType string, kvstore string, kvconfig map[string]interface{}) (*indexImpl, error) {
+func newIndexUsing(path string, mapping mapping.IndexMapping, indexType string, kvstore string, kvconfig map[string]interface{}) (*indexImpl, error) {
 	// first validate the mapping
 	err := mapping.Validate()
 	if err != nil {
 		return nil, err
 	}
 
-	if path == "" {
-		return newMemIndex(indexType, mapping)
-	}
-
 	if kvconfig == nil {
 		kvconfig = map[string]interface{}{}
+	}
+
+	if kvstore == "" {
+		return nil, fmt.Errorf("bleve not configured for file based indexing")
 	}
 
 	rv := indexImpl{
@@ -117,13 +78,17 @@ func newIndexUsing(path string, mapping *IndexMapping, indexType string, kvstore
 	}
 	rv.stats = &IndexStat{i: &rv}
 	// at this point there is hope that we can be successful, so save index meta
-	err = rv.meta.Save(path)
-	if err != nil {
-		return nil, err
+	if path != "" {
+		err = rv.meta.Save(path)
+		if err != nil {
+			return nil, err
+		}
+		kvconfig["create_if_missing"] = true
+		kvconfig["error_if_exists"] = true
+		kvconfig["path"] = indexStorePath(path)
+	} else {
+		kvconfig["path"] = ""
 	}
-	kvconfig["create_if_missing"] = true
-	kvconfig["error_if_exists"] = true
-	kvconfig["path"] = indexStorePath(path)
 
 	// open the index
 	indexTypeConstructor := registry.IndexTypeConstructorByName(rv.meta.IndexType)
@@ -175,7 +140,7 @@ func openIndexUsing(path string, runtimeConfig map[string]interface{}) (rv *inde
 
 	// backwards compatibility if index type is missing
 	if rv.meta.IndexType == "" {
-		rv.meta.IndexType = upside_down.Name
+		rv.meta.IndexType = upsidedown.Name
 	}
 
 	storeConfig := rv.meta.Config
@@ -224,7 +189,7 @@ func openIndexUsing(path string, runtimeConfig map[string]interface{}) (rv *inde
 		return nil, err
 	}
 
-	var im IndexMapping
+	var im *mapping.IndexMappingImpl
 	err = json.Unmarshal(mappingBytes, &im)
 	if err != nil {
 		return nil, fmt.Errorf("error parsing mapping JSON: %v\nmapping contents:\n%s", err, string(mappingBytes))
@@ -243,7 +208,7 @@ func openIndexUsing(path string, runtimeConfig map[string]interface{}) (rv *inde
 		return rv, err
 	}
 
-	rv.m = &im
+	rv.m = im
 	indexStats.Register(rv)
 	return rv, err
 }
@@ -260,7 +225,7 @@ func (i *indexImpl) Advanced() (index.Index, store.KVStore, error) {
 
 // Mapping returns the IndexMapping in use by this
 // Index.
-func (i *indexImpl) Mapping() *IndexMapping {
+func (i *indexImpl) Mapping() mapping.IndexMapping {
 	return i.m
 }
 
@@ -280,7 +245,7 @@ func (i *indexImpl) Index(id string, data interface{}) (err error) {
 	}
 
 	doc := document.NewDocument(id)
-	err = i.m.mapDocument(doc, data)
+	err = i.m.MapDocument(doc, data)
 	if err != nil {
 		return
 	}
@@ -351,7 +316,7 @@ func (i *indexImpl) Document(id string) (doc *document.Document, err error) {
 
 // DocCount returns the number of documents in the
 // index.
-func (i *indexImpl) DocCount() (uint64, error) {
+func (i *indexImpl) DocCount() (count uint64, err error) {
 	i.mutex.RLock()
 	defer i.mutex.RUnlock()
 
@@ -359,7 +324,19 @@ func (i *indexImpl) DocCount() (uint64, error) {
 		return 0, ErrorIndexClosed
 	}
 
-	return i.i.DocCount()
+	// open a reader for this search
+	indexReader, err := i.i.Reader()
+	if err != nil {
+		return 0, fmt.Errorf("error opening index reader %v", err)
+	}
+	defer func() {
+		if cerr := indexReader.Close(); err == nil && cerr != nil {
+			err = cerr
+		}
+	}()
+
+	count, err = indexReader.DocCount()
+	return
 }
 
 // Search executes a search request operation.
@@ -380,7 +357,7 @@ func (i *indexImpl) SearchInContext(ctx context.Context, req *SearchRequest) (sr
 		return nil, ErrorIndexClosed
 	}
 
-	collector := collectors.NewTopScorerSkipCollector(req.Size, req.From)
+	collector := collector.NewTopNCollector(req.Size, req.From, req.Sort)
 
 	// open a reader for this search
 	indexReader, err := i.i.Reader()
@@ -408,30 +385,30 @@ func (i *indexImpl) SearchInContext(ctx context.Context, req *SearchRequest) (sr
 		for facetName, facetRequest := range req.Facets {
 			if facetRequest.NumericRanges != nil {
 				// build numeric range facet
-				facetBuilder := facets.NewNumericFacetBuilder(facetRequest.Field, facetRequest.Size)
+				facetBuilder := facet.NewNumericFacetBuilder(facetRequest.Field, facetRequest.Size)
 				for _, nr := range facetRequest.NumericRanges {
 					facetBuilder.AddRange(nr.Name, nr.Min, nr.Max)
 				}
 				facetsBuilder.Add(facetName, facetBuilder)
 			} else if facetRequest.DateTimeRanges != nil {
 				// build date range facet
-				facetBuilder := facets.NewDateTimeFacetBuilder(facetRequest.Field, facetRequest.Size)
-				dateTimeParser := i.m.dateTimeParserNamed(i.m.DefaultDateTimeParser)
+				facetBuilder := facet.NewDateTimeFacetBuilder(facetRequest.Field, facetRequest.Size)
+				dateTimeParser := i.m.DateTimeParserNamed("")
 				for _, dr := range facetRequest.DateTimeRanges {
-					dr.ParseDates(dateTimeParser)
-					facetBuilder.AddRange(dr.Name, dr.Start, dr.End)
+					start, end := dr.ParseDates(dateTimeParser)
+					facetBuilder.AddRange(dr.Name, start, end)
 				}
 				facetsBuilder.Add(facetName, facetBuilder)
 			} else {
 				// build terms facet
-				facetBuilder := facets.NewTermsFacetBuilder(facetRequest.Field, facetRequest.Size)
+				facetBuilder := facet.NewTermsFacetBuilder(facetRequest.Field, facetRequest.Size)
 				facetsBuilder.Add(facetName, facetBuilder)
 			}
 		}
 		collector.SetFacetsBuilder(facetsBuilder)
 	}
 
-	err = collector.Collect(ctx, searcher)
+	err = collector.Collect(ctx, searcher, indexReader)
 	if err != nil {
 		return nil, err
 	}
@@ -520,7 +497,8 @@ func (i *indexImpl) SearchInContext(ctx context.Context, req *SearchRequest) (sr
 	searchDuration := time.Since(searchStart)
 	atomic.AddUint64(&i.stats.searchTime, uint64(searchDuration))
 
-	if searchDuration > Config.SlowSearchLogThreshold {
+	if Config.SlowSearchLogThreshold > 0 &&
+		searchDuration > Config.SlowSearchLogThreshold {
 		logger.Printf("slow search took %s - %v", searchDuration, req)
 	}
 
@@ -646,48 +624,6 @@ func (i *indexImpl) FieldDictPrefix(field string, termPrefix []byte) (index.Fiel
 		indexReader: indexReader,
 		fieldDict:   fieldDict,
 	}, nil
-}
-
-// DumpAll writes all index rows to a channel.
-// INTERNAL: do not rely on this function, it is
-// only intended to be used by the debug utilities
-func (i *indexImpl) DumpAll() chan interface{} {
-	i.mutex.RLock()
-	defer i.mutex.RUnlock()
-
-	if !i.open {
-		return nil
-	}
-
-	return i.i.DumpAll()
-}
-
-// DumpFields writes all field rows in the index
-// to a channel.
-// INTERNAL: do not rely on this function, it is
-// only intended to be used by the debug utilities
-func (i *indexImpl) DumpFields() chan interface{} {
-	i.mutex.RLock()
-	defer i.mutex.RUnlock()
-
-	if !i.open {
-		return nil
-	}
-	return i.i.DumpFields()
-}
-
-// DumpDoc writes all rows in the index associated
-// with the specified identifier to a channel.
-// INTERNAL: do not rely on this function, it is
-// only intended to be used by the debug utilities
-func (i *indexImpl) DumpDoc(id string) chan interface{} {
-	i.mutex.RLock()
-	defer i.mutex.RUnlock()
-
-	if !i.open {
-		return nil
-	}
-	return i.i.DumpDoc(id)
 }
 
 func (i *indexImpl) Close() error {
