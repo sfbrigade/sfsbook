@@ -7,9 +7,12 @@ import (
 	"time"
 
 	"github.com/blevesearch/bleve"
-	"github.com/blevesearch/bleve/analysis/analyzers/keyword_analyzer"
+	"github.com/blevesearch/bleve/mapping"
+	"github.com/blevesearch/bleve/analysis/analyzer/keyword"
 	"github.com/pborman/uuid"
 	"github.com/sfbrigade/sfsbook/dba/fieldmap"
+
+	"github.com/blevesearch/bleve/registry"
 )
 
 // TestDatabaseType implements IndexFactory for test data.
@@ -22,12 +25,12 @@ func (g *TestDatabaseType) Name() string {
 	return g.name
 }
 
-func buildTestDocumentMapping() *bleve.DocumentMapping {
+func buildTestDocumentMapping() *mapping.DocumentMapping {
 	numberMapping := bleve.NewNumericFieldMapping()
 
 	// testDocumentMapping is a document mapping for tests.
 	testDocumentMapping := bleve.NewDocumentMapping()
-	testDocumentMapping.DefaultAnalyzer = keyword_analyzer.Name
+	testDocumentMapping.DefaultAnalyzer = keyword.Name
 
 	testDocumentMapping.AddFieldMappingsAt("textfield", fieldmap.KeywordFieldMapping)
 	testDocumentMapping.AddFieldMappingsAt("numberfield", numberMapping)
@@ -38,7 +41,7 @@ func buildTestDocumentMapping() *bleve.DocumentMapping {
 }
 
 // Need a mapping for each type.
-func (_ TestDatabaseType) Mapping() *bleve.IndexMapping {
+func (_ TestDatabaseType) Mapping() *mapping.IndexMappingImpl {
 	return fieldmap.AllDocumentMapping(fieldmap.IndexDocumentMap{
 		"testdoc": buildTestDocumentMapping(),
 	})
@@ -88,10 +91,13 @@ func TestMakeMapFromDocument(t *testing.T) {
 		},
 	}
 
+	a, b := registry.AnalyzerTypesAndInstances()
+	t.Log("AnalyzerTypesAndInstances:", a, b)
+
 	// Open and populate a database.
 	db, err := OpenBleve(tmpdir, testfilesetup)
 	if err != nil {
-		t.Fatal("OpenBleve failed to add a test database", err)
+		t.Fatal("OpenBleve failed to add a test database:", err)
 	}
 
 	// Records exist.

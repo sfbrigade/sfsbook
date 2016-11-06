@@ -8,13 +8,14 @@ import (
 	"time"
 
 	"github.com/blevesearch/bleve"
-	"github.com/blevesearch/bleve/analysis/language/en"
+	"github.com/blevesearch/bleve/mapping"
+	"github.com/blevesearch/bleve/analysis/lang/en"
 	"github.com/pborman/uuid"
 )
 
 // buildResourceDocumentMapping builds the mappings needed for resource guide
 // entries.
-func buildResourceDocumentMapping() *bleve.DocumentMapping {
+func buildResourceDocumentMapping() *mapping.DocumentMapping {
 	resourceEntryMapping := bleve.NewDocumentMapping()
 
 	// TODO(rjk): Make sure that I have full language support enabled.
@@ -53,7 +54,7 @@ func (g RefGuideType) Name() string {
 	return string(g)
 }
 
-func (_ RefGuideType) Mapping() *bleve.IndexMapping {
+func (_ RefGuideType) Mapping() *mapping.IndexMappingImpl {
 	return AllDocumentMapping(IndexDocumentMap{
 		"resource": buildResourceDocumentMapping(),
 	})
