@@ -1,4 +1,4 @@
-//  Copyright (c) 2016 Couchbase, Inc.
+//  Copyright (c) 2014 Couchbase, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,22 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package store
+// +build appengine appenginevm
 
-// MultiGet is a helper function to retrieve mutiple keys from a
-// KVReader, and might be used by KVStore implementations that don't
-// have a native multi-get facility.
-func MultiGet(kvreader KVReader, keys [][]byte) ([][]byte, error) {
-	vals := make([][]byte, 0, len(keys))
+package bleve
 
-	for i, key := range keys {
-		val, err := kvreader.Get(key)
-		if err != nil {
-			return nil, err
-		}
+// in the appengine environment we cannot support disk based indexes
+// so we do no extra configuration in this method
+func initDisk() {
 
-		vals[i] = val
-	}
-
-	return vals, nil
 }
