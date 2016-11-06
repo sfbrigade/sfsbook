@@ -9,7 +9,6 @@ import (
 	"github.com/blevesearch/bleve"
 	"github.com/gorilla/securecookie"
 	"github.com/sfbrigade/sfsbook/dba"
-	"github.com/sfbrigade/sfsbook/dba/fieldmap"
 	"github.com/sfbrigade/sfsbook/setup"
 )
 

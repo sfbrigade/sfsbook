@@ -1,4 +1,4 @@
-package fieldmap
+package dba
 
 import (
 	"io/ioutil"
@@ -6,7 +6,6 @@ import (
 	"testing"
 
 	"github.com/blevesearch/bleve"
-	"github.com/sfbrigade/sfsbook/dba"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -20,7 +19,8 @@ func TestPasswordFile(t *testing.T) {
 
 	// Create a database. Should fail because we refuse to create an
 	// insecure password file without a command line flag.
-	if _, err := dba.OpenBleve(tmpdir, PasswordFile); err == nil {
+	// TODO(rjk): Should pass options in.
+	if _, err := OpenBleve(tmpdir, PasswordFile); err == nil {
 		t.Fatal("OpenBleve succeeded adding a password database when it should have refused", err)
 	}
 
@@ -28,7 +28,7 @@ func TestPasswordFile(t *testing.T) {
 	*init_passwords = true
 	defer func() { *init_passwords = original_init_passwords }()
 
-	db, err := dba.OpenBleve(tmpdir, PasswordFile)
+	db, err := OpenBleve(tmpdir, PasswordFile)
 	if err != nil {
 		t.Fatal("OpenBleve failed to add a password file", err)
 	}
