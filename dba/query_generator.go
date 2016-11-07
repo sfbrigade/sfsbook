@@ -26,7 +26,7 @@ type ResourceResult struct {
 	Services    string
 }
 
-type querystringResults struct {
+type queryResults struct {
 	generatedResultCore
 
 	Query     string
@@ -48,16 +48,16 @@ func (qr *QueryResultsGenerator) ForRequest(param interface{}) GeneratedResult {
 	querystring := ""
 
 	// TODO(rjk): validation of querystring parameters should happen in the web layer.
-	if q, ok := req.Form["querystring"]; ok {
+	if q, ok := req.Form["query"]; ok {
 		if len(q) > 0 {
 			querystring = q[0]
 		}
 	}
 
-	results := &querystringResults{
+	results := &queryResults{
 		generatedResultCore: generatedResultCore{
 			success:     false,
-			failureText: "querystring had a sad",
+			failureText: "query had a sad",
 			debug:       false,
 		},
 		Query: querystring,
@@ -66,16 +66,8 @@ func (qr *QueryResultsGenerator) ForRequest(param interface{}) GeneratedResult {
 	// Query goals (long term)?
 	// I think we need some way for the user to specify terms for search.
 
-	// Actually do a querystring against the database.
-	// how do I limit this to only some document types and fields?
-	// I don't know how to do that. SetField() on the querystring?
-	// create a more complicated querystring
-
-	// Add specific terms as "must"
-	// This makes a match querystring for the description field.
-	// TODO(rjk): It is conceivable that this is wrong.
-
-
+	// Actually do a query against the database.
+	// TODO(rjk): Refine the search handling.
 	middleq := make([]query.Query, 0, 4)
 	for _, k := range []string{"description", "services", "categories", "name" } {
 		q := query.NewMatchPhraseQuery(querystring)
@@ -90,6 +82,7 @@ func (qr *QueryResultsGenerator) ForRequest(param interface{}) GeneratedResult {
 		[]query.Query{})
 
 	// Makes a search request.
+	log.Println("querystring:", querystring)
 	searchRequest := bleve.NewSearchRequest(bq)
 
 	// Modify the search request to only retrieve some fields.
@@ -107,7 +100,7 @@ func (qr *QueryResultsGenerator) ForRequest(param interface{}) GeneratedResult {
 	// I need to rationalize the error handling..
 	if err != nil {
 		// TODO(rjk): update the FailureText
-		log.Println("querystring failed", err)
+		log.Println("query failed", err)
 		return results
 	}
 
