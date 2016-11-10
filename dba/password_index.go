@@ -26,6 +26,7 @@ func (pdoc *blevePasswordIndex) MapForDocument(id string) (map[string]interface{
 	return MakeMapFromDocument(doc)
 }
 
+// TODO(rjk): Fix the layering violation of leaking bleve into the interface.
 func (pdoc *blevePasswordIndex) Search(req *bleve.SearchRequest) (*bleve.SearchResult, error) {
 	return pdoc.idx.Search(req)
 }
