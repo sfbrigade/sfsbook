@@ -5,9 +5,9 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/sfbrigade/sfsbook/dba"
 	"github.com/blevesearch/bleve"
 	"github.com/blevesearch/bleve/search/query"
+	"github.com/sfbrigade/sfsbook/dba"
 )
 
 type listUsers struct {
@@ -26,8 +26,8 @@ func (hf *HandlerFactory) makeListUsersHandler() http.Handler {
 type listUsersResult struct {
 	Userquery string
 	// TODO(rjk): Consider making this typed in some fashion.
-	Users []map[string]interface{}
-	Querysuccess bool
+	Users             []map[string]interface{}
+	Querysuccess      bool
 	Diagnosticmessage string
 }
 
@@ -65,7 +65,7 @@ func (gs *listUsers) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	// Setup a query. The query is different if we have specified it.
 	if req.Method == "POST" {
 		log.Println("got a post")
-		
+
 		if err := req.ParseForm(); err != nil {
 			respondWithError(w, fmt.Sprintln("bad uploaded form data to login: ", err))
 			return
@@ -93,44 +93,42 @@ func (gs *listUsers) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		// Is displayname indexed? I might want to do that...
 		// I need to version the database...
 
-	
-	} 
+	}
 
+	// I need to make this search the right way. And bound the result set
+	// size.
+	sreq := bleve.NewSearchRequest(queryop)
+	sreq.Fields = []string{"name", "role", "display_name"}
 
-		// I need to make this search the right way. And bound the result set
-		// size.
-		sreq := bleve.NewSearchRequest(queryop)
-		sreq.Fields = []string{"name",  "role", "display_name"}
+	// These two values need to come from the URL args.
+	sreq.Size = 10
+	sreq.From = 0
 
-		// These two values need to come from the URL args.
-		sreq.Size = 10
-		sreq.From = 0
+	// This is an error case (something is wrong internally)
+	searchResults, err := gs.passwordfile.Search(sreq)
+	if err != nil {
+		respondWithError(w, fmt.Sprintln("database couldn't respond with useful results", err))
+	}
 
-		// This is an error case (something is wrong internally)
-		searchResults, err := gs.passwordfile.Search(sreq)
-		if err != nil {
-			respondWithError(w, fmt.Sprintln("database couldn't respond with useful results", err))
-		}
-
-		if len(searchResults.Hits) < 1 {
-			// This probably means that the user has entered an invalid query.
-			listusersresult.Diagnosticmessage = "Userquery matches no users."
-			gs.ender(w, req, listusersresult)
-			return
-		}
-
-		users := make([]map[string]interface{}, 0, len(searchResults.Hits))
-		for _, sr := range searchResults.Hits {
-			u := make(map[string]interface{})
-			for k, v := range sr.Fields {
-				// Could test and drop the unfortunate?
-				u[k] = v.(string)
-			}
-			u["uuid"] = sr.ID
-			users = append(users, u)
-		}
-		listusersresult.Querysuccess = true
-		listusersresult.Users = users
-
+	if len(searchResults.Hits) < 1 {
+		// This probably means that the user has entered an invalid query.
+		listusersresult.Diagnosticmessage = "Userquery matches no users."
 		gs.ender(w, req, listusersresult)
+		return
+	}
+
+	users := make([]map[string]interface{}, 0, len(searchResults.Hits))
+	for _, sr := range searchResults.Hits {
+		u := make(map[string]interface{})
+		for k, v := range sr.Fields {
+			// Could test and drop the unfortunate?
+			u[k] = v.(string)
+		}
+		u["uuid"] = sr.ID
+		users = append(users, u)
+	}
+	listusersresult.Querysuccess = true
+	listusersresult.Users = users
+
+	gs.ender(w, req, listusersresult)
 }

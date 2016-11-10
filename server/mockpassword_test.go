@@ -8,7 +8,7 @@ import (
 	"github.com/rjkroege/mocking"
 )
 
-// TODO(rjk): Complete the higher level of semantic abstraction with 
+// TODO(rjk): Complete the higher level of semantic abstraction with
 // some kind of appropriate wrapper for Search.
 type mockPasswordIndex mocking.Tape
 
