@@ -1,0 +1,56 @@
+<html>
+<head>
+<script type="text/javascript" src="/js/example.js"></script>
+<link href="/css/style.css" rel="stylesheet">
+</head>
+<body>
+<!-- need to add a status bar -->
+<p>
+<a href="/index.html">Back to Search</a>
+</p>
+{{if .DecodedCookie.HasCapabilityViewUsers}}
+{{with .DecodedCookie}}
+<p>Welcome {{.DisplayName}}  <button onclick="clearSessionCookie();">Sign out</button></p>
+{{end}}
+
+<p>Search for a user</p>
+<form action="/usermgt/listusers.html" method="post">
+   <div>
+        <label for="userquery">Search users:</label>
+        <input type="text" id="userquery" name="userquery" />
+    </div>
+</form>
+
+{{with .Results}}
+
+{{if .Querysuccess}}
+<p>Results for {{.Userquery}}</p>
+{{else}}
+{{.Diagnosticmessage}}
+{{end}}
+
+<table>
+<thead>
+	<td>User name</td>
+	<td>role</td>
+	<td>Display name</td>
+</thead>
+{{range .Users}}
+<tr>
+	<td>{{.name}}</td>
+	<td>{{.role}}</td>
+	<td>{{.display_name}}</td>
+</tr>
+{{end}}
+</table>
+
+{{end}} {{/* with .Results  */}}
+
+{{else}} {{/* if .DecodedCookie.HasCapabilityViewUsers */}}
+
+<p>You aren't signed with the right to list users. <a href="/login.html">Sign-in</a> as an administrative user.</p>
+
+
+{{end}} {{/* if .DecodedCookie.HasCapabilityViewUsers */}}
+</body>
+</html>
