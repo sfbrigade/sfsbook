@@ -186,3 +186,7 @@ func (u *UserCookie) HasCapability(cap CapabilityType) bool {
 func (u *UserCookie) HasCapabilityEditResource() bool {
 	return u.HasCapability(CapabilityEditResource)
 }
+
+func (u *UserCookie) HasCapabilityViewUsers() bool {
+	return u.HasCapability(CapabilityViewUsers)
+}
