@@ -72,14 +72,15 @@ type templateParameters struct {
 // TODO(rjk): add caching of results.
 // TODO(rjk): permit many arguments. They need to get bundled into a kv-store
 // that keeps things more flexible.
-func parseAndExecuteTemplate(w http.ResponseWriter, req *http.Request, templatestrings []string, result interface{}) {
+func parseAndExecuteTemplate(w http.ResponseWriter, req *http.Request, templateNames []string, result interface{}) {
 	// TODO(rjk): Logs, perf measurements, etc.
-	template, err := template.New("htmlbase").Parse(templatestrings[0])
+	templateStrings := getTemplateStrings(templateNames)
+	template, err := template.New("htmlbase").Parse(templateStrings[0])
 	if err != nil {
 		respondWithError(w, fmt.Sprintln("Can't parse template", err))
 		return
 	}
-	for _, t := range templatestrings[1:] {
+	for _, t := range templateStrings[1:] {
 		_, err = template.Parse(t)
 		if err != nil {
 			respondWithError(w, fmt.Sprintln("Can't parse template", err))
@@ -96,4 +97,20 @@ func parseAndExecuteTemplate(w http.ResponseWriter, req *http.Request, templates
 	if err := template.Execute(w, tp); err != nil {
 		respondWithError(w, fmt.Sprintln("Can't execute template", err))
 	}
+}
+
+// getTemplateStrings returns a new slice containing the template string for each
+// template name in the original slice or an error if something is wrong with it.
+func (gs *templatedServer) getTemplateStrings(templateNames []string) ([]string, error) {
+    templateStrings := [len(templateNames)]string
+    for i, v := range templateNames {
+        str, err := gs.embr.GetAsString(v)
+        if err != nil {
+	        // TODO(rjk): Rationalize error handling here. There needs to be a 
+	        // 404 page.
+	        return err
+	    }
+	    templateStrings[i] = str
+    }
+    return templateStrings
 }

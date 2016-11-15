@@ -46,22 +46,6 @@ func getValidatedString(key string, postform url.Values) (string, error) {
 	return value, nil
 }
 
-// getTemplateStrings returns a new slice containing the template string for each
-// template name in the original slice or an error if something is wrong with it.
-func (gs *loginServer) getTemplateStrings(templateNames []string, w http.ResponseWriter) []string {
-    templateStrings := make([]string, len(templateNames))
-    for i, v := range templateNames {
-        str, err := gs.embr.GetAsString(v)
-        if err != nil {
-	        // TODO(rjk): Rationalize error handling here. There needs to be a 
-	        // 404 page.
-	        respondWithError(w, fmt.Sprintln("Server error", err))
-	    }
-	    templateStrings[i] = str
-    }
-    return templateStrings
-}
-
 // TODO(rjk): It is conceivable that this could be computed from
 // the cookie state and this code could be simplified.
 type loginResult struct {
@@ -203,8 +187,8 @@ end:
 	// 	respondWithError(w, fmt.Sprintln("Server error", err))
 	// 	return
 	// }
-	templates := []string{sn, "/header.html", "/footer.html"}
+	templates := []string{sn, "/footer.html"}
 	// do the redirect?
-	templateStrings := getTemplateStrings(templates, w)
-	parseAndExecuteTemplate(w, req, templateStrings, loginresult)
+	// templateStrings := getTemplateStrings(templates, w)
+	parseAndExecuteTemplate(w, req, templates, loginresult)
 }

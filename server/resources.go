@@ -59,26 +59,26 @@ func (gs *resourceServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		dbreq.PostArgs = req.PostForm
 	}
 
-	str, err := gs.embr.GetAsString(sn)
-	if err != nil {
-		// TODO(rjk): Rationalize error handling here. There needs to be a 404 page.
-		respondWithError(w, fmt.Sprintln("Server error", err))
-	}
-	hdr, err := gs.embr.GetAsString("/header.html")
-	if err != nil {
-		// TODO(rjk): Rationalize error handling here. There needs to be a 404 page.
-		respondWithError(w, fmt.Sprintln("Server error", err))
-		return
-	}
-	ftr, err := gs.embr.GetAsString("/footer.html")
-	if err != nil {
-		// TODO(rjk): Rationalize error handling here. There needs to be a 404 page.
-		respondWithError(w, fmt.Sprintln("Server error", err))
-		return
-	}
+	// str, err := gs.embr.GetAsString(sn)
+	// if err != nil {
+	// 	// TODO(rjk): Rationalize error handling here. There needs to be a 404 page.
+	// 	respondWithError(w, fmt.Sprintln("Server error", err))
+	// }
+	// hdr, err := gs.embr.GetAsString("/header.html")
+	// if err != nil {
+	// 	// TODO(rjk): Rationalize error handling here. There needs to be a 404 page.
+	// 	respondWithError(w, fmt.Sprintln("Server error", err))
+	// 	return
+	// }
+	// ftr, err := gs.embr.GetAsString("/footer.html")
+	// if err != nil {
+	// 	// TODO(rjk): Rationalize error handling here. There needs to be a 404 page.
+	// 	respondWithError(w, fmt.Sprintln("Server error", err))
+	// 	return
+	// }
 	// TODO(rjk): The debug flag needs to not always be set but be configurable.
 	results := gs.generator.ForRequest(dbreq)
 	results.SetDebug(true)
-	templates := []string{str,hdr,ftr}
+	templates := []string{sn, "/header.html", "/footer.html"}
 	parseAndExecuteTemplate(w, req, templates, results)
 }
