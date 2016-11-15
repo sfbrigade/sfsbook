@@ -46,6 +46,22 @@ func getValidatedString(key string, postform url.Values) (string, error) {
 	return value, nil
 }
 
+// getTemplateStrings returns a new slice containing the template string for each
+// template name in the original slice or an error if something is wrong with it.
+func (gs *loginServer) getTemplateStrings(templateNames []string, w http.ResponseWriter) []string {
+    templateStrings := make([]string, len(templateNames))
+    for i, v := range templateNames {
+        str, err := gs.embr.GetAsString(v)
+        if err != nil {
+	        // TODO(rjk): Rationalize error handling here. There needs to be a 
+	        // 404 page.
+	        respondWithError(w, fmt.Sprintln("Server error", err))
+	    }
+	    templateStrings[i] = str
+    }
+    return templateStrings
+}
+
 // TODO(rjk): It is conceivable that this could be computed from
 // the cookie state and this code could be simplified.
 type loginResult struct {
@@ -164,29 +180,31 @@ func (gs *loginServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 			respondWithError(w, fmt.Sprintln("Server cookie error", err))
 		}
 	}
-
 end:
 
-	str, err := gs.embr.GetAsString(sn)
-	if err != nil {
-		// TODO(rjk): Rationalize error handling here. There needs to be a 404 page.
-		respondWithError(w, fmt.Sprintln("Server error", err))
-		return
-	}
 
-	hdr, err := gs.embr.GetAsString("/header.html")
-	if err != nil {
-		// TODO(rjk): Rationalize error handling here. There needs to be a 404 page.
-		respondWithError(w, fmt.Sprintln("Server error", err))
-		return
-	}
-	ftr, err := gs.embr.GetAsString("/footer.html")
-	if err != nil {
-		// TODO(rjk): Rationalize error handling here. There needs to be a 404 page.
-		respondWithError(w, fmt.Sprintln("Server error", err))
-		return
-	}
-	templates := []string{str,hdr,ftr}
+
+	// str, err := gs.embr.GetAsString(sn)
+	// if err != nil {
+	// 	// TODO(rjk): Rationalize error handling here. There needs to be a 404 page.
+	// 	respondWithError(w, fmt.Sprintln("Server error", err))
+	// 	return
+	// }
+
+	// hdr, err := gs.embr.GetAsString("/header.html")
+	// if err != nil {
+	// 	// TODO(rjk): Rationalize error handling here. There needs to be a 404 page.
+	// 	respondWithError(w, fmt.Sprintln("Server error", err))
+	// 	return
+	// }
+	// ftr, err := gs.embr.GetAsString("/footer.html")
+	// if err != nil {
+	// 	// TODO(rjk): Rationalize error handling here. There needs to be a 404 page.
+	// 	respondWithError(w, fmt.Sprintln("Server error", err))
+	// 	return
+	// }
+	templates := []string{sn, "/header.html", "/footer.html"}
 	// do the redirect?
-	parseAndExecuteTemplate(w, req, templates, loginresult)
+	templateStrings := getTemplateStrings(templates, w)
+	parseAndExecuteTemplate(w, req, templateStrings, loginresult)
 }
