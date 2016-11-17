@@ -33,15 +33,9 @@ type listUsersResult struct {
 
 func (gs *listUsers) ender(w http.ResponseWriter, req *http.Request, listusersresult interface{}) {
 	sn := req.URL.Path
-	str, err := gs.embr.GetAsString(sn)
-	if err != nil {
-		// TODO(rjk): Rationalize error handling here. There needs to be a 404 page.
-		respondWithError(w, fmt.Sprintln("Server error", err))
-		return
-	}
-
+	templates := []string{sn}
 	// do the redirect?
-	parseAndExecuteTemplate(gs.embr, w, req, str, listusersresult)
+	parseAndExecuteTemplate(gs.embr, w, req, templates, listusersresult)
 }
 
 // TODO(rjk): Note refactoring opportunity with basic search?
