@@ -2,6 +2,7 @@ package server
 
 import (
 	"fmt"
+	"log"
 	"html/template"
 	"net/http"
 
@@ -32,30 +33,13 @@ func (gs *templatedServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		respondWithError(w, fmt.Sprintln("invalid form parameters", err))
 	}
 
-	str, err := gs.embr.GetAsString(sn)
-	if err != nil {
-		// TODO(rjk): Rationalize error handling here. There needs to be a 404 page.
-		respondWithError(w, fmt.Sprintln("Server error", err))
-	}
-	hdr, err := gs.embr.GetAsString("/header.html")
-	if err != nil {
-		// TODO(rjk): Rationalize error handling here. There needs to be a 404 page.
-		respondWithError(w, fmt.Sprintln("Server error", err))
-		return
-	}
-	ftr, err := gs.embr.GetAsString("/footer.html")
-	if err != nil {
-		// TODO(rjk): Rationalize error handling here. There needs to be a 404 page.
-		respondWithError(w, fmt.Sprintln("Server error", err))
-		return
-	}
 	// The req contains the cookie info. And so we can bound viewability
 	// in the database.
 	results := gs.generator.ForRequest(req)
-	templates := []string{str,hdr,ftr}
+	templates := []string{sn,"/header.html","/footer.html"}
 	// TODO(rjk): I need to do something smarter about caching.
 	// I removed the cache of templates pending the global cache.
-	parseAndExecuteTemplate(w, req, templates, results)
+	parseAndExecuteTemplate(gs.embr, w, req, templates, results)
 }
 
 // TODO(rjk): I think that this is not quite right code structure.
@@ -72,9 +56,13 @@ type templateParameters struct {
 // TODO(rjk): add caching of results.
 // TODO(rjk): permit many arguments. They need to get bundled into a kv-store
 // that keeps things more flexible.
-func parseAndExecuteTemplate(w http.ResponseWriter, req *http.Request, templateNames []string, result interface{}) {
+func parseAndExecuteTemplate(embr *embeddableResources, w http.ResponseWriter, req *http.Request, templateNames []string, result interface{}) {
 	// TODO(rjk): Logs, perf measurements, etc.
-	templateStrings := getTemplateStrings(templateNames)
+	templateStrings, err := getTemplateStrings(embr, templateNames)
+	if err != nil {
+		respondWithError(w, fmt.Sprintln("getTemplateStrings failed", err))
+		return
+	}
 	template, err := template.New("htmlbase").Parse(templateStrings[0])
 	if err != nil {
 		respondWithError(w, fmt.Sprintln("Can't parse template", err))
@@ -101,16 +89,18 @@ func parseAndExecuteTemplate(w http.ResponseWriter, req *http.Request, templateN
 
 // getTemplateStrings returns a new slice containing the template string for each
 // template name in the original slice or an error if something is wrong with it.
-func (gs *templatedServer) getTemplateStrings(templateNames []string) ([]string, error) {
-    templateStrings := [len(templateNames)]string
+func getTemplateStrings(embr *embeddableResources, templateNames []string) ([]string, error) {
+    templateStrings := make([]string,len(templateNames))
     for i, v := range templateNames {
-        str, err := gs.embr.GetAsString(v)
+    	log.Println("this is the template", v)
+        str, err := embr.GetAsString(v)
         if err != nil {
 	        // TODO(rjk): Rationalize error handling here. There needs to be a 
 	        // 404 page.
-	        return err
+	        
+	        return []string{}, err
 	    }
 	    templateStrings[i] = str
     }
-    return templateStrings
+    return templateStrings, nil
 }

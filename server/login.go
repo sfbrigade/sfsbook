@@ -191,5 +191,5 @@ end:
 	templates := []string{sn, "/footer.html"}
 	// do the redirect?
 	// templateStrings := getTemplateStrings(templates, w)
-	parseAndExecuteTemplate(w, req, templates, loginresult)
+	parseAndExecuteTemplate(gs.embr, w, req, templates, loginresult)
 }

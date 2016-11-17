@@ -80,5 +80,5 @@ func (gs *resourceServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	results := gs.generator.ForRequest(dbreq)
 	results.SetDebug(true)
 	templates := []string{sn, "/header.html", "/footer.html"}
-	parseAndExecuteTemplate(w, req, templates, results)
+	parseAndExecuteTemplate(gs.embr, w, req, templates, results)
 }
