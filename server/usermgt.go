@@ -153,5 +153,5 @@ end:
 	}
 
 	// do the redirect?
-	parseAndExecuteTemplate(w, req, str, changeresult)
+	parseAndExecuteTemplate(gs.embr, w, req, str, changeresult)
 }

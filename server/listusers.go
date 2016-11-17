@@ -41,7 +41,7 @@ func (gs *listUsers) ender(w http.ResponseWriter, req *http.Request, listusersre
 	}
 
 	// do the redirect?
-	parseAndExecuteTemplate(w, req, str, listusersresult)
+	parseAndExecuteTemplate(gs.embr, w, req, str, listusersresult)
 }
 
 // TODO(rjk): Note refactoring opportunity with basic search?
