@@ -4,12 +4,12 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"strings"
 	"strconv"
+	"strings"
 
-	"github.com/pborman/uuid"
 	"github.com/blevesearch/bleve"
 	"github.com/blevesearch/bleve/search/query"
+	"github.com/pborman/uuid"
 	"github.com/sfbrigade/sfsbook/dba"
 )
 
@@ -23,8 +23,6 @@ const (
 	_ROLECHANGE_TO_NOROLE
 	_BADACTORREQUEST
 )
-
-
 
 type listUsers struct {
 	embr         *embeddableResources
@@ -135,12 +133,12 @@ func (gs *listUsers) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 				queryop = bleve.NewWildcardQuery(userquery)
 				// TODO(rjk): Improve database indexing.
 			}
-		case k =="resetpassword":
+		case k == "resetpassword":
 			action = _RESETPASSWORD
 			// I don't currently have enough information in the password
 			// database to do this. And adding the additional data may
 			// require interaction with how we implement oauth integration.
-			
+
 		default:
 			// TODO(rjk): This is a convenience to simplify implementation.
 			log.Println("ignoring extra fields in form", k, v)
@@ -173,7 +171,7 @@ func (gs *listUsers) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	sreq := bleve.NewSearchRequest(queryop)
 	sreq.Fields = []string{"name", "role", "display_name"}
 
-	// These two values need to come from the URL args so that I can 
+	// These two values need to come from the URL args so that I can
 	// page through many users.
 	sreq.Size = 10
 	sreq.From = 0
@@ -203,7 +201,7 @@ func (gs *listUsers) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		uuidcasted := uuid.UUID(sr.ID)
 		// I thought about encrypting the UUIDs. But to get this content, one
 		// must already have the admin role and that is enforced server side
-		// via a strongly encrypted cookie. And they are cryptographically 
+		// via a strongly encrypted cookie. And they are cryptographically
 		// difficult to guess already.
 		u["uuid"] = uuidcasted.String()
 		u["index"] = strconv.FormatInt(int64(i), 10)
