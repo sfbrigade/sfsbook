@@ -13,13 +13,13 @@
 <p>Welcome {{.DisplayName}}  <button onclick="clearSessionCookie();">Sign out</button></p>
 {{end}}
 
+<!-- query value has to be in the field -->
+<form action="/usermgt/listusers.html" method="get">
 <p>Search for a user</p>
-<form action="/usermgt/listusers.html" method="post">
    <div>
         <label for="userquery">Search users:</label>
         <input type="text" id="userquery" name="userquery" />
     </div>
-</form>
 
 {{with .Results}}
 
@@ -31,18 +31,46 @@
 
 <table>
 <thead>
+	<td></td>
 	<td>User name</td>
 	<td>role</td>
 	<td>Display name</td>
 </thead>
 {{range .Users}}
 <tr>
+	<td>
+		<!-- also contains the uuid. which needs to be encrypted -->
+		<!-- and needs to not be a binary string... -->
+		<input type="hidden" value="{{.name}}" name="name-{{.index}}">
+		<input type="checkbox" value="{{.uuid}}" name="selected-{{.index}}">
+	</td>
 	<td>{{.name}}</td>
 	<td>{{.role}}</td>
 	<td>{{.display_name}}</td>
+	
 </tr>
 {{end}}
 </table>
+
+<div class="buttonbar">
+	<div class="button">
+		<input type="submit" value="Reset Selected Users Password" name="resetpassword"/>
+	</div>
+	<div class="button">
+		<input type="submit" value="Delete User" name="deleteuser"/>
+	</div>
+
+	<div class="button">
+		<select name="rolechange" onchange="this.form.submit()">
+			<option value="nochange" selected>Leave as it</option>
+			<option value="admin">Administrator</option> 
+			<option value="volunteer" >Volunteer</option>
+			<option value="norole" >Clear role</option>
+		</select>
+	</div>
+	<div>Invite people</div>
+</div>
+</form>
 
 {{end}} {{/* with .Results  */}}
 
