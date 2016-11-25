@@ -13,7 +13,6 @@ import (
 	"github.com/sfbrigade/sfsbook/dba"
 )
 
-// check syntax...
 const (
 	_ = iota
 	_SEARCHACTION
@@ -32,7 +31,7 @@ type listUsers struct {
 	passwordfile dba.PasswordIndex
 }
 
-// makeListUsersHandler returns a handler for changing the user password.
+// makeListUsersHandler returns a handler for editing user data.
 func (hf *HandlerFactory) makeListUsersHandler() http.Handler {
 	return &listUsers{
 		embr:         makeEmbeddableResource(hf.sitedir),
@@ -57,12 +56,10 @@ func (gs *listUsers) ender(w http.ResponseWriter, req *http.Request, listusersre
 		return
 	}
 
-	// do the redirect?
 	parseAndExecuteTemplate(w, req, str, listusersresult)
 }
 
-// TODO(rjk): Note refactoring opportunity with basic search?
-// Also: search could have the same "search on the results page"
+// TODO(rjk): Note refactoring opportunity with resource search.
 func (gs *listUsers) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	log.Println("ServeHTTP")
 
@@ -73,8 +70,6 @@ func (gs *listUsers) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		gs.ender(w, req, listusersresult)
 		return
 	}
-
-	log.Println("ServeHTTP didn't skip to end")
 
 	var queryop query.Query
 	queryop = bleve.NewMatchAllQuery()
@@ -88,19 +83,13 @@ func (gs *listUsers) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	// We only use the posted info.
-	// This dumps passwords in the clear in the log.
-	// TODO(rjk): delete before landing this code.
-	log.Println("parsing form / url:")
-
-
 	// Remember that nothing provided as part of the form can be
 	// trusted to be valid. All must be validated. I need a general
 	// mechanism to address clients that are broken.
 	selecteduuids := make([]uuid.UUID, 0, 10)
 	action := _SEARCHACTION
 	for k, v := range req.Form {
-		log.Println("processing form item:", k, v)
+		log.Println("listusers ServeHTTP processing form item:", k, v)
 		switch {
 		case strings.HasPrefix(k, "selected-"):
 			uuidstring, err := getValidatedString(k, req.Form)
@@ -144,9 +133,7 @@ func (gs *listUsers) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 				// We had an argument to search with.
 				listusersresult.Userquery = userquery
 				queryop = bleve.NewWildcardQuery(userquery)
-
-				// Is displayname indexed? I might want to do that...
-				// I need to version the database...
+				// TODO(rjk): Improve database indexing.
 			}
 		case k =="resetpassword":
 			action = _RESETPASSWORD
@@ -161,10 +148,9 @@ func (gs *listUsers) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	}
 
 	// Do the updates
-
 	switch action {
 	case _SEARCHACTION:
-		// pass.
+		// Or do nothing if only searchin.
 	case _RESETPASSWORD:
 		log.Println("notimplemented: resetpassword applied to", selecteduuids)
 	case _DELETEUSERS:
@@ -180,14 +166,15 @@ func (gs *listUsers) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	// Do the searches
+	// And now do the search.
 
 	// I need to make this search the right way. And bound the result set
 	// size.
 	sreq := bleve.NewSearchRequest(queryop)
 	sreq.Fields = []string{"name", "role", "display_name"}
 
-	// These two values need to come from the URL args.
+	// These two values need to come from the URL args so that I can 
+	// page through many users.
 	sreq.Size = 10
 	sreq.From = 0
 
@@ -214,7 +201,10 @@ func (gs *listUsers) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		}
 
 		uuidcasted := uuid.UUID(sr.ID)
-		// TODO(rjk): Make this into a encoded string.
+		// I thought about encrypting the UUIDs. But to get this content, one
+		// must already have the admin role and that is enforced server side
+		// via a strongly encrypted cookie. And they are cryptographically 
+		// difficult to guess already.
 		u["uuid"] = uuidcasted.String()
 		u["index"] = strconv.FormatInt(int64(i), 10)
 		users = append(users, u)
