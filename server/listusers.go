@@ -62,12 +62,41 @@ func (gs *listUsers) ender(w http.ResponseWriter, req *http.Request, listusersre
 func (gs *listUsers) deleteUsers(uuids []uuid.UUID) error {
 	var err error
 	for _, u := range uuids {
+		// TODO(rjk): Revoke the cookies associated with this user.
 		err = gs.passwordfile.Delete(string(u))
 	}
 	return err
 }
 
+// rolechangeUsers changes the specifed user role. Attempts all
+// and returns the last failure if any role change failed.
+// TODO(rjk): This might not be the best policy. Adjust this
+func (gs *listUsers) rolechangeUsers(uuids []uuid.UUID, newrole string) error {
+	var lasterror error
+	for _, u := range uuids {
+		suuid := string(u)
+		passwordmap, err := gs.passwordfile.MapForDocument(suuid)
+		if err != nil {
+			// oops. Probably the article was deleted out from under us.
+			// Just move on.
+			log.Println("error reading user entry for", suuid, err)
+			lasterror = err
+			continue
+		}
+		// Have a map...
+		log.Println("got a map", passwordmap)
 
+		passwordmap["role"] = newrole
+
+		log.Println(">> transformed map", passwordmap)
+		// TODO(rjk): Revoke the cookies associated with this user.
+		if err := gs.passwordfile.Index(suuid, passwordmap); err != nil {
+			lasterror = err
+			log.Println("error writing user entry with updated roll", suuid, err)
+		}
+	}
+	return lasterror
+}
 
 // TODO(rjk): Note refactoring opportunity with resource search.
 func (gs *listUsers) ServeHTTP(w http.ResponseWriter, req *http.Request) {
@@ -124,9 +153,9 @@ func (gs *listUsers) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 			case "admin":
 				action = _ROLECHANGE_TO_ADMIN
 			case "norole":
-				action = _ROLECHANGE_TO_ADMIN
+				action = _ROLECHANGE_TO_NOROLE
 			case "volunteer":
-				action = _ROLECHANGE_TO_ADMIN
+				action = _ROLECHANGE_TO_VOLUNTEER
 			default:
 				log.Println("posted form contained invalid rolechange", k, v)
 				action = _BADACTORREQUEST
@@ -171,11 +200,22 @@ func (gs *listUsers) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 			listusersresult.Diagnosticmessage = "Couldn't successfully delete all of the selected users."
 		}
 	case _ROLECHANGE_TO_ADMIN:
-		log.Println("notimplemented rolechange to admin applied to", selecteduuids)
+		if err := gs.rolechangeUsers(selecteduuids, "admin"); err != nil {
+			log.Println("failed to rolechange selected users to", "admin", selecteduuids, err)
+			listusersresult.Diagnosticmessage = "Couldn't successfully rolechange all of the selected users to admin."
+		}
 	case _ROLECHANGE_TO_VOLUNTEER:
-		log.Println("notimplemented rolechange to volunteer applied to", selecteduuids)
+		if err := gs.rolechangeUsers(selecteduuids, "volunteer"); err != nil {
+			log.Println("failed to rolechange selected users to", "volunteer", selecteduuids, err)
+			listusersresult.Diagnosticmessage = "Couldn't successfully rolechange all of the selected users to volunteer."
+		}
 	case _ROLECHANGE_TO_NOROLE:
-		log.Println("notimplemented rolechange to norole applied to", selecteduuids)
+		// Conceivably, we might want to have a separation between a user with
+		// no role and no such user. But I don't see why at the moment.
+		if err := gs.deleteUsers(selecteduuids); err != nil {
+			log.Println("failed to rolechange selected users to nothing", selecteduuids, err)
+			listusersresult.Diagnosticmessage = "Couldn't successfully rolechange all of the selected users to norole."
+		}
 	default: // includes _BADACTORREQUEST
 		respondWithError(w, "client is attempting something wrong")
 		return
