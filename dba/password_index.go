@@ -8,9 +8,21 @@ import (
 // that we need to operate. Brought out to simplify mocking.
 // See bleve.Index for documentation and usage.
 type PasswordIndex interface {
+	// Inserts the provided data bundle into the password database.
 	Index(id string, data interface{}) error
+
+	// Searches the password database for the specified search string
+	// and returns a search result.
 	Search(req *bleve.SearchRequest) (*bleve.SearchResult, error)
+
+	// Returns the document map for a given document (i.e. password entry)
+	// when presented with the entry's UUID
+	// TODO(rjk): Make sure that the returned map can be indexed. 
+	// And maybe give these better names. And use UUIDs for type clarity.
 	MapForDocument(id string) (map[string]interface{}, error)
+
+	// Deletes the specificed password entry.
+	Delete (id string) error
 }
 
 type blevePasswordIndex struct {
@@ -30,6 +42,11 @@ func (pdoc *blevePasswordIndex) MapForDocument(id string) (map[string]interface{
 func (pdoc *blevePasswordIndex) Search(req *bleve.SearchRequest) (*bleve.SearchResult, error) {
 	return pdoc.idx.Search(req)
 }
+
+func (pdoc *blevePasswordIndex) Delete(id string) error {
+	return pdoc.idx.Delete(id)
+}
+
 
 func (pdoc *blevePasswordIndex) Index(id string, data interface{}) error {
 	return pdoc.idx.Index(id, data)
