@@ -57,6 +57,18 @@ func (gs *listUsers) ender(w http.ResponseWriter, req *http.Request, listusersre
 	parseAndExecuteTemplate(w, req, str, listusersresult)
 }
 
+// deleteUsers deletes the specified users. Attempts all and returns
+// the last failure if any deletion failed.
+func (gs *listUsers) deleteUsers(uuids []uuid.UUID) error {
+	var err error
+	for _, u := range uuids {
+		err = gs.passwordfile.Delete(string(u))
+	}
+	return err
+}
+
+
+
 // TODO(rjk): Note refactoring opportunity with resource search.
 func (gs *listUsers) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	log.Println("ServeHTTP")
@@ -150,9 +162,14 @@ func (gs *listUsers) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	case _SEARCHACTION:
 		// Or do nothing if only searchin.
 	case _RESETPASSWORD:
+		// I have no idea how this should work. And I'm not going to build it
+		// until we have discussed with SFWAR.
 		log.Println("notimplemented: resetpassword applied to", selecteduuids)
 	case _DELETEUSERS:
-		log.Println("notimplemented deleteusers applied to", selecteduuids)
+		if err := gs.deleteUsers(selecteduuids); err != nil {
+			log.Println("failed to delete selected users", selecteduuids, err)
+			listusersresult.Diagnosticmessage = "Couldn't successfully delete all of the selected users."
+		}
 	case _ROLECHANGE_TO_ADMIN:
 		log.Println("notimplemented rolechange to admin applied to", selecteduuids)
 	case _ROLECHANGE_TO_VOLUNTEER:
