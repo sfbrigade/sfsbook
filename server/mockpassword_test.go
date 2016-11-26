@@ -44,6 +44,10 @@ func (tape *mockPasswordIndex) Search(_ *bleve.SearchRequest) (*bleve.SearchResu
 	return nil, fmt.Errorf("not-implemented")
 }
 
+func (tape *mockPasswordIndex) Delete(id string) error {
+	return fmt.Errorf("not-implemented")
+}
+
 func (mpi *mockPasswordIndex) MapForDocument(id string) (map[string]interface{}, error) {
 	tape := (*mocking.Tape)(mpi)
 	res := tape.Record(docStim{
