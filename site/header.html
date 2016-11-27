@@ -1,0 +1,21 @@
+<!-- {{ define "title" }}{{.Title}}{{ end }} -->
+
+{{ define "header" }}
+<header>
+<span>SFWAR Interactive Resource Guide</span>
+
+{{/* TODO(rjk): Make the components of the page into subtemplates. */}}
+{{if .DecodedCookie.IsAuthed}}
+{{with .DecodedCookie}}
+<span style="float: right">Welcome {{.DisplayName}}  <button onclick="clearSessionCookie();">Sign out</button></span>
+{{end}}
+{{else}}
+<span style="float: right">You are not signed in. <a href="/login.html">Login?</a></span>
+{{end}}
+
+<input type="text" name="search" placeholder="Search.." style="float:right; width: 130px;
+    -webkit-transition: width 0.4s ease-in-out;
+    transition: width 0.4s ease-in-out">
+
+</header>
+  {{end}}
