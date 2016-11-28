@@ -167,29 +167,6 @@ func (gs *loginServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	}
 end:
 
-
-
-	// str, err := gs.embr.GetAsString(sn)
-	// if err != nil {
-	// 	// TODO(rjk): Rationalize error handling here. There needs to be a 404 page.
-	// 	respondWithError(w, fmt.Sprintln("Server error", err))
-	// 	return
-	// }
-
-	// hdr, err := gs.embr.GetAsString("/header.html")
-	// if err != nil {
-	// 	// TODO(rjk): Rationalize error handling here. There needs to be a 404 page.
-	// 	respondWithError(w, fmt.Sprintln("Server error", err))
-	// 	return
-	// }
-	// ftr, err := gs.embr.GetAsString("/footer.html")
-	// if err != nil {
-	// 	// TODO(rjk): Rationalize error handling here. There needs to be a 404 page.
-	// 	respondWithError(w, fmt.Sprintln("Server error", err))
-	// 	return
-	// }
 	templates := []string{sn, "/footer.html"}
-	// do the redirect?
-	// templateStrings := getTemplateStrings(templates, w)
 	parseAndExecuteTemplate(gs.embr, w, req, templates, loginresult)
 }
