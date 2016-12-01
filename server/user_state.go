@@ -190,3 +190,7 @@ func (u *UserCookie) HasCapabilityEditResource() bool {
 func (u *UserCookie) HasCapabilityViewUsers() bool {
 	return u.HasCapability(CapabilityViewUsers)
 }
+
+func (u *UserCookie) HasCapabilityIniviteUsers() bool {
+	return u.HasCapability(CapabilityInviteNewVolunteer | CapabilityInviteNewAdmin)
+}
