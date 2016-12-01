@@ -36,6 +36,8 @@ func MakeServer(address string, hf *HandlerFactory) *http.Server {
 		hf.makeCookieHandler(hf.makePasswdChangeHandler()))
 	m.Handle("/usermgt/listusers.html",
 		hf.makeCookieHandler(hf.makeListUsersHandler()))
+	m.Handle("/usermgt/adduser.html",
+		hf.makeCookieHandler(hf.makeAddUserHandler()))
 
 	m.Handle("/",
 		hf.makeCookieHandler(
