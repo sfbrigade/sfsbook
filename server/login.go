@@ -165,16 +165,8 @@ func (gs *loginServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 			respondWithError(w, fmt.Sprintln("Server cookie error", err))
 		}
 	}
-
 end:
 
-	str, err := gs.embr.GetAsString(sn)
-	if err != nil {
-		// TODO(rjk): Rationalize error handling here. There needs to be a 404 page.
-		respondWithError(w, fmt.Sprintln("Server error", err))
-		return
-	}
-
-	// do the redirect?
-	parseAndExecuteTemplate(w, req, str, loginresult)
+	templates := []string{sn, "/footer.html"}
+	parseAndExecuteTemplate(gs.embr, w, req, templates, loginresult)
 }

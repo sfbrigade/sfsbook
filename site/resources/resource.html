@@ -4,15 +4,16 @@
 <link href="/css/style.css" rel="stylesheet">
 </head>
 <body>
-<div><a href="/index.html">Home</a></div>
-{{if .DecodedCookie.IsAuthed}}
+{{ template "header" .}}
+<!-- <div><a href="/index.html">Home</a></div> -->
+<!-- {{if .DecodedCookie.IsAuthed}}
 	{{with .DecodedCookie}}
 		<p>Welcome {{.DisplayName}}  <button onclick="clearSessionCookie();">Sign out</button></p>
 	{{end}}
 {{else}}
 	You are not signed in. <a href="/login.html">Login?</a>
 {{end}}
-
+ -->
 
 {{if .Results.Success}}
 	{{if .DecodedCookie.HasCapabilityEditResource}}
@@ -148,6 +149,8 @@ Debugging output
 	</dd>
 </dl>
 </div>
+{{ template "footer" .}}
+
 <hr>
 	{{end}} {{/*.Debug*/}}
 {{end}} {{/* with .Results */}} 

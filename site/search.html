@@ -4,14 +4,15 @@
 <link href="/css/style.css" rel="stylesheet">
 </head>
 <body>
-{{if .DecodedCookie.IsAuthed}}
+	{{ template "header" . }}
+<!-- {{if .DecodedCookie.IsAuthed}}
 {{with .DecodedCookie}}
 <p>Welcome {{.DisplayName}}  <button onclick="clearSessionCookie();">Sign out</button></p>
 {{end}}
 {{else}}
 You are not signed in. <a href="/login.html">Login?</a>
 {{end}}
-
+ -->
 {{with .Results}}
 <p>Search results for the query: {{.Query}}  <a href="/index.html">Different search?<a></p>
 
@@ -28,5 +29,7 @@ You are not signed in. <a href="/login.html">Login?</a>
 {{end}}
 </ul>
 {{end}}
+{{ template "footer" .}}
+
 </body>
 </html>
