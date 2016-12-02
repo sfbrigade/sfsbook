@@ -145,13 +145,7 @@ func (gs *passwordChange) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 end:
 
 	sn := req.URL.Path
-	str, err := gs.embr.GetAsString(sn)
-	if err != nil {
-		// TODO(rjk): Rationalize error handling here. There needs to be a 404 page.
-		respondWithError(w, fmt.Sprintln("Server error", err))
-		return
-	}
-
-	// do the redirect?
-	parseAndExecuteTemplate(w, req, str, changeresult)
+	templates := []string{sn}
+	
+	parseAndExecuteTemplate(gs.embr, w, req, templates, changeresult)
 }
