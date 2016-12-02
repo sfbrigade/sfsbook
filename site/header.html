@@ -1,0 +1,20 @@
+{{ define "header" }}
+<div style="display: inline-block"><a href="/index.html"><span>San Francisco Stop Violence Book</span></a></div>
+{{if .DecodedCookie.IsAuthed}}
+{{with .DecodedCookie}}
+<span style="float: right">Welcome {{.DisplayName}}  <button onclick="clearSessionCookie();">Sign out</button></span><p> <a href="/usermgt/changepasswd.html">Change Password</a></p>
+{{if .HasCapabilityViewUsers}}
+<p><a href="/usermgt/listusers.html">Edit users</a></p>
+{{end}} {{/* if .HasCapabilityViewUsers  */}}
+{{end}} {{/* with .DecodedCookie */}}
+{{else}}
+<span style="float: right">You are not signed in. <a href="/login.html">Login?</a></span>
+{{end}}
+{{<!-- <p>Do a query for a resource</p> -->}}
+<form action="/search.html" method="get" style="display: inline-block; float:right;">
+   <div>
+        <input type="text" id="query_field" name="query" placeholder="Search.."/>
+    </div>
+</form>
+
+{{ end }}
