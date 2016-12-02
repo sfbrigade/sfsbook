@@ -2,8 +2,8 @@ package server
 
 import (
 	"fmt"
-	"log"
 	"html/template"
+	"log"
 	"net/http"
 
 	"github.com/sfbrigade/sfsbook/dba"
@@ -36,7 +36,7 @@ func (gs *templatedServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	// The req contains the cookie info. And so we can bound viewability
 	// in the database.
 	results := gs.generator.ForRequest(req)
-	templates := []string{sn,"/header.html","/footer.html"}
+	templates := []string{sn, "/header.html", "/footer.html"}
 	// TODO(rjk): I need to do something smarter about caching.
 	// I removed the cache of templates pending the global cache.
 	parseAndExecuteTemplate(gs.embr, w, req, templates, results)
@@ -89,15 +89,15 @@ func parseAndExecuteTemplate(embr *embeddableResources, w http.ResponseWriter, r
 
 // getTemplateStrings returns a new slice containing the template string for
 // each template name in the original slice or an error if something is wrong.
-func getTemplateStrings(embr *embeddableResources, templateNames []string)([]string, error){
+func getTemplateStrings(embr *embeddableResources, templateNames []string) ([]string, error) {
 	templateStrings := make([]string, len(templateNames))
-	for i,v := range templateNames {
+	for i, v := range templateNames {
 		log.Println("this is the template", v)
-			str, err := embr.GetAsString(v)
-			if err != nil {
-				return []string{}, err
-			}
-			templateStrings[i] = str
+		str, err := embr.GetAsString(v)
+		if err != nil {
+			return []string{}, err
 		}
-		return templateStrings, nil
+		templateStrings[i] = str
+	}
+	return templateStrings, nil
 }

@@ -59,7 +59,6 @@ func (gs *resourceServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		dbreq.PostArgs = req.PostForm
 	}
 
-
 	// TODO(rjk): The debug flag needs to not always be set but be configurable.
 	results := gs.generator.ForRequest(dbreq)
 	results.SetDebug(true)
