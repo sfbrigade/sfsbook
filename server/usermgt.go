@@ -146,6 +146,6 @@ end:
 
 	sn := req.URL.Path
 	templates := []string{sn}
-	
+
 	parseAndExecuteTemplate(gs.embr, w, req, templates, changeresult)
 }
