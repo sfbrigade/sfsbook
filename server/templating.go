@@ -88,7 +88,8 @@ func parseAndExecuteTemplate(embr *embeddableResources, w http.ResponseWriter, r
 }
 
 // getTemplateStrings returns a new slice containing the template string for
-// each template name in the original slice or an error if something is wrong.func getTemplateStrings(embr *embeddableResources, templateNames []string)([]string, error){
+// each template name in the original slice or an error if something is wrong.
+func getTemplateStrings(embr *embeddableResources, templateNames []string)([]string, error){
 	templateStrings := make([]string, len(templateNames))
 	for i,v := range templateNames {
 		log.Println("this is the template", v)
