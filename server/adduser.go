@@ -32,11 +32,6 @@ type addUserResult struct {
 
 func (gs *addUser) ender(w http.ResponseWriter, req *http.Request, listusersresult interface{}) {
 	sn := req.URL.Path
-	if err != nil {
-		// TODO(rjk): Rationalize error handling here. There needs to be a 404 page.
-		respondWithError(w, fmt.Sprintln("Server error", err))
-		return
-	}
 	templates := []string{sn, "/header.html", "/footer.html"}
 	parseAndExecuteTemplate(gs.embr, w, req, templates, listusersresult)
 }
