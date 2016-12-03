@@ -6,6 +6,12 @@
 <body>
 {{ template "header" . }}
 
+<form action="/search.html" method="get" style="display: inline-block; float:right;">
+   <div>
+        <input type="text" id="query_field" name="query" placeholder="Search.."/>
+    </div>
+</form>
+
 {{with .Results}}
 <p>Show that I've wired up getting content from within the app server: {{.Message}}</p>
 <p>Show that I've successfully wired up getting JavaScript to load. (Otherwise the button wouldn't work.)</p>
