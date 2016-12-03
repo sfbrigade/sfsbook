@@ -39,7 +39,7 @@ func (gs *addUser) ender(w http.ResponseWriter, req *http.Request, listusersresu
 		return
 	}
 
-	parseAndExecuteTemplate(w, req, str, listusersresult)
+	parseAndExecuteTemplate(gs.embr, w, req, str, listusersresult)
 }
 
 // TODO(rjk): Note refactoring opportunity with resource search.
