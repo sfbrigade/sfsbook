@@ -1,14 +1,25 @@
 {{ define "header" }}
-<div style="display: inline-block"><a href="/index.html"><span>San Francisco Stop Violence Book</span></a></div>
+<div class="nav-header">
+<div class="nav-header-section">
+<a href="/index.html">
+<span>SFWAR Referral Guide</span>
+</a>
+</div>
+<div class="nav-header-section">
+<span>24 Hour Crisis Line: Free and Confidential</span><br>
+<span>415-647-7273</span>
+</div>
+<div class="nav-header-section">
 {{if .DecodedCookie.IsAuthed}}
 {{with .DecodedCookie}}
-<span style="float: right">Welcome {{.DisplayName}}  <button onclick="clearSessionCookie();">Sign out</button></span><p> <a href="/usermgt/changepasswd.html">Change Password</a></p>
+<span>Welcome {{.DisplayName}}  <button onclick="clearSessionCookie();">Sign out</button></span><p> <a href="/usermgt/changepasswd.html">Change Password</a></p>
 {{if .HasCapabilityViewUsers}}
 <p><a href="/usermgt/listusers.html">Edit users</a></p>
 {{end}} {{/* if .HasCapabilityViewUsers  */}}
 {{end}} {{/* with .DecodedCookie */}}
 {{else}}
-<span style="float: right">You are not signed in. <a href="/login.html">Login?</a></span>
+<span>You are not signed in. <a href="/login.html">Login?</a></span>
 {{end}}
-
+</div>
+</div>
 {{ end }}

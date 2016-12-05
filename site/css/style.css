@@ -2,5 +2,22 @@
 	Colour is only to demonstrate that I have working CSS support.
 */
 body {
-	background: rgb(255, 245, 221);
+	font-family: 'Source Sans Pro', sans-serif;
+	font-weight: bold;
 }
+.nav-header{
+	position: relative;
+}
+.nav-header-section {
+	display: inline-block;
+	position: relative;
+    	vertical-align: middle;
+    	width: 33%; }
+	.nav-header-section:nth-child(1) {
+                float: left; }
+	.nav-header-section:nth-child(2) {
+		float: none;
+      		text-align: center; }
+   	.nav-header .nav-header-section:last-child {
+    		float: right;
+    		text-align: right;}
