@@ -1,15 +1,14 @@
 {{ define "header" }}
-<div class="nav-header">
-<div class="nav-header-section">
+<div class="header">
+<div class="header-section">
 <a href="/index.html">
-<span>SFWAR Referral Guide</span>
+<span>SFWAR Resource Guide</span>
 </a>
 </div>
-<div class="nav-header-section">
-<span>24 Hour Crisis Line: Free and Confidential</span><br>
-<span>415-647-7273</span>
+<div class="header-section">
+<span>24 Hour Crisis Line: </span><span class="hotline">415-647-7273 | Free and Confidential</span>
 </div>
-<div class="nav-header-section">
+<div class="header-section">
 {{if .DecodedCookie.IsAuthed}}
 {{with .DecodedCookie}}
 <span>Welcome {{.DisplayName}}  <button onclick="clearSessionCookie();">Sign out</button></span><p> <a href="/usermgt/changepasswd.html">Change Password</a></p>
