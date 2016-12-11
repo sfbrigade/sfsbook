@@ -1,19 +1,27 @@
 package setup
 
 import (
+	"crypto/tls"
+	"flag"
 	"fmt"
 	"log"
 	"os"
 	"path/filepath"
+
+	"golang.org/x/crypto/acme/autocert"
 )
 
-// HandlerFactory contains all state needed to construct the various
-// specialized http.Handler instances provided by the server. Once
-// a HandlerFactory exists, it can vend handlers without errors.
+var use_acme = flag.Bool("use_acme", false, "Obtain a real certificate from Let's Encrypt")
+
+// CertFactory contains all state needed to construct a certificate scheme
+// for the application.
 type CertFactory struct {
 	statepath string
+	autocert  *autocert.Manager
 }
 
+// MakeCertFactory manfactures a CertFactory object that maintains the necessary
+// state to manage certificates.
 func MakeCertFactory(persistentroot string) (*CertFactory, error) {
 	statepath := filepath.Join(persistentroot, "state")
 	log.Println("hello from setup, creating state in", statepath)
@@ -22,19 +30,43 @@ func MakeCertFactory(persistentroot string) (*CertFactory, error) {
 		return nil, fmt.Errorf("Couldn't make directory", statepath, "because", err)
 	}
 
-	if err := MakeKeys(statepath); err != nil {
-		return nil, fmt.Errorf("Don't have and can't make keys.", err)
+	var m *autocert.Manager
+	if *use_acme {
+		log.Println("using acme")
+		m = &autocert.Manager{
+			// TODO(rjk): I need to not make this hard-coded.
+			Prompt:     autocert.AcceptTOS,
+			HostPolicy: autocert.HostWhitelist("mando.liqui.org"),
+		}
+	} else {
+		if err := MakeKeys(statepath); err != nil {
+			return nil, fmt.Errorf("Don't have and can't make keys.", err)
+		}
 	}
 
 	return &CertFactory{
 		statepath: statepath,
+		autocert:  m,
 	}, nil
 }
 
 func (cf *CertFactory) GetCertfFileName() string {
+	if cf.autocert != nil {
+		return ""
+	}
 	return filepath.Join(cf.statepath, "cert.pem")
 }
 
 func (cf *CertFactory) GetKeyFileName() string {
+	if cf.autocert != nil {
+		return ""
+	}
 	return filepath.Join(cf.statepath, "key.pem")
+}
+
+func (cf *CertFactory) GetTLSConfig() *tls.Config {
+	if cf.autocert != nil {
+		return &tls.Config{GetCertificate: cf.autocert.GetCertificate}
+	}
+	return nil
 }

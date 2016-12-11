@@ -9,7 +9,6 @@ import (
 	"github.com/blevesearch/bleve"
 	"github.com/gorilla/securecookie"
 	"github.com/sfbrigade/sfsbook/dba"
-	"github.com/sfbrigade/sfsbook/setup"
 )
 
 // HandlerFactory contains all state needed to construct the various
@@ -46,11 +45,6 @@ func MakeHandlerFactory(persistentroot string) (*HandlerFactory, error) {
 	if _, err := os.Stat(sitedir); err != nil {
 		log.Println("There is no site directory so all resources must be embedded.")
 		sitedir = ""
-	}
-
-	// make keys
-	if err := setup.MakeKeys(statepath); err != nil {
-		return nil, fmt.Errorf("Don't have and can't make keys.", err)
 	}
 
 	resourceguide, err := dba.OpenBleve(persistentroot, dba.RefGuide)
