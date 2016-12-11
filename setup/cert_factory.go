@@ -37,6 +37,7 @@ func MakeCertFactory(persistentroot string) (*CertFactory, error) {
 			// TODO(rjk): I need to not make this hard-coded.
 			Prompt:     autocert.AcceptTOS,
 			HostPolicy: autocert.HostWhitelist("mando.liqui.org"),
+			Cache: autocert.DirCache(filepath.Join(statepath, "certcache")),
 		}
 	} else {
 		if err := MakeKeys(statepath); err != nil {
