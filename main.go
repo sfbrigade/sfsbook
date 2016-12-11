@@ -9,6 +9,8 @@ import (
 	"github.com/sfbrigade/sfsbook/setup"
 )
 
+var port = flag.String("port", ":10443", "Set a port to listen on")
+
 func main() {
 	flag.Parse()
 
@@ -30,9 +32,7 @@ func main() {
 		log.Fatalln("Can't make HandlerFactory:", err)
 	}
 
-	// I don't think that I actually use the certificates properly.
-	srv := server.MakeServer(":10443", handlerfactory)
-
+	srv := server.MakeServer(*port, handlerfactory, certfactory)
 	if err := srv.ListenAndServeTLS(
 		certfactory.GetCertfFileName(),
 		certfactory.GetKeyFileName()); err != nil {
