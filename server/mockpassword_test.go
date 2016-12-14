@@ -23,6 +23,12 @@ type docStim struct {
 	uuid string
 }
 
+type listUsersStim struct {
+	query string
+	size int
+	from int
+}
+
 func (mpi *mockPasswordIndex) Index(id string, data interface{}) error {
 	tape := (*mocking.Tape)(mpi)
 	res := tape.Record(indexStim{
@@ -44,8 +50,21 @@ func (tape *mockPasswordIndex) Search(_ *bleve.SearchRequest) (*bleve.SearchResu
 	return nil, fmt.Errorf("not-implemented")
 }
 
-func (tape *mockPasswordIndex) ListUsers(userquery string, size, from int) ([]map[string]interface{}, error) {
-	return nil, fmt.Errorf("not-implemented")
+func (mpi *mockPasswordIndex) ListUsers(userquery string, size, from int) ([]map[string]interface{}, error) {
+	tape := (*mocking.Tape)(mpi)
+	res := tape.Record(listUsersStim{
+		userquery,
+		size,
+		from,
+	})
+	switch v := res.(type) {
+	case []map[string]interface{}:
+		return v, nil
+	case error:
+		return nil, v
+	}
+	log.Fatalf("%s (mock) response %v is of bad type", "PasswordIndex.Document", res)
+	return nil, nil
 }
 
 func (tape *mockPasswordIndex) Delete(id string) error {
