@@ -1,131 +1,123 @@
-/*
-	Colour is only to demonstrate that I have working CSS support.
-*/
 body {
-	font-family: 'Source Sans Pro', sans-serif;
-	font-weight: bold;
-	margin: 0;
+  font-family: 'Source Sans Pro', sans-serif;
+  font-weight: bold;
+  margin: 0;
 }
 form {
-	margin: 0;
-	padding: 5px;
+  margin: 0;
+  padding: 5px;
 }
 a {
-	text-decoration: none;
+  text-decoration: none;
 }
 .header{
-	padding: 1em;
-	position: relative;
+  padding: 1em;
+  position: relative;
 }
 .header-section {
-	display: inline-block;
-	position: relative;
-    	vertical-align: middle;
-    	width: 25%; }
-	.header-section:nth-child(1) {
-                float: left; }
-	.header-section:nth-child(2) {
-		margin: auto;
-		float: none;
-		width:50%;
-      		text-align: center; }
-   	.header .header-section:last-child {
-    		float: right;
-    		text-align: right;}
+  display: inline-block;
+  position: relative;
+  vertical-align: middle;
+  width: 25%; 
+}
+.header-section:nth-child(1) {
+  float: left; 
+}
+.header-section:nth-child(2) {
+  margin: auto;
+  float: none;
+  width:50%;
+  text-align: center; 
+}
+.header .header-section:last-child {
+  float: right;
+  text-align: right;
+}
 .hotline {
-	border-radius: 5px;
-	background: cornsilk;
-	padding: 5px;}
+  border-radius: 5px;
+  background: cornsilk;
+  padding: 5px;
+}
 .results {
-	padding: 1em;
+  padding: 1em;
 }
 .nav {
-	background: lightsteelblue;
-	float: left;
-	width: 100%;
-}
-	
+  background: lightsteelblue;
+  float: left;
+  width: 100%;
+}	
 .nav li, .nav li li {
-	float: left;
-	position: relative;
-	width: 150px;
-	list-style: none;
-	padding: 5px
+  float: left;
+  position: relative;
+  width: 150px;
+  list-style: none;
+  padding: 5px
 }
 .nav li li li {
-	padding: 14px;
-}
-	
+  padding: 14px;
+}	
 .nav > ul > li > a, h1 {
-	text-transform: uppercase;
-}
-	
+  text-transform: uppercase;
+}	
 .nav a {
-	display: block;
-	text-decoration: none;
-	padding: 9px;
-	color: #000;
+  display: block;
+  text-decoration: none;
+  padding: 9px;
+  color: #000;
 }
-
 .nav ul {
-	position: absolute;
-	left: 0;
-	top: 100%;
-	visibility: hidden;
-	opacity: 0;
-	padding: 0;
-}
-	
+  position: absolute;
+  left: 0;
+  top: 100%;
+  visibility: hidden;
+  opacity: 0;
+  padding: 0;
+}	
 .nav ul ul {
-	left: 100%;
-	top: 0;
-	padding: 0;
-}
-	
+  left: 100%;
+  top: 0;
+  padding: 0;
+}	
 .nav li:hover, .nav li:hover li {
-	background: #ddd;
+  background: #ddd;
 }
-
 .nav li li input {
-	display: none;
+  display: none;
 }
-
 .nav li li:hover, nav li li:hover li {
-	background: #bbb;
-}
-	
+  background: #bbb;
+}	
 .nav li li li:hover {
-	background: #999;
-}
-	
+  background: #999;
+}	
 .nav li:hover > ul {
-	visibility: visible;
-	opacity: 1;
+  visibility: visible;
+  opacity: 1;
 }
 #searchfield {
-	width: 75%;
+  width: 75%;
 }
 #searchfield input {
-	display: block;
-  	margin: 0;
-  	width: 100%;
-  	font-family: sans-serif;
-  	font-size: 18px;
-  	appearance: none;
-  	box-shadow: none;
-  	border-radius: none;
+  display: block;
+  margin: 0;
+  width: 100%;
+  font-family: sans-serif;
+  font-size: 18px;
+  appearance: none;
+  box-shadow: none;
+  border-radius: none;
 }
 #searchfield input:focus {
-	outline: none;
+  outline: none;
 }
 .footer {
-	bottom: 0;
-	position: fixed;
-	text-align: center;
-	margin-bottom: 0;
-	padding: 0;
+  bottom: 0;
+  position: fixed;
+  text-align: center;
+  margin-bottom: 0;
+  padding: 0;
 }
 .footer li {
-	width: 25%;
-	padding:0;
+  width: 25%;
+  padding:0;
 }
