@@ -41,6 +41,9 @@ a {
 .results {
   padding: 1em;
 }
+.resource-list {
+	padding-bottom: 40px;
+}
 .nav {
   background: lightsteelblue;
   float: left;
