@@ -168,7 +168,7 @@ func (gs *loginServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 
 end:
 
-	templates := []string{sn, "/footer.html"}
+	templates := []string{sn,"/header.html", "/footer.html"}
 	// do the redirect?
 	parseAndExecuteTemplate(gs.embr, w, req, templates, loginresult)
 }
