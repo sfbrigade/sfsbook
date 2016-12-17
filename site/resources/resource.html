@@ -7,11 +7,12 @@
 
 {{ template "header" . }}
 
-
+<ul class="nav searchbar">
+	<li><a href="#">Resource Details</a></li>
+</ul>
 {{if .Results.Success}}
 	{{if .DecodedCookie.HasCapabilityEditResource}}
 		{{with .Results}}
-<p>Resource Details</p>
 <div class="resource">
 <div>
 {{/* TODO(rjk): Prettier dates. */}}
