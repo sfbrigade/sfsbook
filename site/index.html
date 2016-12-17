@@ -9,50 +9,9 @@
 	</head>
 	<body>
 		{{ template "header" . }}
-		<ul class="nav searchbar">
-			<li class="categories">
-				<a href="javascript:void(0)" class="dropbtn">Get Help</a>
-				<ul>
-					<li class="category">
-						<a href="#">Locations</a>
-						<ul>
-							<li class="category-option">
-								<input type="checkbox" name="location" value="Oakland">Oakland<br>
-							</li>
-						</ul>
-					</li>
-					<li class="category">
-						<a href="#">Services</a>
-						<ul>
-							<li class="category-option">
-								<input type="c
-								heckbox" name="service" value="Legal">Legal<br>
-							</li>
-						</ul>
-					</li>
-					<li class="category">
-						<a href="#">Communities</a>
-						<ul>
-							<li class="category-option">                      
-								<input type="c
-								heckbox" name="community" value="Asian">Asian<br>
-							</li>
-						</ul> </li>
-				</ul>
-			</li>
-			<li id="searchfield">
-				<form action="/search.html" method="get">
-					<input type="text" id="query_field" name="query" placeholder="Search.."/>
-				</form>
-			</li>
-		</ul>
+		{{ template "searchbar" . }}
 		<div class="results">
 			{{with .Results}}
-			<p>Show that I've wired up getting content from within the app server: {{.Message}}</p>
-			<p>Show that I've successfully wired up getting JavaScript to load. (Otherwise the button wouldn't work.)</p>
-			<button onclick="addSomething();">Click Me Now!</button>
-
-			<div id="insertPoint"></div>
 			{{end}}
 		</div>
 		{{ template "footer" . }}
