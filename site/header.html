@@ -1,24 +1,24 @@
 {{ define "header" }}
 <div class="header">
-<div class="header-section">
-<a href="/index.html">
-<span>SFWAR Resource Guide</span>
-</a>
-</div>
-<div class="header-section">
-<span>24 Hour Crisis Line: </span><span class="hotline">415-647-7273 | Free and Confidential</span>
-</div>
-<div class="header-section">
-{{if .DecodedCookie.IsAuthed}}
-{{with .DecodedCookie}}
-<span>Welcome {{.DisplayName}}  <button onclick="clearSessionCookie();">Sign out</button></span><p> <a href="/usermgt/changepasswd.html">Change Password</a></p>
-{{if .HasCapabilityViewUsers}}
-<p><a href="/usermgt/listusers.html">Edit users</a></p>
-{{end}} {{/* if .HasCapabilityViewUsers  */}}
-{{end}} {{/* with .DecodedCookie */}}
-{{else}}
-<span>You are not signed in. <a href="/login.html">Login?</a></span>
-{{end}}
-</div>
+	<div class="header-section">
+		<a href="/index.html">
+			<span>SFWAR Resource Guide</span>
+		</a>
+	</div>
+	<div class="header-section">
+		<span>24 Hour Crisis Line: </span><span class="hotline">415-647-7273 | Free and Confidential</span>
+	</div>
+	<div class="header-section">
+		{{if .DecodedCookie.IsAuthed}}
+		{{with .DecodedCookie}}
+		<span>Welcome {{.DisplayName}}  <button onclick="clearSessionCookie();">Sign out</button></span><p> <a href="/usermgt/changepasswd.html">Change Password</a></p>
+		{{if .HasCapabilityViewUsers}}
+		<p><a href="/usermgt/listusers.html">Edit users</a></p>
+		{{end}} {{/* if .HasCapabilityViewUsers  */}}
+		{{end}} {{/* with .DecodedCookie */}}
+		{{else}}
+		<span>You are not signed in. <a href="/login.html">Login?</a></span>
+		{{end}}
+	</div>
 </div>
 {{ end }}
