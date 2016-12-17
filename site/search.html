@@ -1,27 +1,29 @@
 <html>
-<head>
-<script type="text/javascript" src="js/example.js"></script>
-<link href="/css/style.css" rel="stylesheet">
-</head>
-<body>
+	<head>
+		<script type="text/javascript" src="js/example.js"></script>
+		<link href="/css/style.css" rel="stylesheet">
+	</head>
+	<body>
 
-{{ template "header" .}}
-{{with .Results}}
-<p>Search results for the query: {{.Query}}  <a href="/index.html">Different search?<a></p>
-
-<ul class="resource-list">
-{{range .Resources}}
-	<li>
-		<ul>
-			<li><a href="/resources/{{.Uuid}}.html">{{.Name}}</a></li>
-			<li>{{.Categories}}</li>
-			<li>{{.Services}}</li>
-			<li>{{.Description}}</a></li>
+		{{ template "header" .}}
+		{{with .Results}}
+		<ul class="nav searchbar">
+		  <li class="dropbtn"><a href="/index.html">Different search?</a></li>
+			<li id="searchfield"><a href="javascript:void(0)">Search results for the query: {{.Query}} </a></li>
 		</ul>
-	</li>
-{{end}}
-</ul>
-{{end}}
-{{ template "footer" .}}
-</body>
+		<ul class="resource-list">
+			{{range .Resources}}
+			<li>
+				<ul>
+					<li><a href="/resources/{{.Uuid}}.html">{{.Name}}</a></li>
+					<li>{{.Categories}}</li>
+					<li>{{.Services}}</li>
+					<li>{{.Description}}</a></li>
+				</ul>
+			</li>
+			{{end}}
+		</ul>
+		{{end}}
+		{{ template "footer" .}}
+	</body>
 </html>
