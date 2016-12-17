@@ -5,9 +5,10 @@
 	</head>
 	<body>
 		<!-- need to add a status bar -->
-		<p>
-		<a href="/index.html">Back to Search</a>
-		</p>
+		<ul class="nav">
+			<li class="category"><a href="/usermgt/listusers.html">Back to user search</a></li>
+			<li id="searchfield"><a href="#">Add a user</a></li>
+		</ul>
 		{{if .DecodedCookie.HasCapabilityIniviteUsers}}
 		{{with .DecodedCookie}}
 		<p>Welcome {{.DisplayName}}  <button onclick="clearSessionCookie();">Sign out</button></p>
