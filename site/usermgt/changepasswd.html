@@ -8,9 +8,10 @@
 
 {{ template "header" . }}
 <ul class="nav searchbar">
-	<li class="category"><a href="#">Change Password</a></li>
+	<li class="category"><a href="/index.html">Back to Search</a></li>
+	<li id="searchfield"><a href="#">Change Password</a></li>
 </ul>
-
+<div class="resource-list">
 {{if .DecodedCookie.IsAuthed}}
 
 {{with .Results}}
@@ -50,6 +51,7 @@
 {{else}} {{/* if .DecodedCookie.IsAuthed */}}
 You aren't sign in. <a href="/login.html">Sign-in</a> before trying to change your password.
 {{end}} {{/* if .DecodedCookie.IsAuthed */}}
+</div>
 {{ template "footer" . }}
 </body>
 </html>

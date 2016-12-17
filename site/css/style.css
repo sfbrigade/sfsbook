@@ -3,7 +3,7 @@ body {
   font-weight: bold;
   margin: 0;
 }
-form {
+.searchform {
   margin: 0;
   padding: 5px;
 }
@@ -42,7 +42,8 @@ a {
   padding: 1em;
 }
 .resource-list {
-	padding-bottom: 40px;
+  float: left;
+	padding: 40px;
 }
 .nav {
   background: lightsteelblue;
