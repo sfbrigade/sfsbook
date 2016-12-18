@@ -61,7 +61,15 @@ a {
 	padding: 5px;
 }
 .results {
-	padding: 1em;
+  float: left;
+	list-style: none;
+	padding-bottom: 40px;
+}
+.result {
+	list-style: none;
+}
+.result li:nth-child(4) {
+ padding-bottom: 10px;
 }
 .nav {
 	background: lightsteelblue;

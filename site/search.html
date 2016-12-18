@@ -12,10 +12,10 @@
 			<li id="searchfield"><a href="#">Search results for the query: {{.Query}} </a></li>
 		</ul>
 
-		<ul>
+		<ul class='results'>
 			{{range .Resources}}
 			<li>
-				<ul>
+				<ul class='result'>
 					<li><a href="/resources/{{.Uuid}}.html">{{.Name}}</a></li>
 					<li>{{.Categories}}</li>
 					<li>{{.Services}}</li>

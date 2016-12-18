@@ -46,15 +46,6 @@
 				</form>
 			</li>
 		</ul>
-		<div class="results">
-			{{with .Results}}
-			<p>Show that I've wired up getting content from within the app server: {{.Message}}</p>
-			<p>Show that I've successfully wired up getting JavaScript to load. (Otherwise the button wouldn't work.)</p>
-			<button onclick="addSomething();">Click Me Now!</button>
-
-			<div id="insertPoint"></div>
-			{{end}}
-		</div>
 		{{ template "footer" . }}
 
 	</body>
