@@ -4,18 +4,18 @@
 		<link href="/css/style.css" rel="stylesheet">
 	</head>
 	<body>
+    {{ template "header" . }}
 		<!-- need to add a status bar -->
 
-		<a href="/index.html">Back to Search</a>
 
 		{{if .DecodedCookie.IsAuthed}}
-		{{with .DecodedCookie}}
-		<p>Welcome {{.DisplayName}}  <button onclick="clearSessionCookie();">Sign out</button></p>
-		{{end}}
 		{{else}}
 
 
-		<p>Sign-in to edit, view comments, invite people, etc.</p>
+		<ul class="nav">
+			<li class="category"><a href="/index.html"><div class="arrow-left"></div>Back to Search</a></li>
+			<li id="searchfield"><a href="#">Sign-in to edit, view comments, invite people, etc.</a></li>
+		</ul>
 
 		<!-- we will redirect on success to index.html  -->
 
@@ -50,6 +50,5 @@
 		{{end}}
 
 		{{ template "footer" . }}
-
 	</body>
 </html>

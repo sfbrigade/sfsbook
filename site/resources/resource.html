@@ -12,10 +12,10 @@
 		{{if .DecodedCookie.HasCapabilityEditResource}}
 		{{with .Results}}
 		<ul class="nav">
-			<li class="category"><a href="#"><FORM><INPUT Type="button" VALUE="Back to search results" onClick="history.go(-1);return true;"></FORM></a></li>
+			<li class="category"><a onClick="window.history.back();"><div class="arrow-left"></div>Back to results</a></li>
 			<li id="searchfield"><a href="#">Resource Details</a></li>
 		</ul>
-		<div class="resource">
+		<div class="results">
 			<div>
 				{{/* TODO(rjk): Prettier dates. */}}
 				Resource first added to the guide on {{.Document.date_indexed}}.
@@ -90,7 +90,7 @@
 		{{end}} {{/* with .Results*/}}	
 		{{else}} {{/* .DecodedCookie.HasCapabilityEditResource */}}
 		{{with .Results}}
-		<dl>
+		<dl class="results">
 			<dt>Name:</dt>
 			<dd>{{.Document.name}}</dd>
 
@@ -127,8 +127,8 @@
 
 		{{with .Results}}
 		{{if .Debug}}
-		<hr>
-		<div class="DebugOutput">
+		<hr class="results">
+		<div class="DebugOutput results">
 			Debugging output
 			<dl style="font-family: courier; font-size: small;">
 				{{/* TODO(rjk): Refactor out this common block. */}}
@@ -147,7 +147,7 @@
 		</div>
 
 		{{ template "footer" .}}
-		<hr>
+		<hr class="results">
 		{{end}} {{/*.Debug*/}}
 		{{end}} {{/* with .Results */}} 
 	</body>

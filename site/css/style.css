@@ -1,3 +1,12 @@
+.arrow-left {
+	display: inline-block;
+	width: 0; 
+	height: 0; 
+	border-top: 5px solid transparent;
+	border-bottom: 5px solid transparent; 
+	border-right:8px solid black; 
+  margin-right: 5px;
+}
 body {
 	font-family: 'Source Sans Pro', sans-serif;
 	font-weight: bold;
@@ -62,7 +71,7 @@ a {
 	padding: 5px;
 }
 .results {
-  float: left;
+	float: left;
 	list-style: none;
 	padding-bottom: 40px;
 }
@@ -70,7 +79,7 @@ a {
 	list-style: none;
 }
 .result li:nth-child(4) {
- padding-bottom: 10px;
+	padding-bottom: 10px;
 }
 .nav {
 	background: lightsteelblue;
