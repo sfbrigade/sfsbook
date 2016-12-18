@@ -7,13 +7,15 @@ function toggleCategoryOption() {
 	var optionValue = this.children[0].value;
 	var re = new RegExp('\\b(' + optionValue + ')\\b', 'gi');
 	var stringToReplace = optionValue.concat(', ');
+	
+	// CEH: need to determine whether user wants to be able to toggle selection via dropdown
 	if(searchText.match(stringToReplace)) {
-		stringToReplace = optionValue.concat(', ');
-		searchText = searchText.replace(stringToReplace, '');
-		el.value = searchText;
+		//stringToReplace = optionValue.concat(', ');
+		//searchText = searchText.replace(stringToReplace, '');
+		//el.value = searchText;
 	} else if (searchText.match(re)) {
-		searchText = searchText.replace(optionValue, '');
-		el.value = searchText;
+		//searchText = searchText.replace(optionValue, '');
+		//el.value = searchText;
 	} else {
 		var hbox = document.getElementsByClassName('hbox')[0];
 		var btn = document.createElement("BUTTON");

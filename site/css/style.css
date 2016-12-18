@@ -11,6 +11,7 @@ a {
 	text-decoration: none;
 }
 .hbox {
+	height: 30px;
 	overflow-x: auto;
 	font-family: sans-serif;
 	font-size: 18px;
