@@ -7,7 +7,7 @@
     {{ template "header" . }}
 		<!-- need to add a status bar -->
 		<ul class="nav">
-			<li class="category"><a href="/usermgt/listusers.html">Back to user search</a></li>
+			<li class="category"><a href="/usermgt/listusers.html"><div class="arrow-left"></div>Back to list</a></li>
 			<li id="searchfield"><a href="#">Add a user</a></li>
 		</ul>
 		{{if .DecodedCookie.HasCapabilityIniviteUsers}}
