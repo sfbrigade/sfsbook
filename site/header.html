@@ -11,11 +11,16 @@
 	<div class="header-section">
 		{{if .DecodedCookie.IsAuthed}}
 		{{with .DecodedCookie}}
-		<span>Welcome {{.DisplayName}}  <button onclick="clearSessionCookie();">Sign out</button></span><p> <a href="/usermgt/changepasswd.html">Change Password</a></p>
-		{{if .HasCapabilityViewUsers}}
-		<p><a href="/usermgt/listusers.html">Edit users</a></p>
+		<div class="user-menu"> Welcome {{.DisplayName}}
+		  <ul>
+			  <li><a onclick="clearSessionCookie();">Sign out</a></li>
+				<li><a href="/usermgt/changepasswd.html">Change Password</a></li>
+		    {{if .HasCapabilityViewUsers}}
+		    <li><a href="/usermgt/listusers.html">Edit users</a></li>
 		{{end}} {{/* if .HasCapabilityViewUsers  */}}
 		{{end}} {{/* with .DecodedCookie */}}
+			</ul>
+		</div>
 		{{else}}
 		<span>You are not signed in. <a href="/login.html">Login?</a></span>
 		{{end}}
