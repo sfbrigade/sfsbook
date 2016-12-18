@@ -26,53 +26,53 @@
 			<form action="/resources/{{.Uuid}}.html" method="post">
 
 				<div class="toggle">
-					<label for="reviewed">Reviewed:</label>
-					<input id="reviewed" type="checkbox" name="reviewed" {{if .Document.reviewed }}checked{{end}}/>
+					<label for="reviewed">Reviewed</label>
+					<input id="reviewed" class="small-input" type="checkbox" name="reviewed" {{if .Document.reviewed }}checked{{end}}/>
 				</div>
 
 				<div class="onefield">
-					<label for="name">Name:</label>
+					<label for="name">Name</label>
 					<input id="name" type="text" name="name" size="80" value="{{.Document.name}}"./>
 				</div>
 
 				<div class="onefield">
-					<label for="categories">Categories:</label>
+					<label for="categories">Categories</label>
 					<input id="categories" type="text" name="categories" size="80" value="{{.Document.categories}}"./>
 				</div>
 
 				<div class="multifield">
-					<label for="description">Description:</label>
+					<label for="description">Description</label>
 					<textarea id="description" rows="10" cols="80" name="description">{{.Document.description}}</textarea>
 				</div>
 
 				<div class="multifield">
-					<label for="services">Services:</label>
+					<label for="services">Services</label>
 					<textarea id="services" rows="5" cols="80" name="services">{{.Document.services}}</textarea>
 				</div>
 
 				<div class="onefield">
-					<label for="email">Email:</label>
+					<label for="email">Email</label>
 					<input id="email" type="text" name="email" size="80" value="{{.Document.email}}"./>
 				</div>
 
 
 				<div class="onefield">
-					<label for="address">Address:</label>
+					<label for="address">Address</label>
 					<input id="address" type="text" name="address" size="80" value="{{.Document.address}}"./>
 				</div>
 
 				<div class="onefield">
-					<label for="languges">Languages:</label>
+					<label for="languges">Languages</label>
 					<input id="languges" type="text" name="languges" size="80" value="{{.Document.languges}}"./>
 				</div>
 
 				<div class="onefield">
-					<label for="pops_served">Populations Served::</label>
+					<label for="pops_served">Populations Served</label>
 					<input id="pops_served" type="text" name="pops_served" size="80" value="{{.Document.pops_served}}"./>
 				</div>
 
 				<div class="onefield">
-					<label for="website">Website:</label>
+					<label for="website">Website</label>
 					<input id="website" type="text" name="website" size="80" value="{{.Document.website}}"./>
 				</div>
 
@@ -90,34 +90,44 @@
 		{{end}} {{/* with .Results*/}}	
 		{{else}} {{/* .DecodedCookie.HasCapabilityEditResource */}}
 		{{with .Results}}
-		<dl class="results">
-			<dt>Name:</dt>
-			<dd>{{.Document.name}}</dd>
-
-			<dt>Categories:</dt>
-			<dd>{{.Document.categories}}</dd>
-
-			<dt>Description:</dt>
-			<dd>{{.Document.description}}</dd>
-
-			<dt>Services:</dt>
-			<dd>{{.Document.services}}</dd>
-
-			<dt>Email:</dt>
-			<dd>{{.Document.email}}</dd>
-
-			<dt>Address:</dt>
-			<dd>{{.Document.address}}</dd>
-
-			<dt>Languages:</dt>
-			<dd>{{.Document.languges}}</dd>
-
-			<dt>Populations Served::</dt>
-			<dd>{{.Document.pops_served}}</dd>
-
-			<dt>Website:</dt>
-			<dd>{{.Document.website}}</dd>
-		</dl>
+		<table class="results">
+			<tr>
+				<th>Name</th>
+				<td>{{.Document.name}}</td>
+			</tr>
+			<tr>
+				<th>Categories</th>
+				<td>{{.Document.categories}}</td>
+			</tr>
+			<tr>
+				<th>Description</th>
+				<td>{{.Document.description}}</td>
+			</tr>
+			<tr>
+				<th>Services</th>
+				<td>{{.Document.services}}</td>
+			</tr>
+			<tr>
+				<th>Email</th>
+				<td>{{.Document.email}}</td>
+			</tr>
+			<tr>
+				<th>Address</th>
+				<td>{{.Document.address}}</td>
+			</tr>
+			<tr>
+				<th>Languages</th>
+				<td>{{.Document.languges}}</td>
+			</tr>
+			<tr>
+				<th>Populations Served</th>
+				<td>{{.Document.pops_served}}</td>
+			</tr>
+			<tr>
+				<th>Website</th>
+				<td>{{.Document.website}}</td>
+			</tr>
+		</table>
 		{{end}} {{/* with .Results*/}}	
 		{{end}} {{/* .DecodedCookie.HasCapabilityEditResource */}}
 		{{else}} {{/* .DecodedCookie.Success */}}
@@ -127,8 +137,8 @@
 
 		{{with .Results}}
 		{{if .Debug}}
-		<hr class="results">
 		<div class="DebugOutput results">
+			<hr>
 			Debugging output
 			<dl style="font-family: courier; font-size: small;">
 				{{/* TODO(rjk): Refactor out this common block. */}}
@@ -144,10 +154,10 @@
 				</dl>
 				</dd>
 			</dl>
+			<hr>
 		</div>
 
 		{{ template "footer" .}}
-		<hr class="results">
 		{{end}} {{/*.Debug*/}}
 		{{end}} {{/* with .Results */}} 
 	</body>
