@@ -5,7 +5,27 @@ function toggleCategoryOption() {
   var el = document.getElementById('query_field');
   var searchText = el.value;
   var optionValue = this.children[0].value;
-  var re = new RegExp('\\b(' + optionValue + ')\\b', 'gi');
+  var hbox = document.getElementsByClassName('hbox')[0];
+	console.log(hbox);
+	var btn = document.createElement("BUTTON");
+	btn.value = optionValue;
+	var t = document.createTextNode(optionValue);
+	btn.appendChild(t);
+	var updateInsert = function(buttonValue){
+	  console.log(buttonValue);
+		var searchfield = document.getElementById('query_field'); 
+		searchfield.value=searchfield.value.replace(buttonValue, '');
+		console.log(searchfield.value);
+	};
+	btn.onclick = function(event){
+		event.preventDefault();
+		event.stopPropagation(); 
+		console.log(this.value);
+		updateInsert(this.value);
+		this.remove();
+	}
+	hbox.appendChild(btn);  
+	var re = new RegExp('\\b(' + optionValue + ')\\b', 'gi');
   var stringToReplace = optionValue.concat(', ');
   if(searchText.match(stringToReplace)) {
     stringToReplace = optionValue.concat(', ');

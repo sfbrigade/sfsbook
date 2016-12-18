@@ -39,8 +39,10 @@
 				</ul>
 			</li>
 			<li id="searchfield">
-				<form action="/search.html" method="get">
-					<input type="text" id="query_field" name="query" placeholder="Search.."/>
+				<form id='search-form' action="/search.html" method="get">
+					<input type='text' id='query_field' name='query' placeholder='Search..'/>
+					<div class='hbox' onClick="document.getElementById('search-form').submit();">
+					</div>
 				</form>
 			</li>
 		</ul>
