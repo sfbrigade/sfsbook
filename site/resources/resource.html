@@ -7,14 +7,14 @@
 
 		{{ template "header" . }}
 
+		<ul class="nav">
+			<li class="category"><a onClick="window.history.back();"><div class="arrow-left"></div>Back to results</a></li> 
+			<li id="searchfield"><a href="#">Resource Details</a></li>
+		</ul>
 
 		{{if .Results.Success}}
 		{{if .DecodedCookie.HasCapabilityEditResource}}
 		{{with .Results}}
-		<ul class="nav">
-			<li class="category"><a onClick="window.history.back();"><div class="arrow-left"></div>Back to results</a></li>
-			<li id="searchfield"><a href="#">Resource Details</a></li>
-		</ul>
 		<div class="results">
 			<div>
 				{{/* TODO(rjk): Prettier dates. */}}
