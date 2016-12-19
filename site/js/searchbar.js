@@ -7,7 +7,7 @@ function toggleCategoryOption() {
 	var optionValue = this.children[0].value;
 	var re = new RegExp('\\b(' + optionValue + ')\\b', 'gi');
 	var stringToReplace = optionValue.concat(', ');
-	
+
 	// CEH: need to determine whether user wants to be able to toggle selection via dropdown
 	if(searchText.match(stringToReplace)) {
 		//stringToReplace = optionValue.concat(', ');
@@ -41,6 +41,18 @@ function toggleCategoryOption() {
 	}
 }
 
+// toggleActiveClass adds or removes active from user-menu class element
+function toggleActiveClass() {
+	console.log('toggleactiveclassfiring', this.classList.value);
+	if (this.classList.length > 1) {
+		this.classList.toggle('user-menu-active');
+	} else {
+		var classes = this.classList.value.split(' ');
+		classes.push('user-menu-active');
+		this.classList.value = classes.join(' ');
+	}
+}
+
 // addEventListener attaches toggleCategoryOption to the checkboxes
 function addEventListener(el, eventName, handler) {
 	eventName.preventDefault ? eventName.preventDefault() : (eventName.returnValue = false);
@@ -55,10 +67,16 @@ function addEventListener(el, eventName, handler) {
 
 // attachToggles attaches event listener to each category option
 function attachToggles() {
+	//CEH: dry this up
+	var dropdowns = document.getElementsByClassName('user-menu');
 	var categories = document.getElementsByClassName('category-option');
 	for(var i = 0; i < categories.length; i++){
 		el = categories[i];
 		addEventListener(el, 'click', toggleCategoryOption);
+	}
+	for(var j = 0; j < dropdowns.length; j++){
+		el = dropdowns[j];
+		addEventListener(el, 'click', toggleActiveClass);
 	}
 }
 

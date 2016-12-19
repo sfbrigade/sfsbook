@@ -1,3 +1,4 @@
+/* general styles */
 body {
 	font-family: 'Source Sans Pro', sans-serif;
 	font-weight: bold;
@@ -36,6 +37,8 @@ table {
 	text-align: left;
 	margin:10px 0;
 }
+
+/* page specific styles */
 .button input {
 	border: none;
 	outline: none;
@@ -103,24 +106,26 @@ a {
 .login:focus {
 	outline: 5px solid lightgrey;
 }
+.user-menu > a {
+	display: inline-block;
+	margin: 0 0 4px;
+}
 .user-menu ul {
 	position: relative;
 	border: solid 1px lightgrey;
 	z-index: 1;
+	list-style: none;
+	margin: 0;
+	right: 0;
+	width: 100px;
 }
-.user-menu:hover li {
+.user-menu:focus li, .user-menu-active li {
 	position:relative;
 	padding: 5px;
 	background: cornsilk;
 }
-.user-menu ul li:hover {
+.user-menu ul li:focus {
 	background: lightsteelblue;
-}
-.user-menu ul {
-	list-style: none;
-	margin: 0;
-	right: 0;
-	width: 100%;
 }
 .arrow-left {
 	display: inline-block;
@@ -228,16 +233,12 @@ a {
 .nav ul {
 	left: 0;
 }
-.user-menu ul {
-	right: 0;
-	margin: 0;
-}
 .nav ul ul {
 	left: 100%;
 	top: 0;
 	padding: 0;
 }	
-.nav .categories:hover, .nav li:hover li {
+.nav .categories:hover, .nav li:focus li {
 	background: #ddd;
 }
 .nav li li input {
@@ -249,7 +250,7 @@ a {
 .nav li li li:hover {
 	background: #999;
 }	
-.nav li:hover > ul, .user-menu:hover > ul {
+.nav li:hover > ul,.user-menu:focus > ul, .user-menu-active > ul {
 	visibility: visible;
 	opacity: 1;
 }
@@ -279,4 +280,22 @@ a {
 .footer li {
 	width: 25%;
 	padding:0;
+}
+
+/* mobile styles */
+@media only screen and ( max-width: 40em ) /* 640 */ {
+	.header {
+		height: 60px;
+		background: lightsteelblue;
+		padding: 5px;
+	}
+	.header-section:nth-child(2) {
+		display: none;
+	}
+	.header-links {
+		display: none;
+	}
+	.nav {
+		display: none;
+	}
 }
