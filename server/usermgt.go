@@ -145,7 +145,7 @@ func (gs *passwordChange) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 end:
 
 	sn := req.URL.Path
-	templates := []string{sn, "/header.html", "/footer.html"}
+	templates := []string{sn, "/head.html", "/header.html", "/footer.html"}
 
 	parseAndExecuteTemplate(gs.embr, w, req, templates, changeresult)
 }
