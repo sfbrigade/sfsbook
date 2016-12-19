@@ -133,7 +133,7 @@ a {
 	display:table-cell;
 }
 .hbox > button {
-	border: 1px solid black;
+	border: 1px solid lightgrey;
 	border-radius: 5px;
 	padding: 5px;
 	margin: 2px;
