@@ -3,16 +3,13 @@
 	<body>
 
 		{{ template "header" . }}
-
-		<ul class="nav">
-			<li class="categories"><a onClick="window.history.back();"><div class="arrow-left"></div>Back to results</a></li> 
-			<li id="searchfield"><a href="#">Resource Details</a></li>
-		</ul>
+    {{ template "searchbar" . }}
 
 		{{if .Results.Success}}
 		{{if .DecodedCookie.HasCapabilityEditResource}}
 		{{with .Results}}
 		<div class="results">
+			<h3>Resource Details</h3>
 			<div>
 				{{/* TODO(rjk): Prettier dates. */}}
 				Resource first added to the guide on {{.Document.date_indexed}}.
@@ -87,7 +84,9 @@
 		{{end}} {{/* with .Results*/}}	
 		{{else}} {{/* .DecodedCookie.HasCapabilityEditResource */}}
 		{{with .Results}}
-		<table class="results">
+		<div class="results">
+		<h3>Resource Details</h3>
+		<table>
 			<tr>
 				<th>Name</th>
 				<td>{{.Document.name}}</td>
@@ -125,6 +124,7 @@
 				<td>{{.Document.website}}</td>
 			</tr>
 		</table>
+		</div>
 		{{end}} {{/* with .Results*/}}	
 		{{end}} {{/* .DecodedCookie.HasCapabilityEditResource */}}
 		{{else}} {{/* .DecodedCookie.Success */}}

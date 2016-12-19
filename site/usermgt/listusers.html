@@ -2,18 +2,14 @@
 	{{ template "head" . }}
 	<body>
 		{{ template "header" . }}
+		{{ template "searchbar" . }}
 		<!-- need to add a status bar -->
-		<ul class="nav">
-			<li class="categories"><a href="/index.html"><div class="arrow-left"></div>Back to Search</a></li>
-			<li id="searchfield"><a href="#">Search for a user</a></li>
-		</ul>
 		{{if .DecodedCookie.HasCapabilityViewUsers}}
 
 		<!-- query value has to be in the field -->
 		<form action="/usermgt/listusers.html" method="get" class="results">
-			<div style="margin: 5px;">
-				<a style="float: right;" href="/usermgt/adduser.html">Invite people</a>
-			</div>
+			<h3>Edit Users</h3>
+			<h3 class="invite"><a href="/usermgt/adduser.html">Invite people</a></h3>
 			<div>
 				<input placeholder="Search users..." type="text" id="userquery" name="userquery" />
 			</div>

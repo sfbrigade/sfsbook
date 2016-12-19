@@ -3,9 +3,20 @@ body {
 	font-weight: bold;
 	margin: 0;
 }
+a li {
+	font-weight: bold;
+	color: black;
+}
 form {
 	margin: 0;
 	padding: 5px;
+}
+h3 {
+	color: 00B398;
+	display: inline-block;
+}
+.invite {
+	float: right;
 }
 input {
 	width: 100%;
@@ -76,11 +87,11 @@ th {
 	text-align: right;
 }
 a {
-	color: black;
+	color: 00B398;
 	text-decoration: none;
 }
 .results a {
-	color: blue;
+	color: 00B398;
 }
 .login {
 	border: none;

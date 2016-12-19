@@ -2,11 +2,8 @@
 	{{ template "head" . }}
 	<body>
 		{{ template "header" . }}
+		{{ template "searchbar" . }}
 		<!-- need to add a status bar -->
-		<ul class="nav">
-			<li class="categories"><a href="/index.html"><div class="arrow-left"></div>Back to Search</a></li>
-			<li id="searchfield"><a href="#">Change your password</a></li>
-		</ul>
 		{{if .DecodedCookie.IsAuthed}}
 
 		{{with .Results}}

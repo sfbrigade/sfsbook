@@ -9,7 +9,7 @@
 	<div class="header-section">
 		{{if .DecodedCookie.IsAuthed}}
 		{{with .DecodedCookie}}
-		<div class="user-menu"> Welcome {{.DisplayName}}
+		<div class="user-menu"><a>Welcome {{.DisplayName}}</a>
 			<ul>
 				<a onclick="clearSessionCookie();"><li>Sign out</li></a>
 				<a href="/usermgt/changepasswd.html"><li>Change Password</li></a>

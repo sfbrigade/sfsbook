@@ -4,15 +4,9 @@
 		{{ template "header" . }}
 		<!-- need to add a status bar -->
 
-
+    {{ template "searchbar" . }}
 		{{if .DecodedCookie.IsAuthed}}
 		{{else}}
-
-
-		<ul class="nav">
-			<li class="category"><a href="/index.html"><div class="arrow-left"></div>Back to Search</a></li>
-			<li id="searchfield"><a href="#">Sign-in to edit, view comments, invite people, etc.</a></li>
-		</ul>
 
 		<!-- we will redirect on success to index.html  -->
 
