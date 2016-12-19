@@ -4,7 +4,7 @@
 		<link href="/css/style.css" rel="stylesheet">
 	</head>
 	<body>
-    {{ template "header" . }}
+		{{ template "header" . }}
 		<!-- need to add a status bar -->
 		<ul class="nav">
 			<li class="category"><a href="/usermgt/listusers.html"><div class="arrow-left"></div>Back to list</a></li>
@@ -27,31 +27,33 @@
 
 		<form class="results" action="/usermgt/adduser.html" method="post">
 			<div class="onefield">
-				<label for="username">Username:</label>
-				<input id="username" type="text" name="username" size="10" ./>
+				<label class="password-label" for="username">Username</label>
+				<input class="password small-input" id="username" type="text" name="username" size="40" ./>
 			</div>
 			<div class="onefield">
-				<label for="displayname">Display name:</label>
-				<input id="displayname" type="text" name="displayname" size="40" ./>
+				<label class="password-label" for="displayname">Display<br>name</label>
+				<input class="password small-input" id="displayname" type="text" name="displayname" size="40" ./>
 			</div>
 			<div class="onefield">
-				<label for="newpassword">Starter password</label>
-				<input id="newpassword" type="password" name="newpassword" size="40" ./>
+				<label class="password-label" for="newpassword">Default<br>password</label>
+				<input class="password small-input" id="newpassword" type="password" name="newpassword" size="40" ./>
 			</div>
 			<div class="onefield">
-				<label for="newpasswordagain">Starter password again</label>
-				<input id="newpasswordagain" type="password" name="newpasswordagain" size="40" ./>
+				<label class="password-label" for="newpasswordagain">Confirm default<br> password</label>
+				<input class="password small-input" id="newpasswordagain" type="password" name="newpasswordagain" size="40" ./>
 			</div>
-			<div class="picker">
-				<label for="role">Role for user</label>
-				<select name="role" id="role" id="role">
-					<option value="admin">Administrator</option> 
-					<option value="volunteer" >Volunteer</option>
-				</select>
-			</div>
+			<div class="buttonbar">
+				<div class="button usermgt">
+					<input type="submit" value="Add user" />
+				</div>
+				<div class="picker usermgt">
+					<label for="role">Role for user</label>
+					<select  name="role" id="role" id="role">
+						<option value="admin">Administrator</option> 
+						<option value="volunteer" >Volunteer</option>
+					</select>
+				</div>
 
-			<div class="button">
-				<input type="submit" value="Add user" />
 			</div>
 		</form>
 
@@ -60,6 +62,6 @@
 		{{else}} {{/* if .DecodedCookie.HasCapabilityIniviteUsers */}}
 		<p>You aren't signed with the right to add users. <a href="/login.html">Sign-in</a> as an administrative user.</p>
 		{{end}} {{/* if .DecodedCookie.HasCapabilityViewUsers */}}
-    {{ template "footer" . }}
+		{{ template "footer" . }}
 	</body>
 </html>

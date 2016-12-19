@@ -9,24 +9,80 @@ form {
 }
 input {
 	width: 100%;
+	font-size: 16px;
+}
+table {
+	width: 100%;
+}
+.buttonbar {
+	float: right;
 }
 .button {
 	width: 50%;
-	float:left;
+	float:right;
 }
+.resource-details div {
+	text-align: left;
+	margin:10px 0;
+}
+.button input {
+	border: none;
+	outline: none;
+	background:lightsteelblue;
+	width: 210px;
+	border-radius: 3px;
+	margin: 5px;
+	padding: 5px;
+	float: right;
+}	
 textarea {
 	border: solid 1px lightgrey;
 	display: block;
 	width: 100%;
 }
+.buttonbar .usermgt {
+	width: 30%;
+	float: right;
+	margin: 8px;
+}
+.buttonbar .usermgt input {
+	width: 100%;
+	margin: 5px;
+}
 .small-input {
 	width: unset;
+}
+.onefield {
+	margin: 5px;
+	text-align: right;
+}
+.password-label {
+	display: inline-block;
+	width: 40%;
+}
+.password {
+	width: 50%;
+	outline: 1px solid lightgrey;
 }
 th {
 	text-align: left;
 }
+.user-details th, .user-details td {
+	padding: 5px;
+	text-align: right;
+}
 a {
 	text-decoration: none;
+}
+.login {
+	border: none;
+	border-bottom: solid lightgrey;
+	padding: 5px;
+	margin: 5px;
+	width: 200px;
+}
+.login:focus {
+	outline: 5px solid lightgrey;
 }
 .user-menu ul {
 	position: relative;
@@ -44,7 +100,7 @@ a {
 .user-menu ul {
 	list-style: none;
 	margin: 0;
-  right: 0;
+	right: 0;
 	width: 100%;
 }
 .arrow-left {

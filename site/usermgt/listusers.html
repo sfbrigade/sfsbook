@@ -4,7 +4,7 @@
 		<link href="/css/style.css" rel="stylesheet">
 	</head>
 	<body>
-    {{ template "header" . }}
+		{{ template "header" . }}
 		<!-- need to add a status bar -->
 		<ul class="nav">
 			<li class="category"><a href="/index.html"><div class="arrow-left"></div>Back to Search</a></li>
@@ -14,10 +14,11 @@
 
 		<!-- query value has to be in the field -->
 		<form action="/usermgt/listusers.html" method="get" class="results">
-			<p>Search for a user</p>
+			<div style="margin: 5px;">
+				<a style="float: right;" href="/usermgt/adduser.html">Invite people</a>
+			</div>
 			<div>
-				<label for="userquery">Search users:</label>
-				<input type="text" id="userquery" name="userquery" />
+				<input placeholder="Search users..." type="text" id="userquery" name="userquery" />
 			</div>
 
 			{{with .Results}}
@@ -28,13 +29,13 @@
 			{{.Diagnosticmessage}}
 			{{end}}
 
-			<table>
-				<thead>
-					<td></td>
-					<td>User name</td>
-					<td>role</td>
-					<td>Display name</td>
-				</thead>
+			<table class="user-details">
+				<tr>	
+					<th></th>
+					<th>User name</th>
+					<th>Role</th>
+					<th>Display name</th>
+				</tr>
 				{{range .Users}}
 				<tr>
 					<td>
@@ -49,22 +50,21 @@
 			</table>
 
 			<div class="buttonbar">
-				<div class="button">
-					<input type="submit" value="Reset Selected Users Password" name="resetpassword"/>
+				<div class="button usermgt">
+					<input type="submit" value="Reset Password" name="resetpassword"/>
 				</div>
-				<div class="button">
+				<div class="button usermgt">
 					<input type="submit" value="Delete User" name="deleteuser"/>
 				</div>
-
-				<div class="button">
+				<div class="button usermgt">
+					<label>Update role</label>
 					<select name="rolechange" onchange="this.form.submit()">
-						<option value="nochange" selected>Leave as it</option>
+						<!--	<option value="nochange" selected>Leave as it</option>-->
 						<option value="admin">Administrator</option> 
 						<option value="volunteer" >Volunteer</option>
 						<option value="norole" >Clear role</option>
 					</select>
 				</div>
-				<div><a href="/usermgt/adduser.html">Invite people</a></div>
 			</div>
 		</form>
 
@@ -75,6 +75,6 @@
 		<p>You aren't signed with the right to list users. <a href="/login.html">Sign-in</a> as an administrative user.</p>
 
 		{{end}} {{/* if .DecodedCookie.HasCapabilityViewUsers */}}
-    {{ template "footer" . }}
+		{{ template "footer" . }}
 	</body>
 </html>
