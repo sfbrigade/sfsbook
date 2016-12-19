@@ -1,9 +1,7 @@
 {{ define "header" }}
 <div class="header">
 	<div class="header-section">
-		<a href="/index.html">
-			<span>SFWAR Resource Guide</span>
-		</a>
+		<a href="/index.html">SFWAR Resource Guide</a>
 	</div>
 	<div class="header-section">
 		<span>24 Hour Crisis Line: </span><span class="hotline">415-647-7273 | Free and Confidential</span>
@@ -12,13 +10,13 @@
 		{{if .DecodedCookie.IsAuthed}}
 		{{with .DecodedCookie}}
 		<div class="user-menu"> Welcome {{.DisplayName}}
-		  <ul>
-			  <li><a onclick="clearSessionCookie();">Sign out</a></li>
-				<li><a href="/usermgt/changepasswd.html">Change Password</a></li>
-		    {{if .HasCapabilityViewUsers}}
-		    <li><a href="/usermgt/listusers.html">Edit users</a></li>
-		{{end}} {{/* if .HasCapabilityViewUsers  */}}
-		{{end}} {{/* with .DecodedCookie */}}
+			<ul>
+				<a onclick="clearSessionCookie();"><li>Sign out</li></a>
+				<a href="/usermgt/changepasswd.html"><li>Change Password</li></a>
+				{{if .HasCapabilityViewUsers}}
+				<a href="/usermgt/listusers.html"><li>Edit users</li></a>
+				{{end}} {{/* if .HasCapabilityViewUsers  */}}
+				{{end}} {{/* with .DecodedCookie */}}
 			</ul>
 		</div>
 		{{else}}

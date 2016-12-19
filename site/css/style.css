@@ -53,16 +53,20 @@ textarea {
 	width: unset;
 }
 .onefield {
-	margin: 5px;
+	margin: 15px 0;
 	text-align: right;
 }
 .password-label {
 	display: inline-block;
 	width: 40%;
 }
+.singleton {
+	vertical-align: top;
+}
 .password {
 	width: 50%;
 	outline: 1px solid lightgrey;
+	vertical-align: super;
 }
 th {
 	text-align: left;
@@ -72,7 +76,11 @@ th {
 	text-align: right;
 }
 a {
+	color: black;
 	text-decoration: none;
+}
+.results a {
+	color: blue;
 }
 .login {
 	border: none;
@@ -159,12 +167,12 @@ a {
 	text-align: right;
 }
 .hotline {
+	border: 1px solid lightgrey;
 	border-radius: 5px;
 	background: cornsilk;
 	padding: 5px;
 }
 .results {
-	float: left;
 	list-style: none;
 	padding: 0 20px 40px 20px;
 }
@@ -218,7 +226,7 @@ a {
 	top: 0;
 	padding: 0;
 }	
-.nav li:hover, .nav li:hover li {
+.nav .categories:hover, .nav li:hover li {
 	background: #ddd;
 }
 .nav li li input {

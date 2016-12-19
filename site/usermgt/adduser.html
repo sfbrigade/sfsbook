@@ -7,7 +7,7 @@
 		{{ template "header" . }}
 		<!-- need to add a status bar -->
 		<ul class="nav">
-			<li class="category"><a href="/usermgt/listusers.html"><div class="arrow-left"></div>Back to list</a></li>
+			<li class="categories"><a href="/usermgt/listusers.html"><div class="arrow-left"></div>Back to list</a></li>
 			<li id="searchfield"><a href="#">Add a user</a></li>
 		</ul>
 		{{if .DecodedCookie.HasCapabilityIniviteUsers}}
@@ -27,7 +27,7 @@
 
 		<form class="results" action="/usermgt/adduser.html" method="post">
 			<div class="onefield">
-				<label class="password-label" for="username">Username</label>
+				<label class="singleton password-label" for="username">Username</label>
 				<input class="password small-input" id="username" type="text" name="username" size="40" ./>
 			</div>
 			<div class="onefield">
