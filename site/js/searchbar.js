@@ -8,15 +8,7 @@ function toggleCategoryOption() {
 	var re = new RegExp('\\b(' + optionValue + ')\\b', 'gi');
 	var stringToReplace = optionValue.concat(', ');
 
-	// CEH: need to determine whether user wants to be able to toggle selection via dropdown
-	if(searchText.match(stringToReplace)) {
-		//stringToReplace = optionValue.concat(', ');
-		//searchText = searchText.replace(stringToReplace, '');
-		//el.value = searchText;
-	} else if (searchText.match(re)) {
-		//searchText = searchText.replace(optionValue, '');
-		//el.value = searchText;
-	} else {
+	if(!searchText.match(stringToReplace) && !searchText.match(re)) {
 		var hbox = document.getElementsByClassName('hbox')[0];
 		var btn = document.createElement("BUTTON");
 		btn.value = optionValue;
@@ -24,7 +16,7 @@ function toggleCategoryOption() {
 		btn.appendChild(t);
 		var updateInsert = function(buttonValue){
 			var searchfield = document.getElementById('query_field');
-			searchfield.value=searchfield.value.replace(buttonValue, '');
+			searchfield.value = searchfield.value.replace(buttonValue, '');
 		};
 		btn.onclick = function(event){
 			event.preventDefault();
@@ -33,7 +25,7 @@ function toggleCategoryOption() {
 			this.remove();
 		}
 		hbox.appendChild(btn);
-		if(searchText.length > 0){
+		if(searchText.length > 0) {
 			el.value = searchText.concat(', ',this.children[0].value);
 		} else {
 			el.value = optionValue;
@@ -57,7 +49,7 @@ function toggleActiveClass() {
 function toggleHiddenNav() {
 	var navbar = document.getElementsByClassName('nav')[0];
 	console.log('toggleactivenav firing', navbar);
-  if(navbar.classList.length > 1){
+	if(navbar.classList.length > 1) {
 		navbar.classList.toggle('nav-hidden');
 	} else {
 		var classes = navbar.classList.value.split(' ');
