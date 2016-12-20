@@ -53,6 +53,30 @@ function toggleActiveClass() {
 	}
 }
 
+// toggleHiddenNav adds or removes hidden from nav on mobile
+function toggleHiddenNav() {
+	var navbar = document.getElementsByClassName('nav')[0];
+	console.log('toggleactivenav firing', navbar);
+  if(navbar.classList.length > 1){
+		navbar.classList.toggle('nav-hidden');
+	} else {
+		var classes = navbar.classList.value.split(' ');
+		classes.push('nav-hidden');
+		navbar.classList.value = classes.join(' ');
+	}
+}
+// toggleHiddenCategory adds or removes hidden from category on mobile
+function toggleHiddenCategory() {
+	var category = this.children[1];
+	console.log("togglecat", this, category);
+	if(category.classList.length > 1){
+		category.classList.toggle('category-hidden');
+	} else {
+		var classes = category.classList.value.split(' ');
+		classes.push('category-hidden');
+		category.classList.value = classes.join(' ');
+	}
+}
 // addEventListener attaches toggleCategoryOption to the checkboxes
 function addEventListener(el, eventName, handler) {
 	eventName.preventDefault ? eventName.preventDefault() : (eventName.returnValue = false);
@@ -68,8 +92,13 @@ function addEventListener(el, eventName, handler) {
 // attachToggles attaches event listener to each category option
 function attachToggles() {
 	//CEH: dry this up
+	addEventListener(document.getElementsByClassName('logo')[0], 'click', toggleHiddenNav);
+	var category = document.getElementsByClassName('category');
 	var dropdowns = document.getElementsByClassName('user-menu');
 	var categories = document.getElementsByClassName('category-option');
+	for(var h = 0; h < category.length; h++){
+		addEventListener(category[h], 'click', toggleHiddenCategory);
+	}
 	for(var i = 0; i < categories.length; i++){
 		el = categories[i];
 		addEventListener(el, 'click', toggleCategoryOption);

@@ -1,11 +1,18 @@
 {{ define "searchbar" }}
-<ul class="nav">
+<ul class="nav nav-hidden">
+	<li id="searchfield">
+		<form id='search-form' action="/search.html" method="get">
+			<input type='text' id='query_field' name='query' placeholder='Search..'/>
+			<div class='hbox' onClick="document.getElementById('search-form').submit();">
+			</div>
+		</form>
+	</li>
 	<li class="categories">
 		<a href="javascript:void(0)" class="dropbtn">Get Help</a>
 		<ul>
 			<li class="category">
 				<a href="#">Locations</a>
-				<ul>
+				<ul class="category-dropdown category-hidden">
 					<li class="category-option">
 						<input type="checkbox" name="location" value="Oakland">Oakland<br>
 					</li>
@@ -13,7 +20,7 @@
 			</li>
 			<li class="category">
 				<a href="#">Services</a>
-				<ul>
+				<ul class="category-dropdown category-hidden">
 					<li class="category-option">
 						<input type="checkbox" name="service" value="Legal">Legal<br>
 					</li>
@@ -21,19 +28,12 @@
 			</li>
 			<li class="category">
 				<a href="#">Communities</a>
-				<ul>
+				<ul class="category-dropdown category-hidden">
 					<li class="category-option">
 						<input type="checkbox" name="community" value="Asian">Asian<br>
 					</li>
 				</ul> </li>
 		</ul>
-	</li>
-	<li id="searchfield">
-		<form id='search-form' action="/search.html" method="get">
-			<input type='text' id='query_field' name='query' placeholder='Search..'/>
-			<div class='hbox' onClick="document.getElementById('search-form').submit();">
-			</div>
-		</form>
 	</li>
 </ul>
 {{end}}

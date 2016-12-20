@@ -117,14 +117,14 @@ a {
 	list-style: none;
 	margin: 0;
 	right: 0;
-	width: 100px;
+	width: 50%;
 }
 .user-menu:focus li, .user-menu-active li {
 	position:relative;
 	padding: 5px;
 	background: cornsilk;
 }
-.user-menu ul li:focus {
+.user-menu ul li:hover {
 	background: lightsteelblue;
 }
 .arrow-left {
@@ -159,9 +159,13 @@ a {
 	border-color: blue;
 	background-color: lightsteelblue;
 }
-.header{
+.header {
 	padding: 1em;
 	position: relative;
+	background: lightsteelblue;
+}
+.header a {
+	color: black;
 }
 .header-section {
 	display: inline-block;
@@ -199,10 +203,11 @@ a {
 	padding-bottom: 10px;
 }
 .nav {
-	background: lightsteelblue;
+	background: cornsilk;
 	float: left;
 	width: 100%;
 	padding: 0;
+	margin: 0;
 }	
 .nav li, .nav li li {
 	float: left;
@@ -210,6 +215,9 @@ a {
 	width: 150px;
 	list-style: none;
 	padding: 5px
+}
+.nav > li {
+  float: right;
 }
 .nav li li li {
 	padding: 14px;
@@ -231,6 +239,7 @@ a {
 	padding: 0;
 }	
 .nav ul {
+	background: #ddd;
 	left: 0;
 }
 .nav ul ul {
@@ -247,7 +256,7 @@ a {
 .nav li li:hover, nav li li:hover li {
 	background: #bbb;
 }	
-.nav li li li:hover {
+.nav li li li:hover, .nav li li li:focus {
 	background: #999;
 }	
 .nav li:hover > ul,.user-menu:focus > ul, .user-menu-active > ul {
@@ -271,6 +280,7 @@ a {
 	outline: none;
 }
 .footer {
+	background: lightsteelblue;
 	bottom: 0;
 	position: fixed;
 	text-align: center;
@@ -283,7 +293,13 @@ a {
 }
 
 /* mobile styles */
-@media only screen and ( max-width: 40em ) /* 640 */ {
+@media only screen and ( max-width:1100px ) {
+	.user-menu ul {
+		width: 100%;
+	}
+	.user-menu a {
+		margin: 0 0 25px;
+	}
 	.header {
 		height: 60px;
 		background: lightsteelblue;
@@ -295,7 +311,47 @@ a {
 	.header-links {
 		display: none;
 	}
-	.nav {
-		display: none;
+	.nav-hidden {
+		visibility: hidden;
+		position: absolute;
+		top: 100%;
+		visibility: hidden;
+		opacity: 0;
+		padding: 0;
 	}
+	.nav {
+		visibility: visible;
+	}
+  .nav ul {
+	  visibility: visible;
+	}	
+	.nav ul, .nav li, .nav li li, .nav a, .nav #searchfield, .nav #searchform {
+		float: right;
+		width: 100%;
+		padding: 5px 0 0;
+	}
+ .nav ul ul, .nav ul ul li {
+	 width: 100%;
+	 padding: 0;
+	 position: static;
+ }
+ .nav .categories {
+	 background: #ddd;
+	 text-align: center;
+ }
+ .nav .categories ul .category-dropdown {
+	 display: block;
+ }
+ .nav .categories ul .category-hidden {
+	 display: none;
+ }
+ .footer {
+	 height: 55px;
+	 background: #ddd;
+	 vertical-align: bottom;
+ }
+ .footer li {
+	 width: 25%;
+	 display: inline-block;
+ }
 }

@@ -1,7 +1,7 @@
 {{ define "header" }}
 <div class="header">
-	<div class="header-section">
-		<a href="/index.html">SFWAR Resource Guide</a>
+	<div class="header-section logo">
+		<a>SFWAR Resource Guide</a>
 	</div>
 	<div class="header-section">
 		<div class="header-links">
@@ -11,7 +11,7 @@
 	<div class="header-section">
 		{{if .DecodedCookie.IsAuthed}}
 		{{with .DecodedCookie}}
-		<div class="user-menu"><a>Welcome {{.DisplayName}}</a>
+		<div class="user-menu"><a>{{.DisplayName}}</a>
 			<ul>
 				<a onclick="clearSessionCookie();"><li>Sign out</li></a>
 				<a href="/usermgt/changepasswd.html"><li>Change Password</li></a>
