@@ -4,7 +4,8 @@
 function toggleCategoryOption() {
   var el = document.getElementById('query_field');
   var searchText = el.value;
-  var optionValue = this.children[0].value;
+  var optionValue = this.textContent;
+  console.log(optionValue, this);
   var re = new RegExp('\\b(' + optionValue + ')\\b', 'gi');
   var stringToReplace = optionValue.concat(', ');
 
@@ -26,7 +27,7 @@ function toggleCategoryOption() {
     };
     hbox.appendChild(btn);
     if(searchText.length > 0) {
-      el.value = searchText.concat(', ',this.children[0].value);
+      el.value = searchText.concat(', ', optionValue);
     } else {
       el.value = optionValue;
     }
@@ -55,6 +56,7 @@ function toggleHiddenNav() {
     navbar.classList.value = classes.join(' ');
   }
 }
+
 // toggleHiddenCategory adds or removes hidden from category on mobile
 function toggleHiddenCategory() {
   var category = this.children[1];
@@ -66,6 +68,19 @@ function toggleHiddenCategory() {
     category.classList.value = classes.join(' ');
   }
 }
+
+// revealUl adds hover class
+function revealUl() {
+  var classes = this.classList.value.split(' ');
+  classes.push('hover');
+  this.classList.value = classes.join(' ');
+};
+
+// hideUl removes hover class
+function hideUl() {
+  this.classList.toggle('hover');
+}
+
 // addEventListener attaches toggleCategoryOption to the checkboxes
 function addEventListener(el, eventName, handler) {
   eventName.preventDefault ? eventName.preventDefault() : (eventName.returnValue = false);
@@ -81,13 +96,18 @@ function addEventListener(el, eventName, handler) {
 // attachToggles attaches event listener to each category option
 function attachToggles() {
   addEventListener(document.getElementsByClassName('logo')[0], 'click', toggleHiddenNav);
-  var togglePairs = [['category', toggleHiddenCategory],
+  var clickPairs = [['category', toggleHiddenCategory],
                      ['user-menu', toggleActiveClass],
                      ['category-option', toggleCategoryOption]];
-  for(var i = 0 ; i < togglePairs.length; i++) {
-    var trigger = document.getElementsByClassName(togglePairs[i][0]);
+  var mouseListeners = document.getElementsByTagName('li');
+  for(var m = 0; m < mouseListeners.length; m++){
+    addEventListener(mouseListeners[m], 'mouseenter', revealUl);
+    addEventListener(mouseListeners[m], 'mouseleave', hideUl); 
+  }
+  for(var i = 0 ; i < clickPairs.length; i++) {
+    var trigger = document.getElementsByClassName(clickPairs[i][0]);
     for(var j = 0; j < trigger.length; j++){
-      addEventListener(trigger[j], 'click', togglePairs[i][1]);
+      addEventListener(trigger[j], 'click', clickPairs[i][1]);
     }
   }
 }
