@@ -293,7 +293,7 @@ a {
 }
 
 /* mobile styles */
-@media only screen and ( max-width:1100px ) {
+@media only screen and ( max-width:800px ) {
 	.user-menu ul {
 		width: 100%;
 	}
@@ -353,5 +353,15 @@ a {
  .footer li {
 	 width: 25%;
 	 display: inline-block;
+ }
+ .buttonbar .button {
+	 margin: 3px;
+ }
+ .buttonbar .button, .buttonbar .button select, .buttonbar .button option, .buttonbar .button input {
+	 font-size: 10px;
+ }
+ .buttonbar .picker {
+	 font-size: 10px;
+	 margin-right: 10px;
  }
 }
