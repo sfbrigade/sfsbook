@@ -47,7 +47,7 @@ function toggleActiveClass() {
 
 // toggleHiddenNav adds or removes hidden from nav on mobile
 function toggleHiddenNav() {
-  var navbar = document.querySelectorAll('nav')[0];
+  var navbar = document.querySelectorAll(".nav")[0];
   if(navbar.classList.length > 1) {
     navbar.classList.toggle('nav-hidden');
   } else {
@@ -96,10 +96,11 @@ function addEventListener(el, eventName, handler) {
 
 // attachToggles attaches event listener to each category option
 function attachToggles() {
-  addEventListener(document.querySelectorAll('logo')[0], 'click', toggleHiddenNav);
-  var clickPairs = [['category', toggleHiddenCategory],
-                     ['user-menu', toggleActiveClass],
-                     ['category-option', toggleCategoryOption]];
+  console.log(document.querySelectorAll(".logo")[0]);
+  addEventListener(document.querySelectorAll(".logo")[0], 'click', toggleHiddenNav);
+  var clickPairs = [[".category", toggleHiddenCategory],
+                     [".user-menu", toggleActiveClass],
+                     [".category-option", toggleCategoryOption]];
   var mouseListeners = document.getElementsByTagName('li');
   for(var m = 0; m < mouseListeners.length; m++) {
     addEventListener(mouseListeners[m], 'mouseenter', revealUl);
