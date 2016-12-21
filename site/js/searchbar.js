@@ -48,6 +48,7 @@ function toggleActiveClass() {
 // toggleHiddenNav adds or removes hidden from nav on mobile
 function toggleHiddenNav() {
   var navbar = document.getElementsByClassName('nav')[0];
+  console.log('firing');
   if(navbar.classList.length > 1) {
     navbar.classList.toggle('nav-hidden');
   } else {
@@ -60,6 +61,7 @@ function toggleHiddenNav() {
 // toggleHiddenCategory adds or removes hidden from category on mobile
 function toggleHiddenCategory() {
   var category = this.children[1];
+  console.log('cat');
   if(category.classList.length > 1){
     category.classList.toggle('category-hidden');
   } else {
@@ -84,6 +86,7 @@ function hideUl() {
 // addEventListener attaches toggleCategoryOption to the checkboxes
 function addEventListener(el, eventName, handler) {
   eventName.preventDefault ? eventName.preventDefault() : (eventName.returnValue = false);
+  eventName.stopPropagation ? eventName.stopPropagation() : (eventName.cancelBubble = true);
   if (el.addEventListener) {
     el.addEventListener(eventName, handler);
   } else {
