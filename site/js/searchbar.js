@@ -10,8 +10,8 @@ function toggleCategoryOption() {
   var stringToReplace = optionValue.concat(', ');
 
   if(!searchText.match(stringToReplace) && !searchText.match(re)) {
-    var hbox = document.querySelectorAll('hbox')[0];
-    var btn = document.createElement("BUTTON");
+    var hbox = document.querySelectorAll('.hbox')[0];
+    var btn = document.createElement('BUTTON');
     btn.value = optionValue;
     var t = document.createTextNode(optionValue);
     btn.appendChild(t);
@@ -26,8 +26,8 @@ function toggleCategoryOption() {
       this.remove();
     };
     hbox.appendChild(btn);
-    if(searchText.length > 0) {
-      el.value = searchText.concat(', ', optionValue);
+    if (searchText.length > 0) {
+      el.value = searchText.concat(' ', optionValue);
     } else {
       el.value = optionValue;
     }
@@ -47,8 +47,8 @@ function toggleActiveClass() {
 
 // toggleHiddenNav adds or removes hidden from nav on mobile
 function toggleHiddenNav() {
-  var navbar = document.querySelectorAll(".nav")[0];
-  if(navbar.classList.length > 1) {
+  var navbar = document.querySelectorAll('.nav')[0];
+  if (navbar.classList.length > 1) {
     navbar.classList.toggle('nav-hidden');
   } else {
     var classes = navbar.classList.value.split(' ');
@@ -60,7 +60,7 @@ function toggleHiddenNav() {
 // toggleHiddenCategory adds or removes hidden from category on mobile
 function toggleHiddenCategory() {
   var category = this.children[1];
-  if(category.classList.length > 1) {
+  if (category.classList.length > 1) {
     category.classList.toggle('category-hidden');
   } else {
     var classes = category.classList.value.split(' ');
@@ -83,8 +83,10 @@ function hideUl() {
 
 // addEventListener attaches toggleCategoryOption to the checkboxes
 function addEventListener(el, eventName, handler) {
-  eventName.preventDefault ? eventName.preventDefault() : (eventName.returnValue = false);
-  eventName.stopPropagation ? eventName.stopPropagation() : (eventName.cancelBubble = true);
+  eventName.preventDefault ? eventName.preventDefault() :
+  (eventName.returnValue = false);
+  eventName.stopPropagation ? eventName.stopPropagation() :
+  (eventName.cancelBubble = true);
   if (el.addEventListener) {
     el.addEventListener(eventName, handler);
   } else {
@@ -96,19 +98,19 @@ function addEventListener(el, eventName, handler) {
 
 // attachToggles attaches event listener to each category option
 function attachToggles() {
-  console.log(document.querySelectorAll(".logo")[0]);
-  addEventListener(document.querySelectorAll(".logo")[0], 'click', toggleHiddenNav);
-  var clickPairs = [[".category", toggleHiddenCategory],
-                     [".user-menu", toggleActiveClass],
-                     [".category-option", toggleCategoryOption]];
+  addEventListener(document.querySelectorAll('.logo')[0], 'click',
+  toggleHiddenNav);
+  var clickPairs = [['.category', toggleHiddenCategory],
+                     ['.user-menu', toggleActiveClass],
+                     ['.category-option', toggleCategoryOption]];
   var mouseListeners = document.getElementsByTagName('li');
-  for(var m = 0; m < mouseListeners.length; m++) {
+  for (var m = 0; m < mouseListeners.length; m++) {
     addEventListener(mouseListeners[m], 'mouseenter', revealUl);
     addEventListener(mouseListeners[m], 'mouseleave', hideUl);
   }
-  for(var i = 0; i < clickPairs.length; i++) {
+  for (var i = 0; i < clickPairs.length; i++) {
     var trigger = document.querySelectorAll(clickPairs[i][0]);
-    for(var j = 0; j < trigger.length; j++) {
+    for (var j = 0; j < trigger.length; j++) {
       addEventListener(trigger[j], 'click', clickPairs[i][1]);
     }
   }

@@ -332,6 +332,7 @@ a {
   }
   .nav .categories ul .category-dropdown {
     display: block;
+    margin: -1px 0;
   }
   .nav .categories ul .category-hidden {
     display: none;
@@ -364,6 +365,9 @@ a {
     margin: -1px 0;
   }
   .nav .categories .category-option {
-    padding: 0;
+    padding: .4em 0;
+  }
+  .nav .category {
+    margin: -1px 0;
   }
 }
