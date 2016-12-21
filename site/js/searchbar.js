@@ -17,7 +17,11 @@ function toggleCategoryOption() {
     btn.appendChild(t);
     var updateInsert = function(buttonValue) {
       var searchfield = document.getElementById('query_field');
-      searchfield.value = searchfield.value.replace(buttonValue, '');
+      if (searchfield.value.match(buttonValue.concat(', '))) {
+        searchfield.value = searchfield.value.replace(buttonValue.concat(', '), '');
+      } else {
+        searchfield.value = searchfield.value.replace(buttonValue, '');
+      }
     };
     btn.onclick = function(event) {
       event.preventDefault();
@@ -27,7 +31,7 @@ function toggleCategoryOption() {
     };
     hbox.appendChild(btn);
     if (searchText.length > 0) {
-      el.value = searchText.concat(' ', optionValue);
+      el.value = searchText.concat(', ', optionValue);
     } else {
       el.value = optionValue;
     }
