@@ -10,7 +10,7 @@ function toggleCategoryOption() {
   var stringToReplace = optionValue.concat(', ');
 
   if(!searchText.match(stringToReplace) && !searchText.match(re)) {
-    var hbox = document.getElementsByClassName('hbox')[0];
+    var hbox = document.querySelectorAll('hbox')[0];
     var btn = document.createElement("BUTTON");
     btn.value = optionValue;
     var t = document.createTextNode(optionValue);
@@ -47,7 +47,7 @@ function toggleActiveClass() {
 
 // toggleHiddenNav adds or removes hidden from nav on mobile
 function toggleHiddenNav() {
-  var navbar = document.getElementsByClassName('nav')[0];
+  var navbar = document.querySelectorAll('nav')[0];
   if(navbar.classList.length > 1) {
     navbar.classList.toggle('nav-hidden');
   } else {
@@ -96,7 +96,7 @@ function addEventListener(el, eventName, handler) {
 
 // attachToggles attaches event listener to each category option
 function attachToggles() {
-  addEventListener(document.getElementsByClassName('logo')[0], 'click', toggleHiddenNav);
+  addEventListener(document.querySelectorAll('logo')[0], 'click', toggleHiddenNav);
   var clickPairs = [['category', toggleHiddenCategory],
                      ['user-menu', toggleActiveClass],
                      ['category-option', toggleCategoryOption]];
@@ -106,7 +106,7 @@ function attachToggles() {
     addEventListener(mouseListeners[m], 'mouseleave', hideUl);
   }
   for(var i = 0; i < clickPairs.length; i++) {
-    var trigger = document.getElementsByClassName(clickPairs[i][0]);
+    var trigger = document.querySelectorAll(clickPairs[i][0]);
     for(var j = 0; j < trigger.length; j++) {
       addEventListener(trigger[j], 'click', clickPairs[i][1]);
     }
