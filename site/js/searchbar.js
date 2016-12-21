@@ -59,7 +59,8 @@ function toggleHiddenNav() {
 
 // toggleHiddenCategory adds or removes hidden from category on mobile
 function toggleHiddenCategory() {
-  var category = this.children[1];
+  console.log('in hidden', this);
+  var category = this.parentElement.children[1];
   if (category.classList.length > 1) {
     category.classList.toggle('category-hidden');
   } else {
@@ -100,7 +101,7 @@ function addEventListener(el, eventName, handler) {
 function attachToggles() {
   addEventListener(document.querySelectorAll('.logo')[0], 'click',
   toggleHiddenNav);
-  var clickPairs = [['.category', toggleHiddenCategory],
+  var clickPairs = [['.expandtab', toggleHiddenCategory],
                      ['.user-menu', toggleActiveClass],
                      ['.category-option', toggleCategoryOption]];
   var mouseListeners = document.getElementsByTagName('li');
