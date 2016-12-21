@@ -319,7 +319,7 @@ a {
   .nav ul, .nav li, .nav li li, .nav a, .nav #searchfield, .nav #searchform {
     float: right;
     width: 100%;
-    padding: 5px 0 0;
+    padding: 0;
   }
   .nav ul ul, .nav ul ul li {
     width: 100%;
@@ -358,5 +358,11 @@ a {
   .nav .hover ul {
     visibility: visible;
     opacity: 1;
+  }
+  .nav .categories a {
+    padding: 0;
+  }
+  .nav .categories .category-option {
+    padding: 0;
   }
 }
