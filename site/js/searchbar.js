@@ -15,11 +15,11 @@ function toggleCategoryOption() {
     btn.value = optionValue;
     var t = document.createTextNode(optionValue);
     btn.appendChild(t);
-    var updateInsert = function(buttonValue){
+    var updateInsert = function(buttonValue) {
       var searchfield = document.getElementById('query_field');
       searchfield.value = searchfield.value.replace(buttonValue, '');
     };
-    btn.onclick = function(event){
+    btn.onclick = function(event) {
       event.preventDefault();
       event.stopPropagation();
       updateInsert(this.value);
@@ -48,7 +48,6 @@ function toggleActiveClass() {
 // toggleHiddenNav adds or removes hidden from nav on mobile
 function toggleHiddenNav() {
   var navbar = document.getElementsByClassName('nav')[0];
-  console.log('firing');
   if(navbar.classList.length > 1) {
     navbar.classList.toggle('nav-hidden');
   } else {
@@ -61,8 +60,7 @@ function toggleHiddenNav() {
 // toggleHiddenCategory adds or removes hidden from category on mobile
 function toggleHiddenCategory() {
   var category = this.children[1];
-  console.log('cat');
-  if(category.classList.length > 1){
+  if(category.classList.length > 1) {
     category.classList.toggle('category-hidden');
   } else {
     var classes = category.classList.value.split(' ');
@@ -76,7 +74,7 @@ function revealUl() {
   var classes = this.classList.value.split(' ');
   classes.push('hover');
   this.classList.value = classes.join(' ');
-};
+}
 
 // hideUl removes hover class
 function hideUl() {
@@ -90,7 +88,7 @@ function addEventListener(el, eventName, handler) {
   if (el.addEventListener) {
     el.addEventListener(eventName, handler);
   } else {
-    el.attachEvent('on' + eventName, function(){
+    el.attachEvent('on' + eventName, function() {
       handler.call(el);
     });
   }
@@ -103,13 +101,13 @@ function attachToggles() {
                      ['user-menu', toggleActiveClass],
                      ['category-option', toggleCategoryOption]];
   var mouseListeners = document.getElementsByTagName('li');
-  for(var m = 0; m < mouseListeners.length; m++){
+  for(var m = 0; m < mouseListeners.length; m++) {
     addEventListener(mouseListeners[m], 'mouseenter', revealUl);
-    addEventListener(mouseListeners[m], 'mouseleave', hideUl); 
+    addEventListener(mouseListeners[m], 'mouseleave', hideUl);
   }
-  for(var i = 0 ; i < clickPairs.length; i++) {
+  for(var i = 0; i < clickPairs.length; i++) {
     var trigger = document.getElementsByClassName(clickPairs[i][0]);
-    for(var j = 0; j < trigger.length; j++){
+    for(var j = 0; j < trigger.length; j++) {
       addEventListener(trigger[j], 'click', clickPairs[i][1]);
     }
   }
@@ -117,7 +115,7 @@ function attachToggles() {
 
 // ready calls addEventListener once the page has loaded
 function ready(fn) {
-  if (document.readyState != 'loading'){
+  if (document.readyState != 'loading') {
     fn();
   } else if (document.addEventListener) {
     document.addEventListener('DOMContentLoaded', fn);
@@ -125,10 +123,10 @@ function ready(fn) {
     document.attachEvent('onreadystatechange', function() {
       if (document.readyState != 'loading') {
         fn();
-      }  
+      }
     });
   }
 }
 
-//calls ready function with attachToggles
+// calls ready function with attachToggles
 ready(attachToggles);
