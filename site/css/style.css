@@ -144,6 +144,7 @@ a {
   box-shadow: none;
   border-radius: none;
   background: white;
+  display: none;
 }
 .hbox > * {
   display:table-cell;
@@ -261,7 +262,6 @@ a {
   width: 75%;
 }
 #searchfield input {
-  display: none;
   margin: 0;
   width: 100%;
   font-family: sans-serif;
@@ -288,6 +288,12 @@ a {
 
 /* mobile styles */
 @media only screen and ( max-width:800px ) {
+  #searchfield input {
+    display: none;
+  }
+  .hbox {
+    display: block;
+  }
   .user-menu ul {
     width: 100%;
   }
