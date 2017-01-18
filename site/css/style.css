@@ -279,6 +279,10 @@ a {
   visibility: visible;
   opacity: 1;
 }
+.notification {
+  background: gold;
+  text-align: center;
+}
 #searchfield {
   width: 75%;
 }

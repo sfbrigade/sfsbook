@@ -12,7 +12,7 @@
 		{{with .Results}}
 
 		{{if .Useradded}}
-		<p>{{.Username}} successfully added.</p>
+    <p class="notification">{{.Username}} successfully added.</p>
 		{{else if .Usernotadded}}
 
 		{{.Diagnosticmessage}}
@@ -54,7 +54,7 @@
 		{{end}} {{/* if .Useradded */}}
 		{{end}} {{/* with .Results  */}}
 		{{else}} {{/* if .DecodedCookie.HasCapabilityIniviteUsers */}}
-		<p>You aren't signed with the right to add users. <a href="/login.html">Sign-in</a> as an administrative user.</p>
+		<p class="notification">You aren't signed with the right to add users. <a href="/login.html">Sign-in</a> as an administrative user.</p>
 		{{end}} {{/* if .DecodedCookie.HasCapabilityViewUsers */}}
 		{{ template "footer" . }}
 	</body>
