@@ -10,14 +10,14 @@ function toggleCategoryOption() {
   var stringToReplace = optionValue.concat(', ');
 
   if(!searchText.match(stringToReplace) && !searchText.match(re)) {
-    var hbox = document.querySelectorAll('.hbox')[0];
+    /*var hbox = document.querySelectorAll('.hbox')[0];
     var btn = document.createElement('BUTTON');
     btn.value = optionValue;
     var t = document.createTextNode(optionValue);
     btn.appendChild(t);
     var updateInsert = function(buttonValue) {
       var searchfield = document.getElementById('query_field');
-      if (searchfield.value.match(buttonValue.concat(', '))) {
+      if (searchfield.value.match(optionValue.concat(', '))) {
         searchfield.value = searchfield.value.replace(buttonValue.concat(', '), '');
       } else {
         searchfield.value = searchfield.value.replace(buttonValue, '');
@@ -29,7 +29,7 @@ function toggleCategoryOption() {
       updateInsert(this.value);
       this.remove();
     };
-    hbox.appendChild(btn);
+    hbox.appendChild(btn);*/
     if (searchText.length > 0) {
       el.value = searchText.concat(', ', optionValue);
     } else {
@@ -49,7 +49,7 @@ function toggleActiveClass() {
   }
 }
 
-// toggleHiddenNav adds or removes hidden from nav on mobile
+/* toggleHiddenNav adds or removes hidden from nav on mobile
 function toggleHiddenNav() {
   var navbar = document.querySelectorAll('.nav')[0];
   if (navbar.classList.length > 1) {
@@ -60,7 +60,7 @@ function toggleHiddenNav() {
     navbar.classList.value = classes.join(' ');
   }
 }
-
+*/
 // toggleHiddenCategory adds or removes hidden from category on mobile
 function toggleHiddenCategory() {
   console.log('in hidden', this);
@@ -103,8 +103,8 @@ function addEventListener(el, eventName, handler) {
 
 // attachToggles attaches event listener to each category option
 function attachToggles() {
-  addEventListener(document.querySelectorAll('.logo')[0], 'click',
-  toggleHiddenNav);
+/*addEventListener(document.querySelectorAll('.logo')[0], 'click',
+  toggleHiddenNav);*/
   var clickPairs = [['.expandtab', toggleHiddenCategory],
                      ['.user-menu', toggleActiveClass],
                      ['.category-option', toggleCategoryOption]];
