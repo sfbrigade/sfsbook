@@ -28,10 +28,10 @@ func testHelper() func() {
 
 	Resources = map[string]string{
 		"/usermgt/changepasswd.html": embeddedResourceForUsermgt,
-    "/head.html": "",
-    "/header.html": "",
-    "/searchbar.html": "",
-    "/footer.html": "",
+		"/head.html":                 "",
+		"/header.html":               "",
+		"/searchbar.html":            "",
+		"/footer.html":               "",
 	}
 
 	return func() { Resources = stashedResources }

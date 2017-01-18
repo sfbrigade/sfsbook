@@ -90,7 +90,6 @@ th {
   text-align: right;
 }
 a {
-  color: 00B398;
   text-decoration: none;
 }
 .results a {
@@ -288,12 +287,12 @@ a {
 
 /* mobile styles */
 @media only screen and ( max-width:800px ) {
-  #searchfield input {
+/* #searchfield input {
     display: none;
   }
   .hbox {
     display: block;
-  }
+  } */
   .user-menu ul {
     width: 100%;
   }
