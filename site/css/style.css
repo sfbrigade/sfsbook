@@ -13,7 +13,7 @@ form {
   padding: 5px;
 }
 h3 {
-  color: 00B398;
+  font-weight: bold;
   display: inline-block;
 }
 .invite {
@@ -43,6 +43,9 @@ table {
   top: 45%;
   left: 75%;
 }
+.header-section a:hover {
+  color: 00B398;
+}
 .resource-details div {
   text-align: left;
   margin:10px 0;
@@ -52,13 +55,22 @@ table {
 .button input {
   border: none;
   outline: none;
-  background:lightsteelblue;
+  background: rgba(0, 179, 152, .8);
   width: 210px;
   border-radius: 3px;
   margin: 5px;
   padding: 5px;
   float: right;
-}	
+}
+.button input:hover {
+  background: rgba(0, 179, 152, 1);
+}
+.secondary input {
+  background: rgba(176,196,222, .8)
+}
+.secondary input:hover {
+  background: rgba(176,196,222, 1);
+}
 textarea {
   border: solid 1px lightgrey;
   display: block;
