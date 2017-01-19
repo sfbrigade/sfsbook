@@ -41,7 +41,7 @@ table {
   border-top: 5px solid #00B398;
   position: absolute;
   top: 45%;
-  left: 75%;
+  left: 83%;
 }
 .header-section a:hover {
   color: 00B398;
@@ -50,8 +50,99 @@ table {
   text-align: left;
   margin:10px 0;
 }
-
-/* page specific styles */
+/* searchbar styles */
+/* search menu styles */
+ul li .dropbtn {
+  height: 57%;
+  padding: 12px 15px 8px 0;
+  text-align: center;
+  background: gold;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+ul li .dropbtn:hover {
+  border-bottom-left-radius: 0;
+}
+/* searchform styles */
+#search-form {
+  position: relative;
+  height: 100%;
+  display: inline-block;
+  width: 90%;
+  line-height: 0px;
+  padding: 0;
+}
+#query_field {
+  position: relative;
+  padding: 0 0 0 10px;
+  border: solid 2px gold;
+  border-left:none;
+  border-right:none;
+	margin: 0;
+  width: 75%;
+  height: 100%;
+  font-family: sans-serif;
+  font-size: 18px;
+  box-shadow: none;
+}
+#query_field:focus {
+  outline: none;
+}
+#searchfield {
+  width: 70%;
+  height: 100%
+}
+.search-submit-container {
+  display: inline-block;
+  width: 40px;
+  margin: 0px -13px;
+  padding: 7px 0 11px 15px;
+  background: gold;
+  position: relative;
+  height: auto;
+  border: solid 2px gold;
+  border-left: none;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+.search-submit {
+  display: inline-block;
+}
+.search-submit-text {
+  text-indent: -9999px;
+  display: inline-block;
+}
+.search-submit-input {
+  background: white;
+  text-indent: -9999px;
+  border: none;
+  display: inline-block;
+  opacity: 0;
+}
+.search-icon {
+ font-size: 1.9em; /* This controls the size. */
+ display: inline-block;
+ width: 0.6em;
+ height: 0.6em;
+ border: 0.1em solid blue;
+ position: relative;
+ border-radius: 0.35em;
+}
+.search-icon::before {
+ content: "";
+ display: inline-block;
+ position: absolute;
+ right: -0.26em;
+ bottom: -0.1em;
+ border-width: 0;
+ background: blue;
+ width: 0.35em;
+ height: 0.1em;
+ -webkit-transform: rotate(45deg);
+    -moz-transform: rotate(45deg);
+     -ms-transform: rotate(45deg);
+      -o-transform: rotate(45deg);
+}
 .button input {
   border: none;
   outline: none;
@@ -230,19 +321,22 @@ a {
   width: 100%;
   padding: 0;
   margin: 0;
+  height: 45px;
 }	
 .nav li, .nav li li {
   float: left;
   position: relative;
   width: 150px;
   list-style: none;
-  padding: 5px
 }
 .nav > li {
   float: right;
+  height: 100%; 
+  padding: 0;
+  background: rgba(0,0,0,0);
 }
 .nav li li li {
-  padding: 14px;
+  padding: 10px;
 }	
 .nav > ul > li > a, h1 {
   text-transform: uppercase;
@@ -250,7 +344,8 @@ a {
 .nav a {
   display: block;
   text-decoration: none;
-  padding: 9px;
+  padding: 10px;
+  height: 100%;
   color: #000;
 }
 .nav ul, .user-menu ul {
@@ -270,7 +365,10 @@ a {
   padding: 0;
 }	
 .nav .hover {
-  background: #bbb;
+//  background: #bbb;
+}
+.nav .hover a {
+  border-bottom-left-radius: 0;
 }
 .nav li li input {
   display: none;
@@ -282,21 +380,6 @@ a {
 .notification {
   background: gold;
   text-align: center;
-}
-#searchfield {
-  width: 75%;
-}
-#searchfield input {
-  margin: 0;
-  width: 100%;
-  font-family: sans-serif;
-  font-size: 18px;
-  appearance: none;
-  box-shadow: none;
-  border-radius: none;
-}
-#searchfield input:focus {
-  outline: none;
 }
 .footer {
   background: lightsteelblue;
@@ -312,13 +395,41 @@ a {
 }
 
 /* mobile styles */
-@media only screen and ( max-width:800px ) {
+@media only screen and (max-width: 885px) {
+  .header-section:first-child + div {
+    visibility: hidden;
+  }
+  .header-links {
+    visibility: hidden;
+  }
+}
+
+@media only screen and ( max-width:500px ) {
 /* #searchfield input {
     display: none;
   }
   .hbox {
     display: block;
   }*/
+  .filter-carrot {
+    top: 47%;
+    left: 66%;
+  }
+  ul li .dropbtn {
+    padding: 12px 15px 8px 0!important;
+  }
+  #search-form {
+    width: 100%;
+  }
+  #query_field {
+    width: 88%;
+    border: solid thick gold;
+    border-left-width: thick;
+  }
+  .search-submit-container {
+    width: 12%;
+    border-radius: 0;
+  }
   .user-menu ul {
     width: 100%;
   }
@@ -329,12 +440,6 @@ a {
     height: 60px;
     background: lightsteelblue;
     padding: 5px;
-  }
-  .header-section:first-child + div {
-    display: none;
-  }
-  .header-links {
-    display: none;
   }
   .nav-hidden {
     visibility: hidden;
