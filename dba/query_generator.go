@@ -3,6 +3,7 @@ package dba
 import (
 	"log"
 	"net/http"
+	"strings"
 
 	"github.com/blevesearch/bleve"
 	"github.com/blevesearch/bleve/search/query"
@@ -24,7 +25,7 @@ type ResourceResult struct {
 	Description string
 	Name        string
 	Services    string
-       Address     string
+	Address     string
 }
 
 type queryResults struct {
@@ -70,16 +71,18 @@ func (qr *QueryResultsGenerator) ForRequest(param interface{}) GeneratedResult {
 	// Actually do a query against the database.
 	// TODO(rjk): Refine the search handling.
 	middleq := make([]query.Query, 0, 5)
-	for _, k := range []string{"description", "services", "categories", "name", "address" } {
-		q := query.NewMatchPhraseQuery(querystring)
-		q.SetField(k)
+	phrases := strings.Split(querystring, ", ")
+	for _, phrase := range phrases {
+		//  for _, k := range []string{"description", "services", "categories", "name", "address" } {
+		q := query.NewMatchPhraseQuery(phrase)
+		//	  q.SetField(k)
 		middleq = append(middleq, q)
+		//  }
 	}
 
-
 	bq := query.NewBooleanQuery(
-		[]query.Query{},
 		middleq,
+		[]query.Query{},
 		[]query.Query{})
 
 	// Makes a search request.
@@ -122,7 +125,7 @@ func (qr *QueryResultsGenerator) ForRequest(param interface{}) GeneratedResult {
 		results.Resources[c].Services = sr.Fields["services"].(string)
 		results.Resources[c].Categories = sr.Fields["categories"].(string)
 		results.Resources[c].Description = sr.Fields["description"].(string)
-               results.Resources[c].Address = sr.Fields["address"].(string)
+		results.Resources[c].Address = sr.Fields["address"].(string)
 
 		c++
 		if c > 10 {
