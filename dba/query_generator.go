@@ -24,6 +24,7 @@ type ResourceResult struct {
 	Description string
 	Name        string
 	Services    string
+       Address     string
 }
 
 type queryResults struct {
@@ -68,8 +69,8 @@ func (qr *QueryResultsGenerator) ForRequest(param interface{}) GeneratedResult {
 
 	// Actually do a query against the database.
 	// TODO(rjk): Refine the search handling.
-	middleq := make([]query.Query, 0, 4)
-	for _, k := range []string{"description", "services", "categories", "name" } {
+	middleq := make([]query.Query, 0, 5)
+	for _, k := range []string{"description", "services", "categories", "name", "address" } {
 		q := query.NewMatchPhraseQuery(querystring)
 		q.SetField(k)
 		middleq = append(middleq, q)
@@ -86,7 +87,7 @@ func (qr *QueryResultsGenerator) ForRequest(param interface{}) GeneratedResult {
 	searchRequest := bleve.NewSearchRequest(bq)
 
 	// Modify the search request to only retrieve some fields.
-	searchRequest.Fields = []string{"name", "categories", "description", "services"}
+	searchRequest.Fields = []string{"name", "categories", "description", "services", "address"}
 	searchRequest.Size = 10
 	// Advance this to move forward through the result set...
 	searchRequest.From = 0
@@ -121,6 +122,7 @@ func (qr *QueryResultsGenerator) ForRequest(param interface{}) GeneratedResult {
 		results.Resources[c].Services = sr.Fields["services"].(string)
 		results.Resources[c].Categories = sr.Fields["categories"].(string)
 		results.Resources[c].Description = sr.Fields["description"].(string)
+               results.Resources[c].Address = sr.Fields["address"].(string)
 
 		c++
 		if c > 10 {
