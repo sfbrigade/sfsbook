@@ -231,6 +231,12 @@
 			"revisionTime": "2016-02-16T16:37:10Z"
 		},
 		{
+			"checksumSHA1": "r9floTSDNy+nWuE25zEoPa7FuPk=",
+			"path": "github.com/rjkroege/mocking",
+			"revision": "1d83045af74674a460477e360f9e97413875a283",
+			"revisionTime": "2016-11-02T13:18:17Z"
+		},
+		{
 			"checksumSHA1": "KE+vv2khbshw+PA9UyHHxd8WKKw=",
 			"path": "github.com/steveyen/gtreap",
 			"revision": "0abe01ef9be25c4aedc174758ec2d917314d6d70",
@@ -271,6 +277,12 @@
 			"path": "golang.org/x/net/context/ctxhttp",
 			"revision": "f2499483f923065a842d38eb4c7f1927e6fc6e6d",
 			"revisionTime": "2017-01-14T04:22:49Z"
+		},
+		{
+			"checksumSHA1": "uTQtOqR0ePMMcvuvAIksiIZxhqU=",
+			"path": "golang.org/x/sys/unix",
+			"revision": "d75a52659825e75fff6158388dddc6a5b04f9ba5",
+			"revisionTime": "2016-12-14T18:38:57Z"
 		}
 	],
 	"rootPath": "github.com/sfbrigade/sfsbook"
