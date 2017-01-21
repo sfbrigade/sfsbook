@@ -72,7 +72,7 @@ a {
   text-decoration: none;
   color: black;
 }
-a:hover {
+a:active {
   color: gold;
 }
 body {
@@ -127,7 +127,7 @@ h3 {
   color: white;
 }
 .escape {
-  background: rgba(255,0,0,0.8);
+  background: rgba(255,0,0,0.7);
 }
 .escape:hover {
   background: rgba(255,0,0,1);
@@ -135,12 +135,15 @@ h3 {
 .escape:hover h3 {
   color: gold;
 }
+.escape:hover h3:nth-child(2) {
+  color: black;
+}
 .header {
   display: inline-block;
   width: 100%;
   padding: 1em;
   position: relative;
-  background: rgba(0,179,152, 0.6);
+  background: rgba(0,179,152, 0.5);
   box-sizing: border-box;
 }
 .header-links div {
@@ -170,7 +173,7 @@ h3 {
   text-align: right;
 }
 .hotline {
-  background: gold;  
+  background: rgba(254,189,52,0.95);
 }
 
 /* nav */
@@ -187,7 +190,7 @@ li:hover > ul {
   height: 55%;
   padding: 12px 15px 8px 0;
   text-align: center;
-  background: gold;
+  background: rgba(176, 196, 222, 1);
   border-top-left-radius: 5px;
   border-bottom-left-radius: 5px;
 }
@@ -232,7 +235,7 @@ li:hover > ul {
   background-color: lightsteelblue;
 }
 .nav {
-  background: lightsteelblue;
+  background: rgba(176, 196, 222, .6);
   float: left;
   width: 100%;
   padding: 0;
@@ -294,7 +297,7 @@ li:hover > ul {
 #query_field {
   position: relative;
   padding: 0 0 0 10px;
-  border: solid 2px gold;
+  border: solid 2px rgba(176, 196, 222, .6);
   border-left:none;
   border-right:none;
   margin: 0;
@@ -325,12 +328,15 @@ li:hover > ul {
   height: 52%;
   margin: 0px -13px;
   padding: 7px 0 11px 15px;
-  background: gold;
+  background: rgba(254,189,52,0.95);
   position: relative;
-  border: solid 2px gold;
+  border: solid 2px rgba(254,189,52,0.95);
   border-left: none;
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
+}
+.search-submit-container:hover {
+  background: rgba(254,189,52,1);
 }
 .search-submit {
   display: inline-block;
@@ -455,12 +461,19 @@ th {
 /* footer */
 
 .footer {
-  background: lightsteelblue;
+  background: #0b2f4f;
   bottom: 0;
   position: fixed;
   text-align: center;
   margin-bottom: 0;
   padding: 0;
+}
+.footer .categories a {
+  color: #d7e5f0;
+  opacity: 0.75;
+}
+.footer .categories a:hover {
+  opacity: 1;
 }
 .footer li {
   width: 25%;
@@ -571,7 +584,7 @@ ul li .dropbtn {
 }
 .footer {
   height: 55px;
-  background: #ddd;
+  background: #114956;
   vertical-align: bottom;
 }
 .footer li {
@@ -592,7 +605,7 @@ ul li .dropbtn {
   visibility: visible;
   opacity: 1;
 }
-.nav .categories a {
+.nav .dropbtn {
   padding: .4em 0;
   margin: -1px 0;
 }
