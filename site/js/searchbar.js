@@ -107,14 +107,14 @@ function attachToggles() {
 
 // ready calls addEventListener once the page has loaded
 function ready(fn) {
-  var txt;
-  var r = confirm("Safety Alert: Computer use can be monitored and is impossible to completely clear. If you are afraid your internet usage might be monitored, call the SFWAR Hotline at 415-647-7273. Would you like to exit this site?");
-  if (r == true) {
+  if(document.referrer.indexOf('localhost') === -1) {
+  var response = confirm("Safety Alert: Computer use can be monitored and is impossible to completely clear. If you are afraid your internet usage might be monitored, exit this site and call the SFWAR Hotline at 415-647-7273. Would you like to exit this site?");
+  if (response === true) {
     window.location.replace('https://weather.com/');
   } else {
     txt = "You pressed Cancel!";
     }
-
+  }
   if (document.readyState != 'loading') {
     fn();
   } else if (document.addEventListener) {
