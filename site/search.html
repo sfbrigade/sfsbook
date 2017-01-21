@@ -1,25 +1,27 @@
 <html>
-	{{ template "head" . }}
-	<body>
+  {{ template "head" . }}
+  <body>
+    <div class='container'>
 
-		{{ template "header" .}}
-		{{ template "searchbar" . }}
-		{{with .Results}}
+      {{ template "header" .}}
+      {{ template "searchbar" . }}
+      {{with .Results}}
 
-		<ul class='results'>
-			<h3>Results for: {{.Query}}</h3>
-			{{range .Resources}}
-			<li>
-				<ul class='result'>
-					<li><a href="/resources/{{.Uuid}}.html">{{.Name}}</a></li>
-					<li>{{.Categories}}</li>
-					<li>{{.Services}}</li>
-					<li>{{.Description}}</a></li>
-				</ul>
-			</li>
-			{{end}}
-		</ul>
-		{{end}}
-		{{ template "footer" .}}
-	</body>
+      <ul class='results'>
+        <h3>Results for: {{.Query}}</h3>
+        {{range .Resources}}
+        <li>
+          <ul class='result'>
+            <li><a href="/resources/{{.Uuid}}.html">{{.Name}}</a></li>
+            <li>{{.Categories}}</li>
+            <li>{{.Services}}</li>
+            <li>{{.Description}}</a></li>
+          </ul>
+        </li>
+        {{end}}
+      </ul>
+      {{end}}
+      {{ template "footer" .}}
+    </div>
+  </body>
 </html>
