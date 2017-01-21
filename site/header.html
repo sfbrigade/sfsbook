@@ -1,17 +1,21 @@
 {{ define "header" }}
 <div class="header">
 	<div class="header-section logo">
-		<a href="/index.html" >SFWAR Resource Guide</a>
+		<a href="/index.html" >
+      <h1>SFWAR Resource Guide</h1>
+    </a>
 	</div>
 	<div class="header-section">
 		<div class="header-links">
       <div class="escape">
-        <a href="https://weather.com/"><span> << ESCAPE >> </span>
-          <span> click here to leave this site </span></a>
+        <a href="https://weather.com/">
+          <h3> << ESCAPE >> </h3>
+          <h3> click here to leave this site </h3>
+        </a>
       </div>
       <div class="hotline">
-        <span>415-647-7273</span>
-        <span> Get Help Now </span>
+        <h3>415-647-7273</h3>
+        <h3> Get Help Now </h3>
       </div>
 		</div>
 	</div>
@@ -29,7 +33,7 @@
 			</ul>
 		</div>
 		{{else}}
-		<span>You are not signed in. <a href="/login.html">Login?</a></span>
+    <a href="/login.html"><h2>Sign in</h2></a>
 		{{end}}
 	</div>
 </div>

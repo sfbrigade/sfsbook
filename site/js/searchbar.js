@@ -74,17 +74,6 @@ function toggleHiddenCategory() {
   }
 }
 
-// revealUl adds hover class
-function revealUl() {
-  var classes = this.classList.value.split(' ');
-  classes.push('hover');
-  this.classList.value = classes.join(' ');
-}
-
-// hideUl removes hover class
-function hideUl() {
-  this.classList.toggle('hover');
-}
 
 // addEventListener attaches toggleCategoryOption to the checkboxes
 function addEventListener(el, eventName, handler) {
@@ -108,11 +97,6 @@ function attachToggles() {
   var clickPairs = [['.expandtab', toggleHiddenCategory],
                      ['.user-menu', toggleActiveClass],
                      ['.category-option', toggleCategoryOption]];
-  var mouseListeners = document.getElementsByTagName('li');
-  for (var m = 0; m < mouseListeners.length; m++) {
-    addEventListener(mouseListeners[m], 'mouseenter', revealUl);
-    addEventListener(mouseListeners[m], 'mouseleave', hideUl);
-  }
   for (var i = 0; i < clickPairs.length; i++) {
     var trigger = document.querySelectorAll(clickPairs[i][0]);
     for (var j = 0; j < trigger.length; j++) {
