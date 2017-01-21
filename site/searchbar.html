@@ -1,32 +1,18 @@
 {{ define "searchbar" }}
-<ul class='nav'>
-	<li id='searchfield'>
-		<form id='search-form' action='/search.html' method='get'>
-			<input type='text' id='query_field' name='query'/>
-      <div class='search-submit-container'>
-        <div class='search-icon-container'>
-          <div class='search-icon'>
-            <span class='search-submit-text'>Search</span>
-            <input type='submit' class='search-submit-input'/>
-          </div>
-        </div>
-        </div>
-      </div>
-    </form>
-	</li>
-	<li class='categories'>
-		<a class='dropbtn'>All Resources
+<div class='nav'>
+  <div class='categories'>
+    <a class='dropbtn'>All Resources
       <span class='filter-carrot'></span>
     </a>
-		<ul>
-			<li class='category'>
-				<a class='expandtab' href='#'>Locations</a>
-				<ul class='category-dropdown category-hidden'>
+    <ul>
+      <li class='category'>
+        <a class='expandtab' href='#'>Locations</a>
+        <ul class='category-dropdown category-hidden'>
           <li class='category-option'>Berkeley</li>
           <li class='category-option'>Oakland</li>
           <li class='category-option'>San Francisco</li>
-				</ul>
-			</li>
+        </ul>
+      </li>
       <li class='category'>
         <a class='expandtab' href='#'>Issues</a>
         <ul class='category-dropdown category-hidden'>
@@ -35,31 +21,45 @@
           <li class='category-option'>Sexual Abuse</li>
           <li class='category-option'>Substance Abuse</li>
         </ul>
-			<li class='category'>
-				<a class='expandtab' href='#'>Services</a>
-				<ul class='category-dropdown category-hidden'>
-					<li class='category-option'>Legal</li>
-          <li class='category-option'>Counseling</li>
-          <li class='category-option'>Emergency Funds</li>
-          <li class='category-option'>Housing</li>
-          <li class='category-option'>Self Defense</li>
-				</ul>
-			</li>
-			<li class='category'>
-				<a class='expandtab' href='#'>Communities</a>
-				<ul class='category-dropdown category-hidden'>
-					<li class='category-option'>Asian</li>
-          <li class='category-option'>Disabled</li>
-          <li class='category-option'>Elderly</li>
-          <li class='category-option'>HIV/AIDS</li>
-          <li class='category-option'>Homeless</li>
-          <li class='category-option'>Immigrant</li>
-          <li class='category-option'>Latina</li>
-          <li class='category-option'>LGBT</li>
-          <li class='category-option'>Sex workers</li>
-          <li class='category-option'>Youth</li>
-				</ul> </li>
-		</ul>
-	</li>
-</ul>
+        <li class='category'>
+          <a class='expandtab' href='#'>Services</a>
+          <ul class='category-dropdown category-hidden'>
+            <li class='category-option'>Legal</li>
+            <li class='category-option'>Counseling</li>
+            <li class='category-option'>Emergency Funds</li>
+            <li class='category-option'>Housing</li>
+            <li class='category-option'>Self Defense</li>
+          </ul>
+        </li>
+        <li class='category'>
+          <a class='expandtab' href='#'>Communities</a>
+          <ul class='category-dropdown category-hidden'>
+            <li class='category-option'>Asian</li>
+            <li class='category-option'>Disabled</li>
+            <li class='category-option'>Elderly</li>
+            <li class='category-option'>HIV/AIDS</li>
+            <li class='category-option'>Homeless</li>
+            <li class='category-option'>Immigrant</li>
+            <li class='category-option'>Latina</li>
+            <li class='category-option'>LGBT</li>
+            <li class='category-option'>Sex workers</li>
+            <li class='category-option'>Youth</li>
+          </ul> 
+        </li>
+    </ul>
+  </div>
+  <div id='searchfield'>
+    <form id='search-form' action='/search.html' method='get'>
+      <input type='text' id='query_field' name='query'/>
+      <div class='search-submit-container'>
+        <div class='search-icon-container'>
+          <div class='search-icon'>
+            <span class='search-submit-text'>Search</span>
+            <input type='submit' class='search-submit-input'/>
+          </div>
+        </div>
+      </div>
+  </div>
+    </form>
+</div>
 {{end}}
