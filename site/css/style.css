@@ -76,10 +76,14 @@ a:active {
   color: gold;
 }
 body, html {
+  height: 100%;
   width: 100%;
   font-family: 'Source Sans Pro', sans-serif;
   font-weight: bold;
   margin: 0;
+}
+body {
+  min-height: 100%;
 }
 form {
   margin: 0;
@@ -88,6 +92,10 @@ form {
 input {
   width: 100%;
   font-size: 16px;
+}
+.container {
+  min-height: 100%;
+  position: relative;
 }
 .result li, .results td {
   font-size: 1em;
@@ -204,7 +212,6 @@ li:hover > ul {
   opacity: 1;
 }
 .dropbtn {
-  height: 55%;
   padding: 12px 15px 8px 0;
   text-align: center;
   background: rgba(176, 196, 222, 1);
@@ -219,7 +226,6 @@ li:hover > ul {
 }
 .filter-carrot {
   width: 0; 
-  height: 0; 
   border-left: 5px solid transparent;
   border-right: 5px solid transparent;        
   border-top: 5px solid #00B398;
@@ -228,7 +234,6 @@ li:hover > ul {
   left: 83%;
 }
 .hbox {
-  height: 30px;
   overflow-x: auto;
   font-family: sans-serif;
   font-size: 18px;
@@ -253,21 +258,19 @@ li:hover > ul {
 }
 .nav {
   background: #d7e5f0;
-  float: left;
   width: 100%;
   padding: 0;
-  margin: 0;
-  height: 45px;
+  margin: auto;
 }	
+.nav div {
+  display: inline-block;
+}
 .nav li, .nav li li {
-  float: left;
   position: relative;
   width: 150px;
   list-style: none;
 }
 .nav > li {
-  float: right;
-  height: 100%; 
   padding: 0;
   background: rgba(0,0,0,0);
 }
@@ -283,9 +286,8 @@ li:hover > ul {
   padding: 10px;
 }
 .nav ul, .user-menu ul {
-  position: absolute;
   top: 100%;
-  visibility: hidden;
+  display: none;
   opacity: 0;
   padding: 0;
 }	
@@ -319,7 +321,6 @@ li:hover > ul {
   border-right:none;
   margin: 0;
   width: 75%;
-  height: 100%;
   font-family: sans-serif;
   font-size: 18px;
   box-shadow: none;
@@ -329,7 +330,6 @@ li:hover > ul {
 }
 #search-form {
   position: relative;
-  height: 100%;
   display: inline-block;
   width: 90%;
   line-height: 0px;
@@ -337,12 +337,10 @@ li:hover > ul {
 }
 #searchfield {
   width: 70%;
-  height: 100%
 }
 .search-submit-container {
   display: inline-block;
   width: 40px;
-  height: 52%;
   margin: 0px -13px;
   padding: 7px 0 11px 15px;
   background: rgba(254,189,52,0.95);
@@ -373,7 +371,6 @@ li:hover > ul {
   font-size: 1.9em; /* This controls the size. */
   display: inline-block;
   width: 0.6em;
-  height: 0.6em;
   border: 0.1em solid blue;
   position: relative;
   border-radius: 0.35em;
@@ -387,7 +384,6 @@ li:hover > ul {
   border-width: 0;
   background: blue;
   width: 0.35em;
-  height: 0.1em;
   -webkit-transform: rotate(45deg);
   -moz-transform: rotate(45deg);
   -ms-transform: rotate(45deg);
@@ -397,7 +393,6 @@ li:hover > ul {
 /* content */
 
 table {
-  width: 100%;
 }
 th {
   text-align: left;
@@ -457,7 +452,7 @@ th {
 .results {
   display: inline-block;
   list-style: none;
-  padding: 10px 20px 40px 20px;
+  padding-bottom: 50px;
 }
 .results a {
   color: 00B398;
@@ -478,9 +473,11 @@ th {
 /* footer */
 
 .footer {
+  position: absolute;
   background: #0b2f4f;
   bottom: 0;
-  position: fixed;
+  left: 0;
+  width: 100%;
   text-align: center;
   margin-bottom: 0;
   padding: 0;
@@ -492,8 +489,8 @@ th {
 .footer .categories a:hover {
   opacity: 1;
 }
-.footer li {
-  width: 25%;
+.footer div {
+  width: 24%;
   padding:0;
 }
 
@@ -525,7 +522,7 @@ textarea {
 
 /* mobile styles */
 
-@media (max-width: 1030px) {
+@media all and (max-width: 1030px) {
   .header-links {
     display: inline-block;
     box-sizing: border-box;
@@ -539,106 +536,11 @@ textarea {
   }
 }
 
-@media ( max-width:500px ) {
- /* header */
+@media all and ( max-width:500px ) {
   .header h1 {
     font-size: 130%;
   }
- 
-  /* #searchfield input {
-    display: none;
+  .header h2 {
+    font-size: 100%;
   }
-  .hbox {
-    display: block;
-  }*/
-.filter-carrot {
-  top: 47%;
-  left: 66%;
-}
-ul li .dropbtn {
-  padding: 12px 15px 8px 0!important;
-}
-#search-form {
-  width: 100%;
-}
-#query_field {
-  width: 88%;
-  border: solid thick gold;
-  border-left-width: thick;
-}
-.search-submit-container {
-  width: 12%;
-  border-radius: 0;
-}
-.user-menu ul {
-  width: 100%;
-}
-.user-menu a {
-  margin: 0 0 25px;
-}
-.nav-hidden {
-  visibility: hidden;
-  position: absolute;
-  top: 100%;
-  visibility: hidden;
-  opacity: 0;
-  padding: 0;
-}
-.nav, .nav ul, .nav li {
-  visibility: visible;
-}	
-.nav ul, .nav li, .nav li li, .nav a, .nav #searchfield, .nav #searchform {
-  float: right;
-  width: 100%;
-  padding: 0;
-}
-.nav ul ul, .nav ul ul li {
-  width: 100%;
-  padding: 0;
-  position: static;
-}
-.nav .categories {
-  background: #ddd;
-  text-align: center;
-}
-.nav .categories ul .category-dropdown {
-  display: block;
-  margin: -1px 0;
-}
-.nav .categories ul .category-hidden {
-  display: none;
-}
-.footer {
-  height: 55px;
-  background: #114956;
-  vertical-align: bottom;
-}
-.footer li {
-  width: 25%;
-  display: inline-block;
-}
-.buttonbar .button {
-  margin: 3px;
-}
-.buttonbar .button, .buttonbar .button select, .buttonbar .button option, .buttonbar .button input {
-  font-size: 10px;
-}
-.buttonbar .picker {
-  font-size: 10px;
-  margin-right: 10px;
-}
-.nav:hover ul {
-  visibility: visible;
-  opacity: 1;
-}
-.nav .dropbtn {
-  padding: .4em 0;
-  margin: -1px 0;
-}
-.nav .categories .category-option {
-  padding: .4em 0;
-}
-.nav .category {
-  margin: -1px 0;
-}
 }
