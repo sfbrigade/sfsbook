@@ -235,7 +235,7 @@ li:hover > ul {
   background-color: lightsteelblue;
 }
 .nav {
-  background: rgba(176, 196, 222, .6);
+  background: #d7e5f0;
   float: left;
   width: 100%;
   padding: 0;
