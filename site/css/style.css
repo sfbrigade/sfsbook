@@ -75,7 +75,8 @@ a {
 a:active {
   color: gold;
 }
-body {
+body, html {
+  width: 100%;
   font-family: 'Source Sans Pro', sans-serif;
   font-weight: bold;
   margin: 0;
@@ -88,8 +89,24 @@ input {
   width: 100%;
   font-size: 16px;
 }
-.results h3, .results p {
+.result li, .results td {
+  font-size: 1em;
+  padding: .4em;
+}
+.results > li {
+  margin-bottom: 1em;
+}
+.results h3, .results p, .results ul, .results table {
   margin: 10px;
+}
+.results h3 {
+  font-size: 2em;
+  line-height: 1.6;
+}
+.results p {
+  font-size: 1em;
+  line-height: 2;
+  margin-bottom: 1em;
 }
 .user-menu > a {
   display: inline-block;
@@ -507,13 +524,27 @@ textarea {
 
 
 /* mobile styles */
-@media only screen and (max-width: 885px) {
+
+@media (max-width: 1030px) {
+  .header-links {
+    display: inline-block;
+    box-sizing: border-box;
+    margin: 0 2em;
+  }
   .header-links div {
     width: 100%;
-  }  
+  }
+  .header h1 {
+    font-size: 160%;
+  }
 }
 
-@media only screen and ( max-width:500px ) {
+@media ( max-width:500px ) {
+ /* header */
+  .header h1 {
+    font-size: 130%;
+  }
+ 
   /* #searchfield input {
     display: none;
   }
@@ -544,11 +575,6 @@ ul li .dropbtn {
 }
 .user-menu a {
   margin: 0 0 25px;
-}
-.header {
-  height: 60px;
-  background: lightsteelblue;
-  padding: 5px;
 }
 .nav-hidden {
   visibility: hidden;
