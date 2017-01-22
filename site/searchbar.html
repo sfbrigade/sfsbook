@@ -1,10 +1,9 @@
 {{ define "searchbar" }}
-<div class='nav'>
-  <div class='categories'>
-    <a class='dropbtn'>All Resources
-      <span class='filter-carrot'></span>
+<div class='search'>
+  <div class='search-filter-toggle'>
+    <a>All Resources
     </a>
-    <ul>
+    <ul class='search-filters'>
       <li class='category'>
         <a class='expandtab' href='#'>Locations</a>
         <ul class='category-dropdown category-hidden'>
@@ -53,7 +52,7 @@
       <input type='text' id='query_field' name='query'/>
       <div class='search-submit-container'>
         <div class='search-icon-container'>
-          <div class='search-icon'>
+          <div>
             <span class='search-submit-text'>Search</span>
             <input type='submit' class='search-submit-input'/>
           </div>

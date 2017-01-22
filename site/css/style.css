@@ -261,6 +261,7 @@ li:hover > ul {
   width: 100%;
   padding: 0;
   margin: auto;
+  text-align: center;
 }	
 .nav div {
   display: inline-block;
@@ -314,7 +315,6 @@ li:hover > ul {
   opacity: 1;
 }
 #query_field {
-  position: relative;
   padding: 0 0 0 10px;
   border: solid 2px rgba(176, 196, 222, .6);
   border-left:none;
@@ -322,7 +322,6 @@ li:hover > ul {
   margin: 0;
   width: 75%;
   font-family: sans-serif;
-  font-size: 18px;
   box-shadow: none;
 }
 #query_field:focus {
@@ -338,14 +337,23 @@ li:hover > ul {
 #searchfield {
   width: 70%;
 }
+.search {
+  margin: auto;
+  text-align: center;
+}
+.search div {
+  display: inline-block;
+}
+.search-filter-toggle {
+}
+.search-filters {
+  display: none;
+}
 .search-submit-container {
   display: inline-block;
   width: 40px;
   margin: 0px -13px;
-  padding: 7px 0 11px 15px;
   background: rgba(254,189,52,0.95);
-  position: relative;
-  border: solid 2px rgba(254,189,52,0.95);
   border-left: none;
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
