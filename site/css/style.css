@@ -198,7 +198,7 @@ h3 {
   text-align: right;
 }
 .hotline {
-  background: rgba(254,189,52,0.95);
+  background: rgba(12,121,152,0.95);
 }
 
 /* nav */
@@ -216,10 +216,10 @@ li:hover > ul {
 }
 .category, .category-option {
   position: relative;
-  padding: 7px;
+  padding: 7px 25px 7px 10px;
   opacity: 0;
   color: #d7e5f0;
-  background: #0b2f4f;
+  background: rgba(12,121,152,0.95);
 }
 .toggle {
   display:block;
@@ -235,6 +235,34 @@ li:hover > ul {
   top: 0;
   left: 100%;
   width: 120px;
+}
+.chevron::before {
+  border-style: solid;
+  border-width: 0.15em 0.15em 0 0;
+  content: '';
+  display: inline-block;
+  height: 0.35em;
+  position: absolute;
+  right: 7px;
+  bottom: 11px;
+  transform: rotate(-45deg);
+  vertical-align: top;
+  width: 0.35em;
+}
+.chevron.right:before {
+  transform: rotate(45deg);
+}
+.down-arrow {
+  width: 0;
+  display: inline-block;
+  height: 0;
+  top: 16px;
+  right: 8px;
+  border-style: solid;
+  border-width: 5px 5px 0 5px;
+  -webkit-transform: rotate(360deg);
+  border-color: #d7e5f0 transparent transparent transparent;
+  position: absolute;
 }
 .dropbtn {
   padding: 12px 15px 8px 0;
@@ -281,6 +309,34 @@ li:hover > ul {
 .hbox > button:hover {
   border-color: blue;
   background-color: lightsteelblue;
+}
+.magnifying-glass
+{
+ font-size: 1.5em; /* This controls the size. */
+ display: inline-block;
+ top: 8px;
+ right: 12px;
+ width: 0.4em;
+ height: 0.4em;
+ border: 0.1em solid black;
+ position: absolute;
+ border-radius: 0.35em;
+}
+.magnifying-glass::before
+{
+ content: "";
+ display: inline-block;
+ position: absolute;
+ right: -0.25em;
+ bottom: -0.1em;
+ border-width: 0;
+ background: black;
+ width: 0.35em;
+ height: 0.08em;
+ -webkit-transform: rotate(45deg);
+ -moz-transform: rotate(45deg);
+ -ms-transform: rotate(45deg);
+ -o-transform: rotate(45deg);
 }
 .nav {
   background: #d7e5f0;
@@ -404,7 +460,7 @@ li:hover > ul {
   left: 0;
   font-size: large;
   width: auto;
-  text-align: center;
+  text-align: left;
 }
 .search-filters:hover > .category {
   display: block;
@@ -413,12 +469,11 @@ li:hover > ul {
   display: block;
   position: relative;
   float: left;
-  background: grey;
-  width: 45px;
+  background: rgba(12,121,152,0.95);
+  width: 55px;
   height: 33px;
 }
 .search-submit-container {
-  display: relative;
   float: right;
   height: 33px;
   /* margin-top: 1px; */
@@ -434,14 +489,16 @@ li:hover > ul {
 .search-submit {
   display: inline-block;
 }
-.search-submit-text {
+.search-submit-label {
   text-indent: -9999px;
   display: inline-block;
+  position: absolute;
 }
 .search-submit-input {
   text-indent: -9999px;
   border: none;
   line-height: 1.9;
+  position: relative;
   opacity: 0;
 }
 .search-icon {
@@ -467,8 +524,10 @@ li:hover > ul {
   -o-transform: rotate(45deg);
 }
 .search-label {
-  display: block;
+  display: inline-block;
   width: auto;
+  color: #d7e5f0;
+  margin-right: 7px;
   line-height: 33px;
   font-size: large;
 }
