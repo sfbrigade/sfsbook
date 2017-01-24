@@ -1,64 +1,60 @@
 {{ define "searchbar" }}
 <div class='search'>
-  <div class='search-filter-toggle'>
-    <a>All Resources
-    </a>
-    <ul class='search-filters'>
-      <li class='category'>
-        Locations
-        <ul class='category-dropdown category-hidden'>
-          <li class='category-option'>Berkeley</li>
-          <li class='category-option'>Oakland</li>
-          <li class='category-option'>San Francisco</li>
-        </ul>
-      </li>
-      <li class='category'>
-        Issues
-        <ul class='category-dropdown category-hidden'>
-          <li class='category-option'>Child Abuse</li>
-          <li class='category-option'>Domestic Violence</li>
-          <li class='category-option'>Sexual Abuse</li>
-          <li class='category-option'>Substance Abuse</li>
-        </ul>
+  <form id='search-form' action='/search.html' method='get'>
+    <div class='search-filter-container'>
+      <div class='search-facade'>
+        <span class='search-label'> All </span>
+      </div>
+      <ul class='search-filters'>
         <li class='category'>
-          Services
+          Locations
           <ul class='category-dropdown category-hidden'>
-            <li class='category-option'>Legal</li>
-            <li class='category-option'>Counseling</li>
-            <li class='category-option'>Emergency Funds</li>
-            <li class='category-option'>Housing</li>
-            <li class='category-option'>Self Defense</li>
+            <li class='category-option'>Berkeley</li>
+            <li class='category-option'>Oakland</li>
+            <li class='category-option'>San Francisco</li>
           </ul>
         </li>
         <li class='category'>
-          Communities
+          Issues
           <ul class='category-dropdown category-hidden'>
-            <li class='category-option'>Asian</li>
-            <li class='category-option'>Disabled</li>
-            <li class='category-option'>Elderly</li>
-            <li class='category-option'>HIV/AIDS</li>
-            <li class='category-option'>Homeless</li>
-            <li class='category-option'>Immigrant</li>
-            <li class='category-option'>Latina</li>
-            <li class='category-option'>LGBT</li>
-            <li class='category-option'>Sex workers</li>
-            <li class='category-option'>Youth</li>
-          </ul> 
-        </li>
-    </ul>
-  </div>
-  <div id='searchfield'>
-    <form id='search-form' action='/search.html' method='get'>
+            <li class='category-option'>Child Abuse</li>
+            <li class='category-option'>Domestic Violence</li>
+            <li class='category-option'>Sexual Abuse</li>
+            <li class='category-option'>Substance Abuse</li>
+          </ul>
+          <li class='category'>
+            Services
+            <ul class='category-dropdown category-hidden'>
+              <li class='category-option'>Legal</li>
+              <li class='category-option'>Counseling</li>
+              <li class='category-option'>Emergency Funds</li>
+              <li class='category-option'>Housing</li>
+              <li class='category-option'>Self Defense</li>
+            </ul>
+          </li>
+          <li class='category'>
+            Communities
+            <ul class='category-dropdown category-hidden'>
+              <li class='category-option'>Asian</li>
+              <li class='category-option'>Disabled</li>
+              <li class='category-option'>Elderly</li>
+              <li class='category-option'>HIV/AIDS</li>
+              <li class='category-option'>Homeless</li>
+              <li class='category-option'>Immigrant</li>
+              <li class='category-option'>Latina</li>
+              <li class='category-option'>LGBT</li>
+              <li class='category-option'>Sex workers</li>
+              <li class='category-option'>Youth</li>
+            </ul> 
+          </li>
+      </ul>
+    </div>
+    <div class='search-submit-container'>
+      <input type='submit' class='search-submit-input'/>
+    </div>
+    <div id='query_field_container'>
       <input type='text' id='query_field' name='query'/>
-      <div class='search-submit-container'>
-        <div class='search-icon-container'>
-          <div>
-            <span class='search-submit-text'>Search</span>
-            <input type='submit' class='search-submit-input'/>
-          </div>
-        </div>
-      </div>
-  </div>
-    </form>
+    </div>
+  </form>
 </div>
 {{end}}
