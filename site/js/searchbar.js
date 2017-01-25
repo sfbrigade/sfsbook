@@ -95,7 +95,6 @@ function attachToggles() {
 /*addEventListener(document.querySelectorAll('.logo')[0], 'click',
   toggleHiddenNav);*/
   var clickPairs = [['.expandtab', toggleHiddenCategory],
-                     ['.user-menu', toggleActiveClass],
                      ['.category-option', toggleCategoryOption]];
   for (var i = 0; i < clickPairs.length; i++) {
     var trigger = document.querySelectorAll(clickPairs[i][0]);

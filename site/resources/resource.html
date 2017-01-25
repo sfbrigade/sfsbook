@@ -8,13 +8,13 @@
       {{if .Results.Success}}
       {{if .DecodedCookie.HasCapabilityEditResource}}
       {{with .Results}}
-      <div class="results">
+      <div class="results" role='form'>
         <h3>Resource Details</h3>
-        <div>
+        <p>
           {{/* TODO(rjk): Prettier dates. */}}
           Resource first added to the guide on {{.Document.date_indexed}}.
           {{if .Document.date_last_modified}}Resource last modified on {{.Document.date_last_modified}}.{{end}}
-        </div>
+        </p>
 
         {{/* The fields are explicitly enumerated here so that we can control the presentation */}}
         <form class="resource-details" action="/resources/{{.Uuid}}.html" method="post">
