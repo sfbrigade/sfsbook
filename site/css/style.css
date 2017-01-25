@@ -141,7 +141,7 @@ body {
 }
 form {
   margin: 0;
-  padding: 5px;
+  padding: 10px;
 }
 input {
   width: 100%;
@@ -153,17 +153,18 @@ input {
 }
 .result li, .results td {
   font-size: 1em;
-  padding: .4em;
+  padding: .4em 0;
 }
 .results > li {
   margin-bottom: 1em;
 }
-.results h3, .results p, .results ul, .results table {
+.results h2, .results h3, .results p, .results ul, .results table {
   margin: 10px;
 }
-.results h3 {
+.results h2, .results h3 {
   font-size: 2em;
   line-height: 1.6;
+  display: inline-block;
 }
 .results p {
   font-size: 1em;
@@ -174,21 +175,21 @@ input {
   display: inline-block;
   margin: 0 0 4px;
 }
-.user-menu ul {
-  position: relative;
-  border: solid 1px lightgrey;
+.user-menu:hover ul, .user-menu:focus ul, .user-menu ul li {
+  opacity: 1;
+  color: #d7e5f0;
+  background: rgba(12,121,152,0.95);
   z-index: 1;
   list-style: none;
   margin: 0;
   right: 0;
-  width: 50%;
 }
-.user-menu:focus li, .user-menu-active li {
+.user-menu li {
   position:relative;
   padding: 5px;
   background: cornsilk;
 }
-.user-menu ul li:hover {
+.user-menu ul li:hover, .user-menu ul li:focus {
   background: lightsteelblue;
 }
 
@@ -199,10 +200,8 @@ h1 {
 h2 {
   font-size: x-large;
 }
-h3 {
+.escape span:nth-child(1), .hotline span:nth-child(1) {
   display: block;
-}
-.escape h3:nth-child(1) {
   color: white;
 }
 .escape {
@@ -210,12 +209,6 @@ h3 {
 }
 .escape:hover {
   background: rgba(255,0,0,1);
-}
-.escape:hover h3 {
-  color: gold;
-}
-.escape:hover h3:nth-child(2) {
-  color: black;
 }
 .header {
   display: inline-block;
@@ -254,7 +247,18 @@ h3 {
 .hotline {
   background: rgba(12,121,152,0.95);
 }
-
+.user-menu ul {
+  position: absolute;
+  width: 130px;
+  top: 100%;
+  display: block;
+  opacity: 0;
+  padding: 0;
+}
+.user-menu ul:focusin, .user-menu ul li:foscusin {
+  opacity: 1;
+}
+}
 /* nav */
 
 a li {
@@ -267,6 +271,7 @@ li:hover > ul {
 }
 .category, .category-dropdown {
   display: block;
+  position: absolute;
 }
 .category, .category-option {
   position: relative;
@@ -279,16 +284,19 @@ li:hover > ul {
   display:block;
 }
 .category:hover .category-dropdown {
-  position: absolute;
-  top: 0;
-  left: 100%;
   display: block;
+  opacity: 1;
 }
 .category-dropdown {
   position: absolute;
+  display: none;
+  opacity: 0;
   top: 0;
   left: 100%;
   width: 120px;
+}
+.category-dropdown:hover .category-option {
+  opacity: 1;
 }
 .chevron::before {
   border-style: solid;
@@ -421,21 +429,6 @@ li:hover > ul {
   display: block;
   text-decoration: none;
   padding: 10px;
-}
-.nav ul, .user-menu ul {
-  top: 100%;
-  display: none;
-  opacity: 0;
-  padding: 0;
-}	
-.nav ul {
-  background: #ddd;
-  left: 0;
-}
-.nav ul ul {
-  left: 100%;
-  top: 0;
-  padding: 0;
 }	
 .nav:hover {
   //  background: #bbb;
@@ -445,10 +438,6 @@ li:hover > ul {
 }
 .nav li li input {
   display: none;
-}
-.nav:hover > ul, .user-menu-active > ul {
-  visibility: visible;
-  opacity: 1;
 }
 #query_field {
   display: block;
@@ -462,7 +451,7 @@ li:hover > ul {
   box-shadow: none;
 }
 #query_field:focus {
-  outline: none;
+  /*outline: none;*/        
 }
 #query_field_container {
   width: auto;
@@ -585,6 +574,7 @@ li:hover > ul {
   line-height: 33px;
   font-size: large;
 }
+
 /* content */
 
 table {
@@ -602,7 +592,7 @@ th {
 .button input {
   border: none;
   outline: none;
-  background: rgba(0, 179, 152, .8);
+  background: rgba(254,189,52,0.95);
   width: 210px;
   border-radius: 3px;
   margin: 5px;
@@ -610,7 +600,7 @@ th {
   float: right;
 }
 .button input:hover {
-  background: rgba(0, 179, 152, 1);
+  background:gold;
 }
 .buttonbar .usermgt {
   width: 30%;
@@ -623,6 +613,7 @@ th {
 }
 .notification {
   background: gold;
+  padding: 15px;
   text-align: center;
 }
 .onefield {
@@ -630,13 +621,14 @@ th {
   text-align: right;
 }
 .password {
-  width: 25%;
   outline: 1px solid lightgrey;
   vertical-align: super;
 }
 .password-label {
   display: inline-block;
   width: 40%;
+  line-height: 1.2;
+  margin: 3px 0;
 }
 .result {
   list-style: none;
@@ -647,10 +639,15 @@ th {
 .results {
   display: inline-block;
   list-style: none;
+  width: 90%;
+  padding: 1em;
   padding-bottom: 50px;
 }
 .results a {
   color: 00B398;
+}
+#reviewed {
+  width: initial;
 }
 .secondary input {
   background: rgba(176,196,222, .8)
@@ -662,7 +659,7 @@ th {
   vertical-align: top;
 }
 .small-input {
-  width: unset;
+  width: 269px;
 }
 
 /* footer */
@@ -737,5 +734,8 @@ textarea {
   }
   .header h2 {
     font-size: 100%;
+  }
+  .user-menu ul {
+    width: 80px;
   }
 }

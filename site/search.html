@@ -7,8 +7,8 @@
       {{ template "searchbar" . }}
       {{with .Results}}
 
-      <ul class='results'>
-        <h3>Results for: {{.Query}}</h3>
+      <ul class='results' role='main'>
+        <h2>Results for: {{.Query}}</h2>
         {{range .Resources}}
         <li>
           <ul class='result'>

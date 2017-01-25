@@ -19,8 +19,8 @@
       {{.Diagnosticmessage}}
 
       {{else}}  {{/* .Useradded */}}
-      <form class="results" action="/usermgt/adduser.html" method="post">
-        <h3>Invite a new user</h3>
+      <form class="results" action="/usermgt/adduser.html" method="post" role='form'>
+        <h2>Invite a new user</h2>
         <div class="onefield">
           <label class="singleton password-label" for="username">Username</label>
           <input class="password small-input" id="username" type="text" name="username" size="40" ./>
@@ -54,7 +54,7 @@
 
       {{end}} {{/* if .Useradded */}}
       {{end}} {{/* with .Results  */}}
-      {{else}} {{/* if .DecodedCookie.HasCapabilityIniviteUsers */}}
+      {{else}} {{/* if .DecodedCookie.HasCapabilityInviteUsers */}}
       <p class="notification">You aren't signed with the right to add users. <a href="/login.html">Sign-in</a> as an administrative user.</p>
       {{end}} {{/* if .DecodedCookie.HasCapabilityViewUsers */}}
       {{ template "footer" . }}

@@ -1,75 +1,64 @@
 <html>
-  {{ template "head" . }}
-  <body>
-    <div class='container'>
-      {{ template "header" . }}
-      {{ template "searchbar" . }}
-      <!-- need to add a status bar -->
-      {{if .DecodedCookie.HasCapabilityViewUsers}}
-
-      <!-- query value has to be in the field -->
-      <form action="/usermgt/listusers.html" method="get" class="results">
-        <h3>Edit Users</h3>
-        <h3 class="invite"><a href="/usermgt/adduser.html">Invite people</a></h3>
-        <div>
-          <input placeholder="Search users..." type="text" id="userquery" name="userquery" />
-        </div>
-
-        {{with .Results}}
-
-        {{if .Querysuccess}}
-        <p>Results for {{.Userquery}}</p>
-        {{else}}
-        {{.Diagnosticmessage}}
-        {{end}}
-
-        <table class="user-details">
-          <tr>	
-            <th></th>
-            <th>User name</th>
-            <th>Role</th>
-            <th>Display name</th>
-          </tr>
-          {{range .Users}}
-          <tr>
-            <td>
-              <input type="checkbox" value="{{.uuid}}" name="selected-{{.index}}">
-            </td>
-            <td>{{.name}}</td>
-            <td>{{.role}}</td>
-            <td>{{.display_name}}</td>
-
-          </tr>
-          {{end}}
-        </table>
-
-        <div class="buttonbar">
-          <div class="button usermgt">
-            <input type="submit" value="Reset Password" name="resetpassword"/>
-          </div>
-          <div class="button secondary usermgt">
-            <input type="submit" value="Delete User" name="deleteuser"/>
-          </div>
-          <div class="button usermgt">
-            <label>Update role</label>
-            <select name="rolechange" onchange="this.form.submit()">
-              <option value="nochange" selected>Current role</option>
-              <option value="admin">Administrator</option> 
-              <option value="volunteer" >Volunteer</option>
-              <option value="norole" >Clear role</option>
-            </select>
-          </div>
-        </div>
-      </form>
-
-      {{end}} {{/* with .Results  */}}
-
-      {{else}} {{/* if .DecodedCookie.HasCapabilityViewUsers */}}
-
-      <p class="notification">You aren't signed with the right to list users. <a href="/login.html">Sign-in</a> as an administrative user.</p>
-
-      {{end}} {{/* if .DecodedCookie.HasCapabilityViewUsers */}}
-      {{ template "footer" . }}
-    </div>
-  </body>
+	{{ template "head" . }}
+	<body>
+		<div class='container'>
+			{{ template "header" . }}
+			{{ template "searchbar" . }}
+			<!-- need to add a status bar -->
+			{{if .DecodedCookie.HasCapabilityIniviteUsers}}      
+			<form action="/usermgt/listusers.html" method="get" class="results" role='form'>
+				<h2>Edit Users</h2>
+				<h3 class="invite"><a href="/usermgt/adduser.html">Invite people</a></h3>
+				<div>
+					<input placeholder="Search users..." type="text" id="userquery" name="userquery" />
+				</div>
+				<p>Results for </p>
+				<table class="user-details">
+					<tr>	
+						<th></th>
+						<th>User name</th>
+						<th>Role</th>
+						<th>Display name</th>
+					</tr>
+					<tr>
+						<td>
+							<input type="checkbox" value="9e38191b-f214-48f2-8891-beacd0a52b9c" name="selected-0">
+						</td>
+						<td>admin</td>
+						<td>admin</td>
+						<td>Pokemon Guardian</td>
+					</tr>
+					<tr>
+						<td>
+							<input type="checkbox" value="ba764810-67c6-4b20-a450-adc5c3fe0ffe" name="selected-1">
+						</td>
+						<td>volunteer</td>
+						<td>volunteer</td>
+						<td>Pikachu Helper</td>
+					</tr>
+				</table>
+				<div class="buttonbar">
+					<div class="button usermgt">
+						<input type="submit" value="Reset Password" name="resetpassword"/>
+					</div>
+					<div class="button secondary usermgt">
+						<input type="submit" value="Delete User" name="deleteuser"/>
+					</div>
+					<div class="button usermgt">
+						<label>Update role</label>
+						<select name="rolechange" onchange="this.form.submit()">
+							<option value="nochange" selected>Current role</option>
+							<option value="admin">Administrator</option> 
+							<option value="volunteer" >Volunteer</option>
+							<option value="norole" >Clear role</option>
+						</select>
+					</div>
+				</div>
+			</form>
+			{{else}} {{/* if .DecodedCookie.HasCapabilityInviteUsers */}}
+			<p class="notification">You aren't signed with the right to add users. <a href="/login.html">Sign-in</a> as an administrative user.</p>
+			{{end}} {{/* if .DecodedCookie.HasCapabilityViewUsers */}}
+			{{ template "footer" . }}
+		</div>
+	</body>
 </html>i
