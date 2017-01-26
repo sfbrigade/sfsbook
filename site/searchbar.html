@@ -1,51 +1,51 @@
 {{ define "searchbar" }}
 <nav class='search' role='search'>
-  <form id='search-form' action='/search.html' method='get'>
-    <div class='search-filter-container'>
+  <form id='search-form' action='/search.html' method='get' role="menubar" aria-controls="st1" title='Search'>
+    <div class='search-filter-container' tabindex='0' onkeydown="searchNav(event, this)" role='menuitem' aria-haspopup='true'>
       <div class='search-facade'>
         <span class='search-label'> All </span>
         <span class='down-arrow'></span>
       </div>
-      <ul class='search-filters' tabindex='2'>
-        <li class='category'>
+      <ul class='search-filters' role='menu'>
+        <li class='category' role='menuitem' tabindex='-1' aria-haspopup='true'>
           Locations<span class="chevron right"></span>
-          <ul class='category-dropdown category-hidden'>
-            <li class='category-option'>Berkeley</li>
-            <li class='category-option'>Oakland</li>
-            <li class='category-option'>San Francisco</li>
+          <ul class='category-dropdown category-hidden' role='menu'>
+            <li class='category-option' onkeydown="searchNav(event, this)" role='menuitem' aria-controls="st1" tabindex='-1'>Berkeley</li>
+            <li class='category-option' onkeydown="searchNav(event, this)" role='menuitem' aria-controls="st1" tabindex='-1'>Oakland</li>
+            <li class='category-option' onkeydown="searchNav(event, this)" role='menuitem' aria-controls="st1" tabindex='-1'>San Francisco</li>
           </ul>
         </li>
-        <li class='category'>
+        <li class='category' role='menuitem' tabindex='-1' aria-haspopup='true'>
           Issues<span class="chevron right"></span>
-          <ul class='category-dropdown category-hidden'>
-            <li class='category-option'>Child Abuse</li>
-            <li class='category-option'>Domestic Violence</li>
-            <li class='category-option'>Sexual Abuse</li>
-            <li class='category-option'>Substance Abuse</li>
+          <ul class='category-dropdown category-hidden' role='menu'>
+            <li class='category-option' onkeydown="searchNav(event, this)" role='menuitem' aria-controls="st1" tabindex='-1'>Child Abuse</li>
+            <li class='category-option' onkeydown="searchNav(event, this)" role='menuitem' aria-controls="st1" tabindex='-1'>Domestic Violence</li>
+            <li class='category-option' onkeydown="searchNav(event, this)" role='menuitem' aria-controls="st1" tabindex='-1'>Sexual Abuse</li>
+            <li class='category-option' onkeydown="searchNav(event, this)" role='menuitem' aria-controls="st1" tabindex='-1'>Substance Abuse</li>
           </ul>
-          <li class='category'>
+          <li class='category' role='menuitem' tabindex='-1' aria-haspopup='true'>
             Services<span class="chevron right"></span>
-            <ul class='category-dropdown category-hidden'>
-              <li class='category-option'>Legal</li>
-              <li class='category-option'>Counseling</li>
-              <li class='category-option'>Emergency Funds</li>
-              <li class='category-option'>Housing</li>
-              <li class='category-option'>Self Defense</li>
+            <ul class='category-dropdown category-hidden' role='menu'>
+              <li class='category-option' onkeydown="searchNav(event, this)" role='menuitem' aria-controls="st1" tabindex='-1'>Legal</li>
+              <li class='category-option' onkeydown="searchNav(event, this)" role='menuitem' aria-controls="st1" tabindex='-1'>Counseling</li>
+              <li class='category-option' onkeydown="searchNav(event, this)" role='menuitem' aria-controls="st1" tabindex='-1'>Emergency Funds</li>
+              <li class='category-option' onkeydown="searchNav(event, this)" role='menuitem' aria-controls="st1" tabindex='-1'>Housing</li>
+              <li class='category-option' onkeydown="searchNav(event, this)" role='menuitem' aria-controls="st1" tabindex='-1'>Self Defense</li>
             </ul>
           </li>
-          <li class='category'>
+          <li class='category' role='menuitem' tabindex='-1' aria-haspopup='true'>
             Communities<span class="chevron right"></span>
-            <ul class='category-dropdown category-hidden'>
-              <li class='category-option'>Asian</li>
-              <li class='category-option'>Disabled</li>
-              <li class='category-option'>Elderly</li>
-              <li class='category-option'>HIV/AIDS</li>
-              <li class='category-option'>Homeless</li>
-              <li class='category-option'>Immigrant</li>
-              <li class='category-option'>Latina</li>
-              <li class='category-option'>LGBT</li>
-              <li class='category-option'>Sex workers</li>
-              <li class='category-option'>Youth</li>
+            <ul class='category-dropdown category-hidden' role='menu'>
+              <li class='category-option' onkeydown="searchNav(event, this)" role='menuitem' aria-controls="st1" tabindex='-1'>Asian</li>
+              <li class='category-option' onkeydown="searchNav(event, this)" role='menuitem' aria-controls="st1" tabindex='-1'>Disabled</li>
+              <li class='category-option' onkeydown="searchNav(event, this)" role='menuitem' aria-controls="st1" tabindex='-1'>Elderly</li>
+              <li class='category-option' onkeydown="searchNav(event, this)" role='menuitem' aria-controls="st1" tabindex='-1'>HIV/AIDS</li>
+              <li class='category-option' onkeydown="searchNav(event, this)" role='menuitem' aria-controls="st1" tabindex='-1'>Homeless</li>
+              <li class='category-option' onkeydown="searchNav(event, this)" role='menuitem' aria-controls="st1" tabindex='-1'>Immigrant</li>
+              <li class='category-option' onkeydown="searchNav(event, this)" role='menuitem' aria-controls="st1" tabindex='-1'>Latina</li>
+              <li class='category-option' onkeydown="searchNav(event, this)" role='menuitem' aria-controls="st1" tabindex='-1'>LGBT</li>
+              <li class='category-option' onkeydown="searchNav(event, this)" role='menuitem' aria-controls="st1" tabindex='-1'>Sex workers</li>
+              <li class='category-option' onkeydown="searchNav(event, this)" role='menuitem' aria-controls="st1" tabindex='-1'>Youth</li>
             </ul> 
           </li>
       </ul>
