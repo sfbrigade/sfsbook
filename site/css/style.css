@@ -249,6 +249,9 @@ h2 {
 .hotline {
   background: rgba(12,121,152,0.95);
 }
+.hotline:hover {
+  background: rgba(12,121,189,1);
+}
 .user-menu-dropdown {
   position: absolute;
   background: cornsilk;
