@@ -297,12 +297,11 @@ li:hover > ul {
 }
 .category-dropdown {
   position: absolute;
-  display: none;
   opacity: 0;
   top: 0;
   left: 100%;
   width: 120px;
-  max-height: 200px;
+  max-height: 400px;
   overflow: scroll;
 }
 .category-dropdown:hover .category-option {
