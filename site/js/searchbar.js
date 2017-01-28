@@ -4,10 +4,11 @@
 function toggleCategoryOption(node) {
   var el = document.getElementById('query_field');
   var searchText = el.value;
-  var input = (node || this);
+  var input = (node.type === 'click') ? node.target : node;
   console.log('input', input);
+  console.log(input.textContent, 'intxtcn');
   var optionValue = input.textContent;
-  console.log(optionValue, input);
+  console.log(optionValue, 'optionValue');
   var re = new RegExp('\\b(' + optionValue + ')\\b', 'gi');
   var stringToReplace = optionValue.concat(', ');
 
