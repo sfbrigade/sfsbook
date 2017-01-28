@@ -52,17 +52,34 @@ if(e.which === 40){
 // Enable visible keyboard navigation of search filters
 function searchNav(e, node) {
 	var theTarget = event.target;
-
+if(e.which === 9){
+  if(theTarget.classList[0].indexOf('category') > -1) {
+    document.querySelector('.search-filters').classList.remove('visible');
+    var secondlevel = document.querySelectorAll('.category-dropdown');
+    for(var i = 0; i < secondlevel.length; i++){
+    	secondlevel[i].classList.remove('visible');
+    }
+  }
+}
+if(e.which === 27 || e.which === 37){
+	if(theTarget.classList[0].indexOf('category') > -1) {
+	  theTarget.parentElement.classList.toggle('visible');
+	  theTarget.parentElement.parentElement.focus();
+	}
+}
 if(e.which === 13){
   if(theTarget.classList[0].indexOf('category-option') > -1) {
     toggleCategoryOption(theTarget);
   }
 }
-if(e.which === 40){
+if(e.which === 40 || e.which === 38){
+	var diff = (e.which === 40) ? 1 : -1;  		
   	if(theTarget.classList[0].indexOf('category-option') > -1) {
   		var siblings = Array.prototype.slice.call(theTarget.parentElement.querySelectorAll(".category-option"));
   		var current = siblings.indexOf(theTarget);
-  		var next = (current === siblings.length - 1) ? 0 : current + 1;
+  		var diff = (e.which === 40) ? 1 : -1;
+  		var next = current + diff;
+  		next = (next < 0) ? siblings.length - 1 : (next === siblings.length) ? 0 : next;
   		var nextItem = theTarget.parentElement.querySelectorAll(".category-option")[next];
   		console.log(nextItem, 'nextItem');
   		nextItem.focus();
@@ -70,8 +87,12 @@ if(e.which === 40){
   		var siblings = Array.prototype.slice.call(document.querySelectorAll(".category"));
   		var current = siblings.indexOf(theTarget);
   		var child = theTarget.querySelector('.category-dropdown');
+  		console.log('child classlist', child.classList.toString());
   		child.classList.toggle('visible');
-  		var next = (current === siblings.length - 1) ? 0 : current + 1;
+  		console.log('child classlist toggled', child.classList.toString());
+  		var diff = (e.which === 40) ? 1 : -1;
+  		var next = current + diff;
+  		next = (next < 0) ? siblings.length - 1 : (next === siblings.length) ? 0 : next;
   		var nextItem = document.querySelectorAll(".category")[next];
   		var nextChild = nextItem.querySelector('.category-dropdown');
   		console.log(nextItem, 'nextItem');
