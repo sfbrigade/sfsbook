@@ -280,6 +280,9 @@ li:hover > ul {
   opacity: 0;
   background: rgba(12,121,152,0.95);
 }
+.search-filter-container:focus .search-facade {
+  outline: -webkit-focus-ring-color auto 5px;
+}
 .category, .category-option {
   position: relative;
   padding: 7px 25px 7px 10px;
@@ -288,7 +291,7 @@ li:hover > ul {
 .toggle {
   display:block;
 }
-.category:hover .category-dropdown {
+.category:hover .category-dropdown, .category:focus .category-dropdown {
   display: block;
   opacity: 1;
 }
@@ -299,6 +302,8 @@ li:hover > ul {
   top: 0;
   left: 100%;
   width: 120px;
+  max-height: 200px;
+  overflow: scroll;
 }
 .category-dropdown:hover .category-option {
   opacity: 1;
@@ -489,7 +494,7 @@ li:hover > ul {
   margin: 0 10px 0 7px;
   width: auto;
 }
-.search-filter-container:hover .category {
+.search-filter-container:hover .search-filters {
   opacity: 1;
 }
 .category:hover .category-option {
@@ -742,5 +747,8 @@ textarea {
   }
   .user-menu .user-menu-dropdown {
     width: 80px;
+  }
+  .category-dropdown {
+    max-height: 100px;
   }
 }
