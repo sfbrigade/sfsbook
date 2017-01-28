@@ -53,22 +53,50 @@ if(e.which === 40){
 function searchNav(e, node) {
 	var theTarget = event.target;
 
+if(e.which === 13){
+  if(theTarget.classList[0].indexOf('category-option') > -1) {
+    toggleCategoryOption(theTarget);
+  }
+}
 if(e.which === 40){
-  	if(theTarget.classList[0].indexOf('category') > -1) {
-  		var siblings = Array.prototype.slice.call(document.querySelectorAll(".category"));
+  	if(theTarget.classList[0].indexOf('category-option') > -1) {
+  		var siblings = Array.prototype.slice.call(theTarget.parentElement.querySelectorAll(".category-option"));
   		var current = siblings.indexOf(theTarget);
   		var next = (current === siblings.length - 1) ? 0 : current + 1;
+  		var nextItem = theTarget.parentElement.querySelectorAll(".category-option")[next];
+  		console.log(nextItem, 'nextItem');
+  		nextItem.focus();
+  	} else if(theTarget.classList[0].indexOf('category') > -1) {
+  		var siblings = Array.prototype.slice.call(document.querySelectorAll(".category"));
+  		var current = siblings.indexOf(theTarget);
+  		var child = theTarget.querySelector('.category-dropdown');
+  		child.classList.toggle('visible');
+  		var next = (current === siblings.length - 1) ? 0 : current + 1;
   		var nextItem = document.querySelectorAll(".category")[next];
+  		var nextChild = nextItem.querySelector('.category-dropdown');
+  		console.log(nextItem, 'nextItem');
+  		console.log(nextChild, 'nextchild');
+  		nextChild.classList.toggle('visible');
   		nextItem.focus();
   	} else if (theTarget.classList && theTarget.classList[0] === 'search-filter-container') {
   	  var child = document.querySelector('.search-filters');
+  	  var grandchild = document.querySelector('.category-dropdown');
   		  console.log('child classlist', child.classList.toString());
   		  child.classList.toggle("visible");
+  		  grandchild.classList.toggle("visible");
   		  console.log('child classlist toggled', child.classList.toString());
   		  console.log(document.querySelector(".category"));
   		  document.querySelector(".category").focus();
   	}
-  }/* else if (e.which === 13 && theTarget.classList && theTarget.classList[0].indexOf('user-menu-item') > -1){
+  }
+  if(e.which === 39){
+  	 if (theTarget.classList && theTarget.classList[0] === 'category') {
+  	   var child = theTarget.querySelector('.category-option');
+  		 console.log(child, 'child: right arrow');
+  		 theTarget.querySelector('.category-option').focus();
+  	}
+  }
+  /* else if (e.which === 13 && theTarget.classList && theTarget.classList[0].indexOf('user-menu-item') > -1){
     location.href=theTarget.parentElement.href;
   } else if (e.which === 27 && theTarget.classList && theTarget.classList[0] === 'user-menu-item'){
     var parent = document.querySelector('.user-menu');

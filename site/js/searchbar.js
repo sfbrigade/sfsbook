@@ -1,11 +1,13 @@
 // Searchbar JavaScript code for sfsbook
 
 // toggleCategoryOption adds or removes a keyword from the search
-function toggleCategoryOption() {
+function toggleCategoryOption(node) {
   var el = document.getElementById('query_field');
   var searchText = el.value;
-  var optionValue = this.textContent;
-  console.log(optionValue, this);
+  var input = (node || this);
+  console.log('input', input);
+  var optionValue = input.textContent;
+  console.log(optionValue, input);
   var re = new RegExp('\\b(' + optionValue + ')\\b', 'gi');
   var stringToReplace = optionValue.concat(', ');
 
