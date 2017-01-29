@@ -12,7 +12,6 @@
 				<div>
 					<input placeholder="Search users..." type="text" id="userquery" name="userquery" />
 				</div>
-				<p>Results for </p>
 				<table class="user-details">
 					<tr>	
 						<th></th>
@@ -39,12 +38,6 @@
 				</table>
 				<div class="buttonbar">
 					<div class="button usermgt">
-						<input type="submit" value="Reset Password" name="resetpassword"/>
-					</div>
-					<div class="button secondary usermgt">
-						<input type="submit" value="Delete User" name="deleteuser"/>
-					</div>
-					<div class="button usermgt">
 						<label>Update role</label>
 						<select name="rolechange" onchange="this.form.submit()">
 							<option value="nochange" selected>Current role</option>
@@ -52,6 +45,12 @@
 							<option value="volunteer" >Volunteer</option>
 							<option value="norole" >Clear role</option>
 						</select>
+					</div>
+					<div class="button secondary usermgt">
+						<input type="submit" value="Delete User" name="deleteuser"/>
+					</div>
+					<div class="button usermgt">
+						<input type="submit" value="Reset User" name="resetuser"/>
 					</div>
 				</div>
 			</form>

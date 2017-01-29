@@ -592,11 +592,10 @@ th {
   text-align: left;
 }
 .buttonbar {
-  text-align: right;
+  text-align: right!important;
 }
 .button {
   width: 50%;
-  float: right;
 }
 .button input {
   border: none;
@@ -613,9 +612,14 @@ th {
 }
 .buttonbar .usermgt {
   width: 30%;
+  max-width: 150px;
   display: inline-block;
   position: relative;
-  margin: 8px;
+  margin: 20px;
+  margin-right: 0;
+}
+.buttonbar .usermgt label {
+  display: block;
 }
 .buttonbar .usermgt input {
   width: 100%;
@@ -623,6 +627,8 @@ th {
   position: absolute;
   top: 0;
   right: 0;
+  margin-right: 0;
+  margin-top: -5px;
 }
 .notification {
   background: gold;
@@ -658,6 +664,10 @@ th {
 }
 .results a {
   color: 00B398;
+}
+.results table {
+  margin-right: 0;
+  margin-left: 10px;
 }
 #reviewed {
   width: initial;

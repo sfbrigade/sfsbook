@@ -15,6 +15,9 @@
           Resource first added to the guide on {{.Document.date_indexed}}.
           {{if .Document.date_last_modified}}Resource last modified on {{.Document.date_last_modified}}.{{end}}
         </p>
+        <p>
+          Resource reviewed: {{.Document.reviewed}}.
+        </p>
 
         {{/* The fields are explicitly enumerated here so that we can control the presentation */}}
         <form class="resource-details" action="/resources/{{.Uuid}}.html" method="post">
@@ -71,12 +74,11 @@
           </div>
 
           <div class="buttonbar">
-            <div class="button">
-              <input type="submit" value="Update resource" />
-            </div>
-
-            <div class="button secondary">
+            <div class="button usermgt secondary">
               <input type="submit" value="Discard Edits" />
+            </div>
+            <div class="button usermgt">
+              <input type="submit" value="Update resource" />
             </div>
           </div>
         </form>
