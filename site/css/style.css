@@ -252,6 +252,9 @@ h2 {
 .hotline:hover {
   background: rgba(12,121,189,1);
 }
+.user-menu:hover .user-menu-dropdown {
+  display: block;
+}
 .user-menu-dropdown {
   position: absolute;
   background: cornsilk;
@@ -262,7 +265,6 @@ h2 {
   display: none;
   padding: 0;
   right: 0;
-}
 }
 /* nav */
 
@@ -590,11 +592,11 @@ th {
   text-align: left;
 }
 .buttonbar {
-  float: right;
+  text-align: right;
 }
 .button {
   width: 50%;
-  float:right;
+  float: right;
 }
 .button input {
   border: none;
@@ -611,12 +613,16 @@ th {
 }
 .buttonbar .usermgt {
   width: 30%;
-  float: right;
+  display: inline-block;
+  position: relative;
   margin: 8px;
 }
 .buttonbar .usermgt input {
   width: 100%;
   margin: 5px;
+  position: absolute;
+  top: 0;
+  right: 0;
 }
 .notification {
   background: gold;

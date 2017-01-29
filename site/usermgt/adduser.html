@@ -23,30 +23,30 @@
         <h2>Invite a new user</h2>
         <div class="onefield">
           <label class="singleton password-label" for="username">Username</label>
-          <input class="password small-input" id="username" type="text" name="username" size="40" ./>
+          <input class="password small-input" id="username" type="text" name="username" size="40" required aria-required="true"./>
         </div>
         <div class="onefield">
           <label class="password-label" for="displayname">Display<br>name</label>
-          <input class="password small-input" id="displayname" type="text" name="displayname" size="40" ./>
+          <input class="password small-input" id="displayname" type="text" name="displayname" size="40" required aria-required="true"./>
         </div>
         <div class="onefield">
           <label class="password-label" for="newpassword">Default<br>password</label>
-          <input class="password small-input" id="newpassword" type="password" name="newpassword" size="40" ./>
+          <input class="password small-input" id="newpassword" type="password" name="newpassword" size="40" required aria-required="true"./>
         </div>
         <div class="onefield">
           <label class="password-label" for="newpasswordagain">Confirm default<br> password</label>
-          <input class="password small-input" id="newpasswordagain" type="password" name="newpasswordagain" size="40" ./>
+          <input class="password small-input" id="newpasswordagain" type="password" name="newpasswordagain" size="40" required aria-required="true"./>
         </div>
         <div class="buttonbar">
-          <div class="button usermgt">
-            <input type="submit" value="Add user" />
-          </div>
           <div class="picker usermgt">
             <label for="role">Role for user</label>
-            <select  name="role" id="role" id="role">
+            <select  name="role" id="role" id="role" required aria-required="true">
               <option value="admin">Administrator</option> 
               <option value="volunteer" >Volunteer</option>
             </select>
+          </div>
+          <div class="button usermgt">
+            <input type="submit" value="Add user" />
           </div>
 
         </div>
