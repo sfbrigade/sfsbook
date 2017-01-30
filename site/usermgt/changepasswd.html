@@ -42,7 +42,7 @@
       {{end}} {{/* with .DecodedCookie */}}
 
       {{else}} {{/* if .DecodedCookie.IsAuthed */}}
-      You aren't sign in. <a href="/login.html">Sign-in</a> before trying to change your password.
+      <p  class="notification">You aren't sign in. <a href="/login.html">Sign-in</a> before trying to change your password.</p>
       {{end}} {{/* if .DecodedCookie.IsAuthed */}}
       {{ template "footer" . }}
     </div>

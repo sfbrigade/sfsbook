@@ -25,12 +25,12 @@
 	<ul role="menubar" aria-controls="st1" title='User Menu'>
 		{{if .DecodedCookie.IsAuthed}}
 		{{with .DecodedCookie}}
-		<li class="user-menu" onkeydown="dropdownNav(event, this)" role='menuitem' aria-haspopup='true' tabindex='0'><a>{{.DisplayName}}</a>
+		<li class="user-menu" role='menuitem' aria-haspopup='true' tabindex='0'><a>{{.DisplayName}}</a>
 			<ul class="user-menu-dropdown" role='menu' aria-haspopup='true'>
-				<a tabindex='-1' onkeydown="clearSessionCookie(event)" onclick="clearSessionCookie(event)"><li class='user-menu-item' onkeydown="dropdownNav(event, this)" role='menuitem' aria-controls="st1" tabindex='-1'>Sign out</li></a>
-				<a tabindex='-1' href="/usermgt/changepasswd.html"><li class='user-menu-item' onkeydown="dropdownNav(event, this)" role='menuitem' aria-controls="st1" tabindex='-1'>Change Password</li></a>
+				<a tabindex='-1' onkeydown="clearSessionCookie(event)" onclick="clearSessionCookie(event)"><li class='user-menu-item' onkeydown="userNav(event, this)" role='menuitem' aria-controls="st1" tabindex='-1'>Sign out</li></a>
+				<a tabindex='-1' href="/usermgt/changepasswd.html"><li class='user-menu-item' role='menuitem' aria-controls="st1" tabindex='-1'>Change Password</li></a>
 				{{if .HasCapabilityViewUsers}}
-				<a tabindex='-1' href="/usermgt/listusers.html"><li class='user-menu-item' onkeydown="dropdownNav(event, this)" role='menuitem' aria-controls="st1" tabindex='-1'>Edit users</li></a>
+				<a tabindex='-1' href="/usermgt/listusers.html"><li class='user-menu-item' role='menuitem' aria-controls="st1" tabindex='-1'>Edit users</li></a>
 				{{end}} {{/* if .HasCapabilityViewUsers  */}}
 				{{end}} {{/* with .DecodedCookie */}}
 			</ul>
