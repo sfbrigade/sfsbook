@@ -2,17 +2,12 @@
 
 // toggleCategoryOption adds or removes a keyword from the search
 function toggleCategoryOption(node) {
-  console.log(arguments);
   var el = document.getElementById('query_field');
   var searchText = el.value;
   var input = (node.type === 'click') ? node.target : node;
-  console.log('input', input);
-  console.log(input.textContent, 'intxtcn');
   var optionValue = input.textContent;
-  console.log(optionValue, 'optionValue');
   var re = new RegExp('\\b(' + optionValue + ')\\b', 'gi');
   var stringToReplace = optionValue.concat(', ');
-
   if(!searchText.match(stringToReplace) && !searchText.match(re)) {
     if (searchText.length > 0) {
       el.value = searchText.concat(', ', optionValue);
@@ -24,9 +19,9 @@ function toggleCategoryOption(node) {
 
 function addEventListener(el, eventName, handler) {
   eventName.preventDefault ? eventName.preventDefault() :
-  (eventName.returnValue = false);
+    (eventName.returnValue = false);
   eventName.stopPropagation ? eventName.stopPropagation() :
-  (eventName.cancelBubble = true);
+    (eventName.cancelBubble = true);
   if (el.addEventListener) {
     el.addEventListener(eventName, handler);
   } else {
@@ -39,10 +34,10 @@ function addEventListener(el, eventName, handler) {
 function attachToggles() {
   var clickPairs = [['.category-option', toggleCategoryOption]];
   var keydownPairs = [['.search-filter-container', searchNav],
-                      ['.search-filters', searchNav],
-                      ['.category-option', searchNav],
-                      ['.user-menu', userNav],
-                      ['.user-menu-item', userNav]];
+  ['.search-filters', searchNav],
+  ['.category-option', searchNav],
+  ['.user-menu', userNav],
+  ['.user-menu-item', userNav]];
   for (var i = 0; i < clickPairs.length; i++) {
     var trigger = document.querySelectorAll(clickPairs[i][0]);
     for (var j = 0; j < trigger.length; j++) {
@@ -59,11 +54,11 @@ function attachToggles() {
 
 function ready(fn) {
   if(document.referrer.indexOf('localhost') === -1) {
-  var response = confirm("Safety Alert: Computer use can be monitored and is impossible to completely clear. If you are afraid your internet usage might be monitored, exit this site and call the SFWAR Hotline at 415-647-7273. Would you like to exit this site?");
-  if (response === true) {
-    window.location.replace('https://weather.com/');
-  } else {
-    txt = "You pressed Cancel!";
+    var response = confirm("Safety Alert: Computer use can be monitored and is impossible to completely clear. If you are afraid your internet usage might be monitored, exit this site and call the SFWAR Hotline at 415-647-7273. Would you like to exit this site?");
+    if (response === true) {
+      window.location.replace('https://weather.com/');
+    } else {
+      txt = "You pressed Cancel!";
     }
   }
   if (document.readyState != 'loading') {

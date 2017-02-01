@@ -11,12 +11,12 @@
       <div class="results" role='form'>
         <h3>Resource Details</h3>
         <p>
-          {{/* TODO(rjk): Prettier dates. */}}
-          Resource first added to the guide on {{.Document.date_indexed}}.
-          {{if .Document.date_last_modified}}Resource last modified on {{.Document.date_last_modified}}.{{end}}
+        {{/* TODO(rjk): Prettier dates. */}}
+        Resource first added to the guide on {{.Document.date_indexed}}.
+        {{if .Document.date_last_modified}}Resource last modified on {{.Document.date_last_modified}}.{{end}}
         </p>
         <p>
-          Resource reviewed: {{.Document.reviewed}}.
+        Resource reviewed: {{.Document.reviewed}}.
         </p>
 
         {{/* The fields are explicitly enumerated here so that we can control the presentation */}}

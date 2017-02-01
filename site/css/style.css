@@ -2,14 +2,14 @@
 /*
 1-reset
 2-base
-  general styles
-  header
-  nav
-  content
-  footer
+general styles
+header
+nav
+content
+footer
 3-page specific styles
 4-mobile styles
-*/
+ */
 
 
 /* reset */
@@ -20,7 +20,7 @@ v1.6.1
 Last Updated: 2010-09-17
 Author: Richard Clark - http://richclarkdesign.com 
 Twitter: @rich_clark
-*/
+ */
 
 html, body, div, span, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
@@ -34,87 +34,87 @@ table, caption, tbody, tfoot, thead, tr, th, td,
 article, aside, canvas, details, figcaption, figure, 
 footer, header, hgroup, menu, nav, section, summary,
 time, mark, audio, video {
-    margin:0;
-    padding:0;
-    border:0;
-    outline:0;
-    font-size:100%;
-    vertical-align:baseline;
-    background:transparent;
+  margin:0;
+  padding:0;
+  border:0;
+  outline:0;
+  font-size:100%;
+  vertical-align:baseline;
+  background:transparent;
 }
 
 body {
-    line-height:1;
+  line-height:1;
 }
 
 article,aside,details,figcaption,figure,
 footer,header,hgroup,menu,nav,section { 
-    display:block;
+  display:block;
 }
 
 nav ul {
-    list-style:none;
+  list-style:none;
 }
 
 blockquote, q {
-    quotes:none;
+  quotes:none;
 }
 
 blockquote:before, blockquote:after,
 q:before, q:after {
-    content:'';
-    content:none;
+  content:'';
+  content:none;
 }
 
 a {
-    margin:0;
-    padding:0;
-    font-size:100%;
-    vertical-align:baseline;
-    background:transparent;
+  margin:0;
+  padding:0;
+  font-size:100%;
+  vertical-align:baseline;
+  background:transparent;
 }
 
 /* change colours to suit your needs */
 ins {
-    background-color:#ff9;
-    color:#000;
-    text-decoration:none;
+  background-color:#ff9;
+  color:#000;
+  text-decoration:none;
 }
 
 /* change colours to suit your needs */
 mark {
-    background-color:#ff9;
-    color:#000; 
-    font-style:italic;
-    font-weight:bold;
+  background-color:#ff9;
+  color:#000; 
+  font-style:italic;
+  font-weight:bold;
 }
 
 del {
-    text-decoration: line-through;
+  text-decoration: line-through;
 }
 
 abbr[title], dfn[title] {
-    border-bottom:1px dotted;
-    cursor:help;
+  border-bottom:1px dotted;
+  cursor:help;
 }
 
 table {
-    border-collapse:collapse;
-    border-spacing:0;
+  border-collapse:collapse;
+  border-spacing:0;
 }
 
 /* change border colour to suit your needs */
 hr {
-    display:block;
-    height:1px;
-    border:0;   
-    border-top:1px solid #cccccc;
-    margin:1em 0;
-    padding:0;
+  display:block;
+  height:1px;
+  border:0;   
+  border-top:1px solid #cccccc;
+  margin:1em 0;
+  padding:0;
 }
 
 input, select {
-    vertical-align:middle;
+  vertical-align:middle;
 }
 
 
@@ -352,31 +352,31 @@ li:hover > ul {
 }
 .magnifying-glass
 {
- font-size: 1.5em;
- display: inline-block;
- top: 8px;
- right: 12px;
- width: 0.4em;
- height: 0.4em;
- border: 0.1em solid black;
- position: absolute;
- border-radius: 0.35em;
+  font-size: 1.5em;
+  display: inline-block;
+  top: 8px;
+  right: 12px;
+  width: 0.4em;
+  height: 0.4em;
+  border: 0.1em solid black;
+  position: absolute;
+  border-radius: 0.35em;
 }
 .magnifying-glass::before
 {
- content: "";
- display: inline-block;
- position: absolute;
- right: -0.25em;
- bottom: -0.1em;
- border-width: 0;
- background: black;
- width: 0.35em;
- height: 0.08em;
- -webkit-transform: rotate(45deg);
- -moz-transform: rotate(45deg);
- -ms-transform: rotate(45deg);
- -o-transform: rotate(45deg);
+  content: "";
+  display: inline-block;
+  position: absolute;
+  right: -0.25em;
+  bottom: -0.1em;
+  border-width: 0;
+  background: black;
+  width: 0.35em;
+  height: 0.08em;
+  -webkit-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  -o-transform: rotate(45deg);
 }
 .nav {
   background: #d7e5f0;
@@ -454,7 +454,7 @@ li:hover > ul {
 }
 .search-filters:hover > .category {
   display: block;
- }
+}
 .search-filter-container {
   display: block;
   position: relative;
