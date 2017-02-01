@@ -66,7 +66,7 @@ function searchNav(node) {
     if(theTarget.classList[0].indexOf('category') > -1) {
       theTarget.parentElement.classList.toggle('visible');
       theTarget.parentElement.parentElement.focus();
-	}
+    }
   }
   if(event.which === 13){
     if(theTarget.classList[0].indexOf('category-option') > -1) {
@@ -74,39 +74,39 @@ function searchNav(node) {
     }
   }
   if(event.which === 40 || event.which === 38){
-	var diff = (event.which === 40) ? 1 : -1;  		
-  	if(theTarget.classList[0].indexOf('category-option') > -1) {
-  	  var siblings = Array.prototype.slice.call(theTarget.parentElement.querySelectorAll(".category-option"));
-  	  var current = siblings.indexOf(theTarget);
-  	  var diff = (event.which === 40) ? 1 : -1;
-  	  var next = current + diff;
-  	  next = (next < 0) ? siblings.length - 1 : (next === siblings.length) ? 0 : next;
-  	  var nextItem = theTarget.parentElement.querySelectorAll(".category-option")[next];
-  	  nextItem.focus();
-  	} else if(theTarget.classList[0].indexOf('category') > -1) {
-  	  var siblings = Array.prototype.slice.call(document.querySelectorAll(".category"));
-  	  var current = siblings.indexOf(theTarget);
-  	  var child = theTarget.querySelector('.category-dropdown');
-  	  child.classList.remove('visible');
-  	  var diff = (event.which === 40) ? 1 : -1;
-  	  var next = current + diff;
-  	  next = (next < 0) ? siblings.length - 1 : (next === siblings.length) ? 0 : next;
-  	  var nextItem = document.querySelectorAll(".category")[next];
-  	  var nextChild = nextItem.querySelector('.category-dropdown');
-  	  nextChild.classList.add('visible');
-  	  nextItem.focus();
-  	} else if (theTarget.classList && theTarget.classList[0] === 'search-filter-container') {
-  	  var child = document.querySelector('.search-filters');
-  	  var grandchild = document.querySelector('.category-dropdown');
+    var diff = (event.which === 40) ? 1 : -1;  		
+    if(theTarget.classList[0].indexOf('category-option') > -1) {
+      var siblings = Array.prototype.slice.call(theTarget.parentElement.querySelectorAll(".category-option"));
+      var current = siblings.indexOf(theTarget);
+      var diff = (event.which === 40) ? 1 : -1;
+      var next = current + diff;
+      next = (next < 0) ? siblings.length - 1 : (next === siblings.length) ? 0 : next;
+      var nextItem = theTarget.parentElement.querySelectorAll(".category-option")[next];
+      nextItem.focus();
+    } else if(theTarget.classList[0].indexOf('category') > -1) {
+      var siblings = Array.prototype.slice.call(document.querySelectorAll(".category"));
+      var current = siblings.indexOf(theTarget);
+      var child = theTarget.querySelector('.category-dropdown');
+      child.classList.remove('visible');
+      var diff = (event.which === 40) ? 1 : -1;
+      var next = current + diff;
+      next = (next < 0) ? siblings.length - 1 : (next === siblings.length) ? 0 : next;
+      var nextItem = document.querySelectorAll(".category")[next];
+      var nextChild = nextItem.querySelector('.category-dropdown');
+      nextChild.classList.add('visible');
+      nextItem.focus();
+    } else if (theTarget.classList && theTarget.classList[0] === 'search-filter-container') {
+      var child = document.querySelector('.search-filters');
+      var grandchild = document.querySelector('.category-dropdown');
       child.classList.toggle("visible");
       grandchild.classList.toggle("visible");
-	  document.querySelector(".category").focus();
-  	}
+      document.querySelector(".category").focus();
+    }
   }
   if(event.which === 39){
-  	 if (theTarget.classList && theTarget.classList[0] === 'category') {
-  	   var child = theTarget.querySelector('.category-option');
-  	   theTarget.querySelector('.category-option').focus();
-  	 }
+    if (theTarget.classList && theTarget.classList[0] === 'category') {
+      var child = theTarget.querySelector('.category-option');
+      theTarget.querySelector('.category-option').focus();
+    }
   }
 }
