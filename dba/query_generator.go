@@ -73,7 +73,7 @@ func (qr *QueryResultsGenerator) ForRequest(param interface{}) GeneratedResult {
 	middleq := make([]query.Query, 0, 5)
 	phrases := strings.Split(querystring, ", ")
 	for _, phrase := range phrases {
-		//  for _, k := range []string{"description", "services", "categories", "name", "address" } {
+		//  for _, k := range []string{"description", "services", "categories", "name", "website", "email", "address" } {
 		q := query.NewMatchPhraseQuery(phrase)
 		//	  q.SetField(k)
 		middleq = append(middleq, q)
@@ -90,7 +90,7 @@ func (qr *QueryResultsGenerator) ForRequest(param interface{}) GeneratedResult {
 	searchRequest := bleve.NewSearchRequest(bq)
 
 	// Modify the search request to only retrieve some fields.
-	searchRequest.Fields = []string{"name", "categories", "description", "services", "address"}
+	searchRequest.Fields = []string{"name", "categories", "description", "services", "website", "email", "address"}
 	searchRequest.Size = 10
 	// Advance this to move forward through the result set...
 	searchRequest.From = 0
