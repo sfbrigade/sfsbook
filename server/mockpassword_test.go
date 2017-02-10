@@ -44,6 +44,10 @@ func (tape *mockPasswordIndex) Search(_ *bleve.SearchRequest) (*bleve.SearchResu
 	return nil, fmt.Errorf("not-implemented")
 }
 
+func (tape *mockPasswordIndex) ListUsers(userquery string, size, from int) ([]map[string]interface{}, error) {
+	return nil, fmt.Errorf("not-implemented")
+}
+
 func (tape *mockPasswordIndex) Delete(id string) error {
 	return fmt.Errorf("not-implemented")
 }
