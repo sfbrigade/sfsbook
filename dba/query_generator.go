@@ -26,6 +26,8 @@ type ResourceResult struct {
 	Name        string
 	Services    string
 	Address     string
+  Website     string
+  Email       string
 }
 
 type queryResults struct {
@@ -70,14 +72,11 @@ func (qr *QueryResultsGenerator) ForRequest(param interface{}) GeneratedResult {
 
 	// Actually do a query against the database.
 	// TODO(rjk): Refine the search handling.
-	middleq := make([]query.Query, 0, 5)
+	middleq := make([]query.Query, 0, 7)
 	phrases := strings.Split(querystring, ", ")
 	for _, phrase := range phrases {
-		//  for _, k := range []string{"description", "services", "categories", "name", "website", "email", "address" } {
 		q := query.NewMatchPhraseQuery(phrase)
-		//	  q.SetField(k)
 		middleq = append(middleq, q)
-		//  }
 	}
 
 	bq := query.NewBooleanQuery(
@@ -126,6 +125,8 @@ func (qr *QueryResultsGenerator) ForRequest(param interface{}) GeneratedResult {
 		results.Resources[c].Categories = sr.Fields["categories"].(string)
 		results.Resources[c].Description = sr.Fields["description"].(string)
 		results.Resources[c].Address = sr.Fields["address"].(string)
+    results.Resources[c].Website = sr.Fields["website"].(string)
+    results.Resources[c].Email = sr.Fields["email"].(string)
 
 		c++
 		if c > 10 {
