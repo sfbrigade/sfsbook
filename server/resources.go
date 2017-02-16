@@ -62,6 +62,7 @@ func (gs *resourceServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	// TODO(rjk): The debug flag needs to not always be set but be configurable.
 	results := gs.generator.ForRequest(dbreq)
 	results.SetDebug(true)
-	templates := []string{sn, "/header.html", "/footer.html"}
+	templates := []string{sn, "/head.html", "/header.html", "/searchbar.html", "/footer.html"}
 	parseAndExecuteTemplate(gs.embr, w, req, templates, results)
 }
+
