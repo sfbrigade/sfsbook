@@ -26,8 +26,8 @@ type ResourceResult struct {
 	Name        string
 	Services    string
 	Address     string
-  Website     string
-  Email       string
+	Website     string
+	Email       string
 }
 
 type queryResults struct {
@@ -125,8 +125,8 @@ func (qr *QueryResultsGenerator) ForRequest(param interface{}) GeneratedResult {
 		results.Resources[c].Categories = sr.Fields["categories"].(string)
 		results.Resources[c].Description = sr.Fields["description"].(string)
 		results.Resources[c].Address = sr.Fields["address"].(string)
-    results.Resources[c].Website = sr.Fields["website"].(string)
-    results.Resources[c].Email = sr.Fields["email"].(string)
+		results.Resources[c].Website = sr.Fields["website"].(string)
+		results.Resources[c].Email = sr.Fields["email"].(string)
 
 		c++
 		if c > 10 {
@@ -136,4 +136,3 @@ func (qr *QueryResultsGenerator) ForRequest(param interface{}) GeneratedResult {
 
 	return results
 }
-
