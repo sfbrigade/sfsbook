@@ -36,7 +36,7 @@ func (gs *templatedServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	// The req contains the cookie info. And so we can bound viewability
 	// in the database.
 	results := gs.generator.ForRequest(req)
-	templates := []string{sn, "/header.html", "/footer.html"}
+	templates := []string{sn, "/head.html", "/header.html", "/searchbar.html", "/footer.html"}
 	// TODO(rjk): I need to do something smarter about caching.
 	// I removed the cache of templates pending the global cache.
 	parseAndExecuteTemplate(gs.embr, w, req, templates, results)
@@ -101,3 +101,4 @@ func getTemplateStrings(embr *embeddableResources, templateNames []string) ([]st
 	}
 	return templateStrings, nil
 }
+
