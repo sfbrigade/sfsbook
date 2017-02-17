@@ -1,0 +1,91 @@
+{{ define "searchbar" }}
+<nav class='search' role='search'>
+  <form id='search-form' action='/search.html' method='get' role="menubar" aria-controls="st1" title='Search'>
+    <div class='search-filter-container' tabindex='0' role='menuitem' aria-haspopup='true'>
+      <div class='search-facade'>
+        <span class='search-label'> All </span>
+        <span class='down-arrow'></span>
+      </div>
+      <ul class='search-filters' role='menu'>
+        <li class='category' role='menuitem' tabindex='-1' aria-haspopup='true'>
+          Locations<span class="chevron right"></span>
+          <ul class='category-dropdown category-hidden' role='menu'>
+            <li class='category-option' role='menuitem' aria-controls="st1" tabindex='-1'>Berkeley</li>
+            <li class='category-option' role='menuitem' aria-controls="st1" tabindex='-1'>Oakland</li>
+            <li class='category-option' role='menuitem' aria-controls="st1" tabindex='-1'>San Francisco</li>
+          </ul>
+        </li>
+        <li class='category' role='menuitem' tabindex='-1' aria-haspopup='true'>
+          Issues<span class="chevron right"></span>
+          <ul class='category-dropdown category-hidden' role='menu'>
+            <li class='category-option' role='menuitem' aria-controls="st1" tabindex='-1'>Alcohol/Substance Abuse</li>
+            <li class='category-option' role='menuitem' aria-controls="st1" tabindex='-1'>Child Sexual Abuse</li>
+            <li class='category-option' role='menuitem' aria-controls="st1" tabindex='-1'>Domestic Violence</li>
+            <li class='category-option' role='menuitem' aria-controls="st1" tabindex='-1'>Ritual Abuse</li>
+            <li class='category-option' role='menuitem' aria-controls="st1" tabindex='-1'>Sexual Abuse</li>
+            <li class='category-option' role='menuitem' aria-controls="st1" tabindex='-1'>Substance Abuse</li>
+            <li class='category-option' role='menuitem' aria-controls="st1" tabindex='-1'>Suicide</li>
+          </ul>
+          <li class='category' role='menuitem' tabindex='-1' aria-haspopup='true'>
+            Services<span class="chevron right"></span>
+            <ul class='category-dropdown category-hidden' role='menu'>
+              <li class='category-option' role='menuitem' aria-controls="st1" tabindex='-1'>24 Hour Services</li>
+              <li class='category-option' role='menuitem' aria-controls="st1" tabindex='-1'>Bodywork</li>
+              <li class='category-option' role='menuitem' aria-controls="st1" tabindex='-1'>CA Rape Crisis Center</li>
+              <li class='category-option' role='menuitem' aria-controls="st1" tabindex='-1'>Counseling: Licensed</li>
+              <li class='category-option' role='menuitem' aria-controls="st1" tabindex='-1'>Counseling: Peer</li>
+              <li class='category-option' role='menuitem' aria-controls="st1" tabindex='-1'>Counseling: Warm Lines</li>
+              <li class='category-option' role='menuitem' aria-controls="st1" tabindex='-1'>Legal: Attorney</li>
+              <li class='category-option' role='menuitem' aria-controls="st1" tabindex='-1'>Legal: Services</li>
+              <li class='category-option' role='menuitem' aria-controls="st1" tabindex='-1'>Legal D.A./Police</li>
+              <li class='category-option' role='menuitem' aria-controls="st1" tabindex='-1'>Counseling</li>
+              <li class='category-option' role='menuitem' aria-controls="st1" tabindex='-1'>Emergency Needs</li>
+              <li class='category-option' role='menuitem' aria-controls="st1" tabindex='-1'>Employment</li>
+              <li class='category-option' role='menuitem' aria-controls="st1" tabindex='-1'>Health Clinics</li>
+              <li class='category-option' role='menuitem' aria-controls="st1" tabindex='-1'>Hotlines</li>
+              <li class='category-option' role='menuitem' aria-controls="st1" tabindex='-1'>Housing/Shelter</li>
+              <li class='category-option' role='menuitem' aria-controls="st1" tabindex='-1'>Self Defense</li>
+              <li class='category-option' role='menuitem' aria-controls="st1" tabindex='-1'>Social Justice</li>
+              <li class='category-option' role='menuitem' aria-controls="st1" tabindex='-1'>Somatic Healing</li>
+              <li class='category-option' role='menuitem' aria-controls="st1" tabindex='-1'>Support Groups</li>
+              <li class='category-option' role='menuitem' aria-controls="st1" tabindex='-1'>Tenants Rights</li>              
+              <li class='category-option' role='menuitem' aria-controls="st1" tabindex='-1'>Transportation</li>
+            </ul>
+          </li>
+          <li class='category' role='menuitem' tabindex='-1' aria-haspopup='true'>
+            Communities<span class="chevron right"></span>
+            <ul class='category-dropdown category-hidden' role='menu'>
+              <li class='category-option' role='menuitem' aria-controls="st1" tabindex='-1'>Adult Survivors of CSA/Incest</li>
+              <li class='category-option' role='menuitem' aria-controls="st1" tabindex='-1'>African American/Black</li>
+              <li class='category-option' role='menuitem' aria-controls="st1" tabindex='-1'>Asian/Pacific Islanders</li>
+              <li class='category-option' role='menuitem' aria-controls="st1" tabindex='-1'>Cancer</li>
+              <li class='category-option' role='menuitem' aria-controls="st1" tabindex='-1'>Disabled</li>
+              <li class='category-option' role='menuitem' aria-controls="st1" tabindex='-1'>Elderly</li>
+              <li class='category-option' role='menuitem' aria-controls="st1" tabindex='-1'>HIV/AIDS</li>
+              <li class='category-option' role='menuitem' aria-controls="st1" tabindex='-1'>Homeless</li>
+              <li class='category-option' role='menuitem' aria-controls="st1" tabindex='-1'>Immigrant</li>
+              <li class='category-option' role='menuitem' aria-controls="st1" tabindex='-1'>Incarcerated</li>
+              <li class='category-option' role='menuitem' aria-controls="st1" tabindex='-1'>Latina</li>
+              <li class='category-option' role='menuitem' aria-controls="st1" tabindex='-1'>LGBTQII</li>
+              <li class='category-option' role='menuitem' aria-controls="st1" tabindex='-1'>Male Survivors</li>
+              <li class='category-option' role='menuitem' aria-controls="st1" tabindex='-1'>Native American</li>
+              <li class='category-option' role='menuitem' aria-controls="st1" tabindex='-1'>Perpetrators</li>
+              <li class='category-option' role='menuitem' aria-controls="st1" tabindex='-1'>Sex workers</li>
+              <li class='category-option' role='menuitem' aria-controls="st1" tabindex='-1'>Significant Others</li>
+              <li class='category-option' role='menuitem' aria-controls="st1" tabindex='-1'>Youth</li>
+            </ul> 
+          </li>
+      </ul>
+    </div>
+    <div class='search-submit-container'>
+      <span class='search-submit-label'>Search</span>
+      <span class='magnifying-glass'></span>
+      <input type='submit' name='search-submit-button' id='search-submit-button' class='search-submit-input'/>
+    </div>
+    <div id='query_field_container'>
+      <label for='query_field' class='search-submit-label'>Search: </label>
+      <input type='text' id='query_field' name='query'/>
+    </div>
+  </form>
+</nav>
+{{end}}

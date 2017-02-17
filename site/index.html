@@ -1,61 +1,16 @@
 <html>
-	<head>
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>SFWAR Resource Guide</title>
-		<script type="text/javascript" src="/js/example.js"></script>
-		<script type="text/javascript" src="/js/searchbar.js"></script>
-		<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet">
-		<link href="/css/style.css" rel="stylesheet">
-	</head>
-	<body>
-		{{ template "header" . }}
-		<ul class="nav searchbar">
-			<li class="categories">
-			<a href="javascript:void(0)" class="dropbtn">Get Help</a>
-			<ul>
-				<li class="category">
-				<a href="#">Locations</a>
-				<ul>
-					<li class="category-option">
-					<input type="checkbox" name="location" value="Oakland">Oakland<br>
-					</li>
-				</ul>
-				</li>
-				<li class="category">
-				<a href="#">Services</a>
-				<ul>
-					<li class="category-option">
-					<input type="c
-					heckbox" name="service" value="Legal">Legal<br>
-					</li>
-				</ul>
-				</li>
-				<li class="category">
-				<a href="#">Communities</a>
-				<ul>
-					<li class="category-option">                      
-					<input type="c
-					heckbox" name="community" value="Asian">Asian<br>
-					</li>
-				</ul> </li>
-			</ul>
-			</li>
-			<li id="searchfield">
-			<form action="/search.html" method="get">
-				<input type="text" id="query_field" name="query" placeholder="Search.."/>
-			</form>
-			</li>
-		</ul>
-		<div class="results">
-			{{with .Results}}
-			<p>Show that I've wired up getting content from within the app server: {{.Message}}</p>
-			<p>Show that I've successfully wired up getting JavaScript to load. (Otherwise the button wouldn't work.)</p>
-			<button onclick="addSomething();">Click Me Now!</button>
-
-			<div id="insertPoint"></div>
-			{{end}}
-		</div>
-		{{ template "footer" . }}
-
-	</body>
+  {{ template "head" . }}
+  <body>
+    <div class='container'>
+      {{ template "header" . }}
+      {{ template "searchbar" . }}
+      <section class="results">
+        <h2>Find Local Support</h2>
+        <p>SFWAR's referral guide has over 350 resources for survivors, significant others and service providers. Covering areas such as Child Sexual Abuse, Counseling, Body Work, and Employment, this guide has been invaluable to us. We hope that you will find it helpful as well. If you come across any resources that need to be updated, please email Teresa Martyny at teresamartyny@sfwar.org.</p>
+        <h2>24-hour Rape Crisis Line</h2>
+        <p>Rape crisis counselors are available 24 hours/day to offer support, information and resources for survivors of rape and sexual assault, friends, family members and others. Counselors are also trained in areas such as sexual harassment, incest, child sexual assault, same-sex sexual assault, domestic violence, ritual abuse, suicide prevention, male survivors and stalking. SFWAR's crisis hotline is (415) 647-RAPE.</p>
+      </section>
+      {{ template "footer" . }}
+    </div>
+  </body>
 </html>

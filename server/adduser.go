@@ -32,7 +32,7 @@ type addUserResult struct {
 
 func (gs *addUser) ender(w http.ResponseWriter, req *http.Request, listusersresult interface{}) {
 	sn := req.URL.Path
-	templates := []string{sn, "/header.html", "/footer.html"}
+	templates := []string{sn, "/head.html", "/header.html","/searchbar.html", "/footer.html"}
 	parseAndExecuteTemplate(gs.embr, w, req, templates, listusersresult)
 }
 

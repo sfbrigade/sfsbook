@@ -44,7 +44,7 @@ type listUsersResult struct {
 
 func (gs *listUsers) ender(w http.ResponseWriter, req *http.Request, listusersresult interface{}) {
 	sn := req.URL.Path
-	templates := []string{sn}
+	templates := []string{sn, "/head.html", "/header.html", "/searchbar.html", "/footer.html"}
 	parseAndExecuteTemplate(gs.embr, w, req, templates, listusersresult)
 }
 

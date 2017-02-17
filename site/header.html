@@ -1,24 +1,44 @@
 {{ define "header" }}
-<div class="header">
-<div class="header-section">
-<a href="/index.html">
-<span>SFWAR Resource Guide</span>
-</a>
-</div>
-<div class="header-section">
-<span>24 Hour Crisis Line: </span><span class="hotline">415-647-7273 | Free and Confidential</span>
-</div>
-<div class="header-section">
-{{if .DecodedCookie.IsAuthed}}
-{{with .DecodedCookie}}
-<span>Welcome {{.DisplayName}}  <button onclick="clearSessionCookie();">Sign out</button></span><p> <a href="/usermgt/changepasswd.html">Change Password</a></p>
-{{if .HasCapabilityViewUsers}}
-<p><a href="/usermgt/listusers.html">Edit users</a></p>
-{{end}} {{/* if .HasCapabilityViewUsers  */}}
-{{end}} {{/* with .DecodedCookie */}}
-{{else}}
-<span>You are not signed in. <a href="/login.html">Login?</a></span>
-{{end}}
-</div>
-</div>
+<header class="header" role='banner'>
+  <div class="header-section logo">
+    <a href="/index.html" >
+      <h1>SFWAR Resource Guide</h1>
+    </a>
+  </div>
+  <div class="header-section">
+    <div class="header-links">
+      <div class="escape">
+        <a href="https://weather.com/" accesskey="e">
+          <span> ESCAPE </span>
+          <span>Leave this Site</span>
+        </a>
+      </div>
+      <div class="hotline">
+        <a href="tel:415-647-7273" >
+          <span>415-647-7273</span>
+          <span> Get Help Now </span>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class='header-section'>
+    <ul role="menubar" aria-controls="st1" title='User Menu'>
+      {{if .DecodedCookie.IsAuthed}}
+      {{with .DecodedCookie}}
+      <li class="user-menu" role='menuitem' aria-haspopup='true' tabindex='0'><a>{{.DisplayName}}</a>
+        <ul class="user-menu-dropdown" role='menu' aria-haspopup='true'>
+          <a tabindex='-1' onkeydown="clearSessionCookie(event)" onclick="clearSessionCookie(event)"><li class='user-menu-item' onkeydown="userNav(event, this)" role='menuitem' aria-controls="st1" tabindex='-1'>Sign out</li></a>
+          <a tabindex='-1' href="/usermgt/changepasswd.html"><li class='user-menu-item' role='menuitem' aria-controls="st1" tabindex='-1'>Change Password</li></a>
+          {{if .HasCapabilityViewUsers}}
+          <a tabindex='-1' href="/usermgt/listusers.html"><li class='user-menu-item' role='menuitem' aria-controls="st1" tabindex='-1'>Edit users</li></a>
+          {{end}} {{/* if .HasCapabilityViewUsers  */}}
+          {{end}} {{/* with .DecodedCookie */}}
+        </ul>
+      </li>
+      {{else}}
+      <li tabindex='-1'><a tabindex='0' href="/login.html"><h2>Sign in</h2></a></li>
+      {{end}}
+    </ul>
+  </div>
+</header>
 {{ end }}
