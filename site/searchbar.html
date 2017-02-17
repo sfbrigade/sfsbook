@@ -1,0 +1,35 @@
+{{ define "searchbar" }}
+<ul class="nav nav-hidden">
+	<li id="searchfield">
+		<form id='search-form' action="/search.html" method="get">
+			<input type='text' id='query_field' name='query' placeholder='Search..'/>
+			<div class='hbox' onClick="document.getElementById('search-form').submit();">
+			</div>
+		</form>
+	</li>
+	<li class="categories">
+		<a class="dropbtn">Get Help</a>
+		<ul>
+			<li class="category">
+				<a class="expandtab" href="#">Locations</a>
+				<ul class="category-dropdown category-hidden">
+					<li class="category-option">Oakland</li>
+				</ul>
+			</li>
+			<li class="category">
+				<a class="expandtab" href="#">Services</a>
+				<ul class="category-dropdown category-hidden">
+					<li class="category-option">Legal</li>
+          <li class="category-option">Counseling</li>
+          <li class="category-option">Housing</li>
+				</ul>
+			</li>
+			<li class="category">
+				<a class="expandtab" href="#">Communities</a>
+				<ul class="category-dropdown category-hidden">
+					<li class="category-option">Asian</li>
+				</ul> </li>
+		</ul>
+	</li>
+</ul>
+{{end}}

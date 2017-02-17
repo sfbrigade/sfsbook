@@ -1,18 +1,172 @@
+/* general styles */
 body {
   font-family: 'Source Sans Pro', sans-serif;
   font-weight: bold;
   margin: 0;
 }
+a li {
+  font-weight: bold;
+  color: black;
+}
 form {
   margin: 0;
   padding: 5px;
 }
+h3 {
+  color: 00B398;
+  display: inline-block;
+}
+.invite {
+  float: right;
+}
+input {
+  width: 100%;
+  font-size: 16px;
+}
+table {
+  width: 100%;
+}
+.buttonbar {
+  float: right;
+}
+.button {
+  width: 50%;
+  float:right;
+}
+.resource-details div {
+  text-align: left;
+  margin:10px 0;
+}
+
+/* page specific styles */
+.button input {
+  border: none;
+  outline: none;
+  background:lightsteelblue;
+  width: 210px;
+  border-radius: 3px;
+  margin: 5px;
+  padding: 5px;
+  float: right;
+}	
+textarea {
+  border: solid 1px lightgrey;
+  display: block;
+  width: 100%;
+}
+.buttonbar .usermgt {
+  width: 30%;
+  float: right;
+  margin: 8px;
+}
+.buttonbar .usermgt input {
+  width: 100%;
+  margin: 5px;
+}
+.small-input {
+  width: unset;
+}
+.onefield {
+  margin: 15px 0;
+  text-align: right;
+}
+.password-label {
+  display: inline-block;
+  width: 40%;
+}
+.singleton {
+  vertical-align: top;
+}
+.password {
+  width: 25%;
+  outline: 1px solid lightgrey;
+  vertical-align: super;
+}
+th {
+  text-align: left;
+}
+.user-details th, .user-details td {
+  padding: 5px;
+  text-align: right;
+}
 a {
+  color: 00B398;
   text-decoration: none;
 }
-.header{
+.results a {
+  color: 00B398;
+}
+.login {
+  border: none;
+  border-bottom: solid lightgrey;
+  padding: 5px;
+  margin: 5px;
+  width: 200px;
+}
+.login:focus {
+  outline: 5px solid lightgrey;
+}
+.user-menu > a {
+  display: inline-block;
+  margin: 0 0 4px;
+}
+.user-menu ul {
+  position: relative;
+  border: solid 1px lightgrey;
+  z-index: 1;
+  list-style: none;
+  margin: 0;
+  right: 0;
+  width: 50%;
+}
+.user-menu:focus li, .user-menu-active li {
+  position:relative;
+  padding: 5px;
+  background: cornsilk;
+}
+.user-menu ul li:hover {
+  background: lightsteelblue;
+}
+.arrow-left {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-right:8px solid black;
+  margin-right: 5px;
+}
+.hbox {
+  height: 30px;
+  overflow-x: auto;
+  font-family: sans-serif;
+  font-size: 18px;
+  box-shadow: none;
+  border-radius: none;
+  background: white;
+  display: none;
+}
+.hbox > * {
+  display:table-cell;
+}
+.hbox > button {
+  border: 1px solid lightgrey;
+  border-radius: 5px;
+  padding: 5px;
+  margin: 2px;
+  background-color: cornsilk;
+}
+.hbox > button:hover {
+  border-color: blue;
+  background-color: lightsteelblue;
+}
+.header {
   padding: 1em;
   position: relative;
+  background: lightsteelblue;
+}
+.header a {
+  color: black;
 }
 .header-section {
   display: inline-block;
@@ -20,31 +174,41 @@ a {
   vertical-align: middle;
   width: 25%; 
 }
-.header-section:nth-child(1) {
+.header-section:first-child {
   float: left; 
 }
-.header-section:nth-child(2) {
+.header-section:first-child + div {
   margin: auto;
   float: none;
   width:50%;
   text-align: center; 
 }
-.header .header-section:last-child {
+.header .header-section:first-child + div + div {
   float: right;
   text-align: right;
 }
 .hotline {
+  border: 1px solid lightgrey;
   border-radius: 5px;
   background: cornsilk;
   padding: 5px;
 }
 .results {
-  padding: 1em;
+  list-style: none;
+  padding: 0 20px 40px 20px;
+}
+.result {
+  list-style: none;
+}
+.result li:first-child + li + li + li {
+  padding-bottom: 10px;
 }
 .nav {
-  background: lightsteelblue;
+  background: cornsilk;
   float: left;
   width: 100%;
+  padding: 0;
+  margin: 0;
 }	
 .nav li, .nav li li {
   float: left;
@@ -52,6 +216,9 @@ a {
   width: 150px;
   list-style: none;
   padding: 5px
+}
+.nav > li {
+  float: right;
 }
 .nav li li li {
   padding: 14px;
@@ -65,32 +232,29 @@ a {
   padding: 9px;
   color: #000;
 }
-.nav ul {
+.nav ul, .user-menu ul {
   position: absolute;
-  left: 0;
   top: 100%;
   visibility: hidden;
   opacity: 0;
   padding: 0;
 }	
+.nav ul {
+  background: #ddd;
+  left: 0;
+}
 .nav ul ul {
   left: 100%;
   top: 0;
   padding: 0;
 }	
-.nav li:hover, .nav li:hover li {
-  background: #ddd;
+.nav .hover {
+  background: #bbb;
 }
 .nav li li input {
   display: none;
 }
-.nav li li:hover, nav li li:hover li {
-  background: #bbb;
-}	
-.nav li li li:hover {
-  background: #999;
-}	
-.nav li:hover > ul {
+.nav .hover > ul, .user-menu-active > ul {
   visibility: visible;
   opacity: 1;
 }
@@ -98,7 +262,6 @@ a {
   width: 75%;
 }
 #searchfield input {
-  display: block;
   margin: 0;
   width: 100%;
   font-family: sans-serif;
@@ -111,6 +274,7 @@ a {
   outline: none;
 }
 .footer {
+  background: lightsteelblue;
   bottom: 0;
   position: fixed;
   text-align: center;
@@ -120,4 +284,96 @@ a {
 .footer li {
   width: 25%;
   padding:0;
+}
+
+/* mobile styles */
+@media only screen and ( max-width:800px ) {
+  #searchfield input {
+    display: none;
+  }
+  .hbox {
+    display: block;
+  }
+  .user-menu ul {
+    width: 100%;
+  }
+  .user-menu a {
+    margin: 0 0 25px;
+  }
+  .header {
+    height: 60px;
+    background: lightsteelblue;
+    padding: 5px;
+  }
+  .header-section:first-child + div {
+    display: none;
+  }
+  .header-links {
+    display: none;
+  }
+  .nav-hidden {
+    visibility: hidden;
+    position: absolute;
+    top: 100%;
+    visibility: hidden;
+    opacity: 0;
+    padding: 0;
+  }
+  .nav, .nav ul, .nav li {
+    visibility: visible;
+  }	
+  .nav ul, .nav li, .nav li li, .nav a, .nav #searchfield, .nav #searchform {
+    float: right;
+    width: 100%;
+    padding: 0;
+  }
+  .nav ul ul, .nav ul ul li {
+    width: 100%;
+    padding: 0;
+    position: static;
+  }
+  .nav .categories {
+    background: #ddd;
+    text-align: center;
+  }
+  .nav .categories ul .category-dropdown {
+    display: block;
+    margin: -1px 0;
+  }
+  .nav .categories ul .category-hidden {
+    display: none;
+  }
+  .footer {
+    height: 55px;
+    background: #ddd;
+    vertical-align: bottom;
+  }
+  .footer li {
+    width: 25%;
+    display: inline-block;
+  }
+  .buttonbar .button {
+    margin: 3px;
+  }
+  .buttonbar .button, .buttonbar .button select, .buttonbar .button option, .buttonbar .button input {
+    font-size: 10px;
+  }
+  .buttonbar .picker {
+    font-size: 10px;
+    margin-right: 10px;
+  }
+  .nav .hover ul {
+    visibility: visible;
+    opacity: 1;
+  }
+  .nav .categories a {
+    padding: .4em 0;
+    margin: -1px 0;
+  }
+  .nav .categories .category-option {
+    padding: .4em 0;
+  }
+  .nav .category {
+    margin: -1px 0;
+  }
 }

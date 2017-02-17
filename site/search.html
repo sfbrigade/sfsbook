@@ -1,64 +1,25 @@
 <html>
-<head>
-<script type="text/javascript" src="js/example.js"></script>
-<link href="/css/style.css" rel="stylesheet">
-</head>
-<body>
+	{{ template "head" . }}
+	<body>
 
-{{ template "header" .}}
-<ul class="nav searchbar">
-<li class="categories">
-    <a href="javascript:void(0)" class="dropbtn">Get Help</a>
-    <ul>
-      <li class="category">
-        <a href="#">Locations</a>
-                <ul>
-                        <li class="category-option">
-                                <input type="checkbox" name="location" value="Oakland">Oakland<br>
-                        </li>
-                </ul>
-        </li>
-            <li class="category">
-        <a href="#">Services</a>
-                <ul>
-                        <li class="category-option">
-                                <input type="c
-heckbox" name="service" value="Legal">Legal<br>
-                        </li>
-                </ul>
-                </li>
-      <li class="category">
-        <a href="#">Communities</a>
-                <ul>
-                        <li class="category-option">
-                                <input type="c
-heckbox" name="community" value="Asian">Asian<br>
-                        </li>
-       </ul> </li>
-    </ul>
-  </li>
-<li id="searchfield">
-<form action="/search.html" method="get">
-        <input type="text" id="query_field" name="query" placeholder="Search.."/>
-</form>
-</li>
-</ul>
-{{with .Results}}
-<p>Search results for the query: {{.Query}}  <a href="/index.html">Different search?<a></p>
+		{{ template "header" .}}
+		{{ template "searchbar" . }}
+		{{with .Results}}
 
-<ul>
-{{range .Resources}}
-	<li>
-		<ul>
-			<li><a href="/resources/{{.Uuid}}.html">{{.Name}}</a></li>
-			<li>{{.Categories}}</li>
-			<li>{{.Services}}</li>
-			<li>{{.Description}}</a></li>
+		<ul class='results'>
+			<h3>Results for: {{.Query}}</h3>
+			{{range .Resources}}
+			<li>
+				<ul class='result'>
+					<li><a href="/resources/{{.Uuid}}.html">{{.Name}}</a></li>
+					<li>{{.Categories}}</li>
+					<li>{{.Services}}</li>
+					<li>{{.Description}}</a></li>
+				</ul>
+			</li>
+			{{end}}
 		</ul>
-	</li>
-{{end}}
-</ul>
-{{end}}
-{{ template "footer" .}}
-</body>
+		{{end}}
+		{{ template "footer" .}}
+	</body>
 </html>
