@@ -1,151 +1,119 @@
 <html>
-<head>
-<script type="text/javascript" src="/js/example.js"></script>
-<link href="/css/style.css" rel="stylesheet">
-</head>
-<body>
-
-{{ template "header" . }}
-
-
-{{if .Results.Success}}
-	{{if .DecodedCookie.HasCapabilityEditResource}}
-		{{with .Results}}
-<p>Resource Details</p>
-<div class="resource">
-<div>
-{{/* TODO(rjk): Prettier dates. */}}
-Resource first added to the guide on {{.Document.date_indexed}}.
-{{if .Document.date_last_modified}}Resource last modified on {{.Document.date_last_modified}}.{{end}}
-</div>
-
-{{/* The fields are explicitly enumerated here so that we can control the presentation */}}
-<form action="/resources/{{.Uuid}}.html" method="post">
-
-<div class="toggle">
-<label for="reviewed">Reviewed:</label>
-<input id="reviewed" type="checkbox" name="reviewed" {{if .Document.reviewed }}checked{{end}}/>
-</div>
-
-<div class="onefield">
-<label for="name">Name:</label>
-<input id="name" type="text" name="name" size="80" value="{{.Document.name}}"./>
-</div>
-
-<div class="onefield">
-<label for="categories">Categories:</label>
-<input id="categories" type="text" name="categories" size="80" value="{{.Document.categories}}"./>
-</div>
-
-<div class="multifield">
-<label for="description">Description:</label>
- <textarea id="description" rows="10" cols="80" name="description">{{.Document.description}}</textarea>
-</div>
-
-<div class="multifield">
-<label for="services">Services:</label>
-<textarea id="services" rows="5" cols="80" name="services">{{.Document.services}}</textarea>
-</div>
-
-<div class="onefield">
-<label for="email">Email:</label>
-<input id="email" type="text" name="email" size="80" value="{{.Document.email}}"./>
-</div>
-
-
-<div class="onefield">
-<label for="address">Address:</label>
-<input id="address" type="text" name="address" size="80" value="{{.Document.address}}"./>
-</div>
-
-<div class="onefield">
-<label for="languges">Languages:</label>
-<input id="languges" type="text" name="languges" size="80" value="{{.Document.languges}}"./>
-</div>
-
-<div class="onefield">
-<label for="pops_served">Populations Served::</label>
-<input id="pops_served" type="text" name="pops_served" size="80" value="{{.Document.pops_served}}"./>
-</div>
-
-<div class="onefield">
-<label for="website">Website:</label>
-<input id="website" type="text" name="website" size="80" value="{{.Document.website}}"./>
-</div>
-
-<div class="buttonbar">
-<div class="button">
-<input type="submit" value="Update resource" />
-</div>
-
-<div class="button">
-<input type="submit" value="Discard Edits" />
-</div>
-</div>
-</form>
-</div>
-		{{end}} {{/* with .Results*/}}	
-	{{else}} {{/* .DecodedCookie.HasCapabilityEditResource */}}
-		{{with .Results}}
-<dl>
-	<dt>Name:</dt>
-	<dd>{{.Document.name}}</dd>
-
-	<dt>Categories:</dt>
-	<dd>{{.Document.categories}}</dd>
-
-	<dt>Description:</dt>
-	<dd>{{.Document.description}}</dd>
-
-	<dt>Services:</dt>
-	<dd>{{.Document.services}}</dd>
-
-	<dt>Email:</dt>
-	<dd>{{.Document.email}}</dd>
-
-	<dt>Address:</dt>
-	<dd>{{.Document.address}}</dd>
-
-	<dt>Languages:</dt>
-	<dd>{{.Document.languges}}</dd>
-
-	<dt>Populations Served::</dt>
-	<dd>{{.Document.pops_served}}</dd>
-
-	<dt>Website:</dt>
-	<dd>{{.Document.website}}</dd>
-</dl>
-		{{end}} {{/* with .Results*/}}	
-	{{end}} {{/* .DecodedCookie.HasCapabilityEditResource */}}
-{{else}} {{/* .DecodedCookie.Success */}}
-	<p>Resource {{.Uuid}} isn't currently available. Sorry about that.</p>
-{{end}} {{/* .DecodedCookie.Success */}}
-
-
-{{with .Results}}
-	{{if .Debug}}
-<hr>
-<div class="DebugOutput">
-Debugging output
-<dl style="font-family: courier; font-size: small;">
-	{{/* TODO(rjk): Refactor out this common block. */}}
-	<dt>Success</dt>			<dd>{{ .Success }}</dd>
-	<dt>ErrorMessage</dt>		<dd>{{ .ErrorMessage }}</dd>
-	<dt>Debug</dt>			<dd>{{ .Debug }}</dd>
-
-	<dt>Uuid</dt>			<dd>{{ .Uuid }}</dd>
-	<dt>Document</dt>
-	<dd>
-		<dl>
-			{{range $k, $v :=  .Document}}<dt>{{$k}}</dt><dd>{{$v}}</dd>{{end}}
-		</dl>
-	</dd>
-</dl>
-</div>
-
-{{ template "footer" .}}
-<hr>
-	{{end}} {{/*.Debug*/}}
-{{end}} {{/* with .Results */}} 
-</body>
+  {{template "head" .}}
+  <body>
+    {{template "header" .}}
+    {{template "searchbar" .}}
+    {{if .Results.Success}}
+      {{if .DecodedCookie.HasCapabilityEditResource}}
+        {{with .Results}}
+          <p>Resource Details</p>
+          <div class="resource"><div>
+            {{/* TODO(rjk): Prettier dates. */}}
+            Resource first added to the guide on {{.Document.date_indexed}}.
+            {{if .Document.date_last_modified}}Resource last modified on {{.Document.date_last_modified}}.{{end}}
+          </div>
+          {{/* The fields are explicitly enumerated here so that we can control the presentation */}}
+          <form action="/resources/{{.Uuid}}.html" method="post">
+            <div class="toggle">
+              <label for="reviewed">Reviewed:</label>
+              <input id="reviewed" type="checkbox" name="reviewed" {{if .Document.reviewed }}checked{{end}}/>
+            </div>
+            <div class="onefield">
+              <label for="name">Name:</label>
+              <input id="name" type="text" name="name" size="80" value="{{.Document.name}}"./>
+            </div>
+            <div class="onefield">
+              <label for="categories">Categories:</label>
+              <input id="categories" type="text" name="categories" size="80" value="{{.Document.categories}}"./>
+            </div>
+            <div class="multifield">
+              <label for="description">Description:</label>
+              <textarea id="description" rows="10" cols="80" name="description">{{.Document.description}}</textarea>
+            </div>
+            <div class="multifield">
+              <label for="services">Services:</label>
+              <textarea id="services" rows="5" cols="80" name="services">{{.Document.services}}</textarea>
+            </div>
+            <div class="onefield">
+              <label for="email">Email:</label>
+              <input id="email" type="text" name="email" size="80" value="{{.Document.email}}"./>
+            </div>
+            <div class="onefield">
+              <label for="address">Address:</label>
+              <input id="address" type="text" name="address" size="80" value="{{.Document.address}}"./>
+            </div>
+            <div class="onefield">
+              <label for="languges">Languages:</label>
+              <input id="languges" type="text" name="languges" size="80" value="{{.Document.languges}}"./>
+            </div>
+            <div class="onefield">
+              <label for="pops_served">Populations Served::</label>
+              <input id="pops_served" type="text" name="pops_served" size="80" value="{{.Document.pops_served}}"./>
+            </div>
+            <div class="onefield">
+              <label for="website">Website:</label>
+              <input id="website" type="text" name="website" size="80" value="{{.Document.website}}"./>
+            </div>
+            <div class="buttonbar">
+              <div class="button">
+                <input type="submit" value="Update resource" />
+              </div>
+              <div class="button">
+                <input type="submit" value="Discard Edits" />
+              </div>
+            </div>
+          </form>
+        </div>
+      {{end}} {{/* with .Results*/}}	
+    {{else}} {{/* .DecodedCookie.HasCapabilityEditResource */}}
+      {{with .Results}}
+        <dl>
+          <dt>Name:</dt>
+          <dd>{{.Document.name}}</dd>
+          <dt>Categories:</dt>
+          <dd>{{.Document.categories}}</dd>
+          <dt>Description:</dt>
+          <dd>{{.Document.description}}</dd>
+          <dt>Services:</dt>
+          <dd>{{.Document.services}}</dd>
+          <dt>Email:</dt>
+          <dd>{{.Document.email}}</dd>
+          <dt>Address:</dt>
+          <dd>{{.Document.address}}</dd>
+          <dt>Languages:</dt>
+          <dd>{{.Document.languges}}</dd>
+          <dt>Populations Served::</dt>
+          <dd>{{.Document.pops_served}}</dd>
+          <dt>Website:</dt>
+          <dd>{{.Document.website}}</dd>
+        </dl>
+      {{end}} {{/* with .Results*/}}	
+    {{end}} {{/* .DecodedCookie.HasCapabilityEditResource */}}
+  {{else}} {{/* .DecodedCookie.Success */}}
+    <p>Resource {{.Uuid}} isn't currently available. Sorry about that.</p>
+  {{end}} {{/* .DecodedCookie.Success */}}
+    {{with .Results}}
+      {{if .Debug}}
+        <hr>
+          <div class="DebugOutput">
+            Debugging output
+            <dl style="font-family: courier; font-size: small;">
+              {{/* TODO(rjk): Refactor out this common block. */}}
+              <dt>Success</dt>			<dd>{{ .Success }}</dd>
+              <dt>ErrorMessage</dt>		<dd>{{ .ErrorMessage }}</dd>
+              <dt>Debug</dt>			<dd>{{ .Debug }}</dd>
+              <dt>Uuid</dt>			<dd>{{ .Uuid }}</dd>
+              <dt>Document</dt>
+              <dd>
+                <dl>
+                  {{range $k, $v :=  .Document}}<dt>{{$k}}</dt><dd>{{$v}}</dd>{{end}}
+                </dl>
+              </dd>
+            </dl>
+          </div>
+        <hr>
+      {{end}} {{/*.Debug*/}}
+    {{end}} {{/* with .Results */}} 
+    {{template "footer" .}}
+  </body>
 </html>
