@@ -4,16 +4,16 @@
 <link href="/css/style.css" rel="stylesheet">
 </head>
 <body>
-<!-- need to add a status bar -->
-<p>
-<a href="/index.html">Back to Search</a>
-</p>
-{{if .DecodedCookie.HasCapabilityIniviteUsers}}
-{{with .DecodedCookie}}
-<p>Welcome {{.DisplayName}}  <button onclick="clearSessionCookie();">Sign out</button></p>
-{{end}} {{/* with .DecodedCookie */}}
 
-<p>Return to <a href="/usermgt/listusers.html">user list</a></p>
+	{{ template "header" . }}
+	
+	<!-- need to add a status bar -->
+<ul class="nav searchbar">
+	<li class="category"><a href="/usermgt/listusers.html">Return to user list</a></li>
+  <li id="searchfield"><a href="#">Add a user</a></li>
+</ul>
+<div class="resource-list">
+{{if .DecodedCookie.HasCapabilityIniviteUsers}}
 
 <!-- query value has to be in the field -->
 
@@ -62,5 +62,8 @@
 {{else}} {{/* if .DecodedCookie.HasCapabilityIniviteUsers */}}
 	<p>You aren't signed with the right to add users. <a href="/login.html">Sign-in</a> as an administrative user.</p>
 {{end}} {{/* if .DecodedCookie.HasCapabilityViewUsers */}}
+</div>
+{{template "footer" . }}
+
 </body>
 </html>
