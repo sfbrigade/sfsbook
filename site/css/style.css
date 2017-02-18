@@ -74,6 +74,11 @@ a {
   background:transparent;
 }
 
+input[type="checkbox"]{
+  width: 30px; /*Desired width*/
+  height: 30px; /*Desired height*/
+}
+
 /* change colours to suit your needs */
 ins {
   background-color:#ff9;
@@ -193,6 +198,7 @@ h1 {
 }
 h2 {
   font-size: x-large;
+  display: inline-block;
 }
 .escape span:nth-child(1), .hotline span:nth-child(1) {
   display: block;
@@ -532,7 +538,7 @@ th {
   background:gold;
 }
 .buttonbar .usermgt {
-  width: 30%;
+  width: 300px;
   max-width: 150px;
   display: inline-block;
   position: relative;
@@ -649,12 +655,16 @@ textarea {
 
 .invite {
   float: right;
+  font-size: x-large;
 }
 .user-details th, .user-details td {
   padding: 5px;
   text-align: right;
 }
 
+.usersearch {
+  margin: 10px 0;
+}
 
 /* mobile styles */
 
@@ -692,4 +702,3 @@ textarea {
     width: 120px;
   }
 }
-
