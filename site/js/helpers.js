@@ -122,7 +122,6 @@ function searchNav(node) {
       }
       break;
 
-    
     case keys.enter:
       if (theTarget.classList[0].indexOf('category-option') > -1) {
         toggleCategoryOption(theTarget);
