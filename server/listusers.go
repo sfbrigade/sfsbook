@@ -4,11 +4,8 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"strconv"
 	"strings"
 
-	"github.com/blevesearch/bleve"
-	"github.com/blevesearch/bleve/search/query"
 	"github.com/pborman/uuid"
 	"github.com/sfbrigade/sfsbook/dba"
 )
@@ -104,10 +101,8 @@ func (gs *listUsers) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	var queryop query.Query
-	queryop = bleve.NewMatchAllQuery()
-
 	// Setup a query. The query is different if we have specified it.
+	userquery := ""
 	log.Println("not a post but proceeding anyway")
 	log.Println("req", req)
 
@@ -158,14 +153,14 @@ func (gs *listUsers) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		case k == "deleteuser":
 			action = _DELETEUSERS
 		case k == "userquery":
-			userquery, err := getValidatedString("userquery", req.Form)
+			uq, err := getValidatedString("userquery", req.Form)
 			if err != nil {
 				log.Println("no userquery", err)
 				listusersresult.Diagnosticmessage = "Showing all..."
 			} else {
 				// We had an argument to search with.
-				listusersresult.Userquery = userquery
-				queryop = bleve.NewWildcardQuery(userquery)
+				listusersresult.Userquery = uq
+				userquery = uq
 				// TODO(rjk): Improve database indexing.
 			}
 		case k == "resetpassword":
@@ -215,49 +210,19 @@ func (gs *listUsers) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	// And now do the search.
-
-	// I need to make this search the right way. And bound the result set
-	// size.
-	sreq := bleve.NewSearchRequest(queryop)
-	sreq.Fields = []string{"name", "role", "display_name"}
-
-	// These two values need to come from the URL args so that I can
-	// page through many users.
-	sreq.Size = 10
-	sreq.From = 0
-
-	// This is an error case (something is wrong internally)
-	searchResults, err := gs.passwordfile.Search(sreq)
+	users, err := gs.passwordfile.ListUsers(userquery, 10, 0)
 	if err != nil {
 		respondWithError(w, fmt.Sprintln("database couldn't respond with useful results", err))
 		return
 	}
-
-	if len(searchResults.Hits) < 1 {
+	if len(users) < 1 {
 		// This probably means that the user has entered an invalid query.
+		// Or that we've paged past the end.
 		listusersresult.Diagnosticmessage = "Userquery matches no users."
 		gs.ender(w, req, listusersresult)
 		return
 	}
 
-	users := make([]map[string]interface{}, 0, len(searchResults.Hits))
-	for i, sr := range searchResults.Hits {
-		u := make(map[string]interface{})
-		for k, v := range sr.Fields {
-			// Could test and drop the unfortunate?
-			u[k] = v.(string)
-		}
-
-		uuidcasted := uuid.UUID(sr.ID)
-		// I thought about encrypting the UUIDs. But to get this content, one
-		// must already have the admin role and that is enforced server side
-		// via a strongly encrypted cookie. And they are cryptographically
-		// difficult to guess already.
-		u["uuid"] = uuidcasted.String()
-		u["index"] = strconv.FormatInt(int64(i), 10)
-		users = append(users, u)
-	}
 	listusersresult.Querysuccess = true
 	listusersresult.Users = users
 
