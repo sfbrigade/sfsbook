@@ -4,7 +4,6 @@
     <div class='container'>
       {{template "header" .}}
       <!-- need to add a status bar -->
-      {{template "searchbar" .}}
       {{if .DecodedCookie.IsAuthed}}
       {{else}}
       <!-- we will redirect on success to index.html  -->
