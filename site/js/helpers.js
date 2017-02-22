@@ -53,11 +53,14 @@ function clearSessionCookie() {
 function userNav(node) {
   var theTarget = event.target;
   switch (event.which) {
+    case keys.up:
     case keys.down:
-      if (theTarget.classList[0].indexOf('user-menu-item') > -1) {
+      if (theTarget.classList[0] === 'user-menu-item') {
         var siblings = Array.prototype.slice.call(document.querySelectorAll('.user-menu-item'));
         var current = siblings.indexOf(theTarget);
-        var next = (current === siblings.length - 1) ? 0 : current + 1;
+        var diff = (event.which === 40) ? 1 : -1;
+        var next = current + diff;
+        next = (next < 0) ? siblings.length - 1 : (next === siblings.length) ? 0 : next;
         var nextItem = document.querySelectorAll('.user-menu-item')[next];
         nextItem.focus();
       } else if (theTarget.classList && theTarget.classList[0] === 'user-menu') {
@@ -68,7 +71,7 @@ function userNav(node) {
       break;
 
   case keys.enter:
-    if (theTarget.classList && theTarget.classList[0].indexOf('user-menu-item') > -1) {
+    if (theTarget.classList && theTarget.classList[0] === 'user-menu-item') {
       location.href=theTarget.parentElement.href;
     }
     break;
@@ -77,7 +80,7 @@ function userNav(node) {
     if (theTarget.classList && theTarget.classList[0] === 'user-menu-item') {
       var parent = query('.user-menu');
       var child = query('.user-menu-dropdown');
-      if (child.classList[1] && (child.classList[1].indexOf('visible') > -1)) {
+      if (child.classList[1] && (child.classList[1] === 'visible')) {
         child.classList.toggle('visible');
         parent.focus();
       }
@@ -105,7 +108,7 @@ function searchNav(node) {
 
   switch (event.which) {
     case keys.tab:
-      if ((theTarget.classList[0].indexOf('category') > -1) || (theTarget.classList[0].indexOf('search-filter-container') > -1)) {
+      if ((theTarget.classList[0] === 'category') || (theTarget.classList[0] === 'search-filter-container')) {
         query('.search-filters').classList.remove('visible');
         var secondlevel = document.querySelectorAll('.category-dropdown');
         for(var i = 0; i < secondlevel.length; i++) {
@@ -116,14 +119,14 @@ function searchNav(node) {
 
     case keys.esc:
     case keys.left:
-      if (theTarget.classList[0].indexOf('category') > -1) {
+      if ((theTarget.classList[0] === 'category')||(theTarget.classList[0] === 'category-option')) {
         theTarget.parentElement.classList.toggle('visible');
           theTarget.parentElement.parentElement.focus();
       }
       break;
 
     case keys.enter:
-      if (theTarget.classList[0].indexOf('category-option') > -1) {
+      if (theTarget.classList[0] === 'category-option') {
         toggleCategoryOption(theTarget);
       }
       break;
@@ -131,7 +134,7 @@ function searchNav(node) {
     case keys.down:
     case keys.up:
       diff = (event.which === 40) ? 1 : -1;
-      if (theTarget.classList[0].indexOf('category-option') > -1) {
+      if (theTarget.classList[0] === 'category-option') {
         siblings = Array.prototype.slice.call(theTarget.parentElement.querySelectorAll('.category-option'));
         current = siblings.indexOf(theTarget);
         diff = (event.which === 40) ? 1 : -1;
@@ -139,7 +142,7 @@ function searchNav(node) {
         next = (next < 0) ? siblings.length - 1 : (next === siblings.length) ? 0 : next;
         nextItem = theTarget.parentElement.querySelectorAll('.category-option')[next];
         nextItem.focus();
-      } else if (theTarget.classList[0].indexOf('category') > -1) {
+      } else if (theTarget.classList[0] === 'category') {
         siblings = Array.prototype.slice.call(document.querySelectorAll('.category'));
         current = siblings.indexOf(theTarget);
         child = theTarget.querySelector('.category-dropdown');
