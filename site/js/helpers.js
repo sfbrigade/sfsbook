@@ -76,6 +76,16 @@ function userNav(node) {
     }
     break;
 
+  case keys.tab:
+    if (theTarget.classList && theTarget.classList[0] === 'user-menu-item') {
+      var parent = query('.user-menu');
+      var child = query('.user-menu-dropdown');
+      if (child.classList[1] && (child.classList[1] === 'visible')) {
+        child.classList.toggle('visible');
+      }
+    }
+    break;
+
   case keys.esc:
     if (theTarget.classList && theTarget.classList[0] === 'user-menu-item') {
       var parent = query('.user-menu');
