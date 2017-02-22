@@ -10,12 +10,34 @@ var keys = {
 };
 
 /**
- * Shortcut for document.querySelector.
- * @param {string} identifier The selector class.
+ * Shortcut for document.getElementById.
+ * @param {string} identifier The selector id.
  * @return {object} The selected node.
  */
-function query(identifier) {
-  return document.querySelector(identifier);
+function gebi(identifier) {
+  return document.getElementById(identifier);
+}
+
+/**
+ * Shortcut for document.querySelector.
+ * @param {string} identifier The selector class.
+ * @param {object}  nodeList The container list.
+ * @return {object} The selected node.
+ */
+function qs(identifier, nodeList) {
+  nodeList = (nodeList || document);
+  return nodeList.querySelector(identifier);
+}
+
+/**
+ * Shortcut for document.querySelectorAll.
+ * @param {string} identifier The selector class.
+ * @param {object} nodeList The container list.
+ * @return {object} The selected node.
+ */
+function qsa(identifier, nodeList) {
+  nodeList = (nodeList || document);
+  return nodeList.querySelectorAll(identifier);
 }
 
 /**
@@ -23,7 +45,7 @@ function query(identifier) {
  * @param {object} node The selected keyword node.
  */
 function toggleCategoryOption(node) {
-  var el = document.getElementById('query_field');
+  var el = gebi('query_field');
   var searchText = el.value;
   var input = (node.type === 'click') ? node.target : node;
   var optionValue = input.textContent;
@@ -56,17 +78,17 @@ function userNav(node) {
     case keys.up:
     case keys.down:
       if (theTarget.classList[0] === 'user-menu-item') {
-        var siblings = Array.prototype.slice.call(document.querySelectorAll('.user-menu-item'));
+        var siblings = Array.prototype.slice.call(qsa('.user-menu-item'));
         var current = siblings.indexOf(theTarget);
         var diff = (event.which === 40) ? 1 : -1;
         var next = current + diff;
         next = (next < 0) ? siblings.length - 1 : (next === siblings.length) ? 0 : next;
-        var nextItem = document.querySelectorAll('.user-menu-item')[next];
+        var nextItem = qsa('.user-menu-item')[next];
         nextItem.focus();
       } else if (theTarget.classList && theTarget.classList[0] === 'user-menu') {
-        var child = query('.user-menu-dropdown');
+        var child = qs('.user-menu-dropdown');
         child.classList.toggle('visible');
-        query('.user-menu-item').focus();
+        qs('.user-menu-item').focus();
       }
       break;
 
@@ -78,8 +100,8 @@ function userNav(node) {
 
   case keys.tab:
     if (theTarget.classList && theTarget.classList[0] === 'user-menu-item') {
-      var parent = query('.user-menu');
-      var child = query('.user-menu-dropdown');
+      var parent = qs('.user-menu');
+      var child = qs('.user-menu-dropdown');
       if (child.classList[1] && (child.classList[1] === 'visible')) {
         child.classList.toggle('visible');
       }
@@ -88,8 +110,8 @@ function userNav(node) {
 
   case keys.esc:
     if (theTarget.classList && theTarget.classList[0] === 'user-menu-item') {
-      var parent = query('.user-menu');
-      var child = query('.user-menu-dropdown');
+      var parent = qs('.user-menu');
+      var child = qs('.user-menu-dropdown');
       if (child.classList[1] && (child.classList[1] === 'visible')) {
         child.classList.toggle('visible');
         parent.focus();
@@ -119,8 +141,8 @@ function searchNav(node) {
   switch (event.which) {
     case keys.tab:
       if ((theTarget.classList[0] === 'category') || (theTarget.classList[0] === 'search-filter-container')) {
-        query('.search-filters').classList.remove('visible');
-        var secondlevel = document.querySelectorAll('.category-dropdown');
+        qs('.search-filters').classList.remove('visible');
+        var secondlevel = qsa('.category-dropdown');
         for(var i = 0; i < secondlevel.length; i++) {
           secondlevel[i].classList.remove('visible');
         }
@@ -145,38 +167,38 @@ function searchNav(node) {
     case keys.up:
       diff = (event.which === 40) ? 1 : -1;
       if (theTarget.classList[0] === 'category-option') {
-        siblings = Array.prototype.slice.call(theTarget.parentElement.querySelectorAll('.category-option'));
+        siblings = Array.prototype.slice.call(qsa('.category-option', theTarget.parentElement));
         current = siblings.indexOf(theTarget);
         diff = (event.which === 40) ? 1 : -1;
         next = current + diff;
         next = (next < 0) ? siblings.length - 1 : (next === siblings.length) ? 0 : next;
-        nextItem = theTarget.parentElement.querySelectorAll('.category-option')[next];
+        nextItem = qsa('.category-option', theTarget.parentElement)[next];
         nextItem.focus();
       } else if (theTarget.classList[0] === 'category') {
-        siblings = Array.prototype.slice.call(document.querySelectorAll('.category'));
+        siblings = Array.prototype.slice.call(qsa('.category'));
         current = siblings.indexOf(theTarget);
-        child = theTarget.querySelector('.category-dropdown');
+        child = qs('.category-dropdown', theTarget);
         child.classList.remove('visible');
         diff = (event.which === 40) ? 1 : -1;
         next = current + diff;
         next = (next < 0) ? siblings.length - 1 : (next === siblings.length) ? 0 : next;
-        nextItem = document.querySelectorAll('.category')[next];
-        nextChild = nextItem.querySelector('.category-dropdown');
+        nextItem = qsa('.category')[next];
+        nextChild = qs('.category-dropdown', nextItem);
         nextChild.classList.add('visible');
         nextItem.focus();
       } else if (theTarget.classList && theTarget.classList[0] === 'search-filter-container') {
-        child = query('.search-filters');
-        grandchild = query('.category-dropdown');
+        child = qs('.search-filters');
+        grandchild = qs('.category-dropdown');
         child.classList.toggle('visible');
         grandchild.classList.toggle('visible');
-        query('.category').focus();
+        qs('.category').focus();
       }
       break;
 
     case keys.right:
       if (theTarget.classList && theTarget.classList[0] === 'category') {
-        child = theTarget.querySelector('.category-option');
-        theTarget.querySelector('.category-option').focus();
+        child = qs('.category-option', theTarget);
+        qs('.category-option', theTarget).focus();
       }
       break;
 
