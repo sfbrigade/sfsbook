@@ -1,5 +1,5 @@
 /**
- * Attaches event handlers.
+ * Attaches event handlers for IE8, stops event propagation and prevents default event behavior.
  * @param {object} el The element to which the event will be attached.
  * @param {object} eventName The event to be attached.
  * @param {function} handler The handler to be invoked when the event occurs.
