@@ -21,11 +21,11 @@ If you want to get started on the research initives we're currently working on, 
 Want to help us design some research? Reach out to Karl (@karlton) on the Brigade Slack.
 
 ## Development
-The sfsbook application backend is written in [Go](http://golang.org). So install Go (use [homebrew](http://brew.sh) on MacOS for example) and then `git clone` this repository. Build the server like so:
+The sfsbook application backend is written in [Go](http://golang.org). So install Go (use [homebrew](http://brew.sh), on MacOS for example), create a go folder in your home directory, and then `git clone` this repository into your go/src/github.com/sfbrigade/sfsbook directory. Build the server like so:
 
 ```
+go get
 go build
-```
 ./sfsbook -init_passwords
 ```
 after the initial run, and once the test passwords have been constructed, simply call
