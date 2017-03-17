@@ -701,4 +701,8 @@ textarea {
   .search-filter-container ul {
     width: 120px;
   }
+  #search-form {
+    margin-right: 0;
+    margin-left: 0;
+  }
 }
