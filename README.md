@@ -21,19 +21,29 @@ If you want to get started on the research initives we're currently working on, 
 Want to help us design some research? Reach out to Karl (@karlton) on the Brigade Slack.
 
 ## Development
-The sfsbook application backend is written in [Go](http://golang.org). So install Go (use [homebrew](http://brew.sh), on MacOS for example), create a go folder in your home directory, and then `git clone` this repository into your go/src/github.com/sfbrigade/sfsbook directory. Build the server like so:
+The sfsbook application backend is written in [Go](http://golang.org). So install Go (use [homebrew](http://brew.sh), on MacOS for example, which will automatically create your GOPATH), create the following directory structure in your home folder go/src/github.com/sfbrigade/, and then `git clone` this repository into your  directory, and build the server like so:
 
 ```
-go get
-go build
-./sfsbook -init_passwords
+brew install go
+mkdir -p ~/go/src/github.com/sfbrigade
+cd ~/go/src/github.com/sfbrigade
+git clone https://github.com/sfbrigade/sfsbook.git
+cd sfsbook
+make build
+make start
+make open
 ```
+
+and you should end up with a server called `sfsbook` ready to run at the top level. The server will manufacture some getting started state in `./state`, dump a varying amount of logging and be ready to browse to at [https://localhost:10443/index.html](https://localhost:10443/index.html). 
+
 after the initial run, and once the test passwords have been constructed, simply call
 ```
 ./sfsbook
 ```
-
-and you should end up with a server called `sfsbook` ready to run at the top level. The server will manufacture some getting started state in `./state`, dump a varying amount of logging and be ready to browse to at [https://localhost:10443/index.html](https://localhost:10443/index.html). 
+and in another terminal (since ./sfsbook runs the server until you kill it with CMD+C or CONTROL+C):
+```
+make open
+```
 
 If you're interested in helping with development, reach out ot Rob (@rjkroege) on the Brigade Slack.
   
