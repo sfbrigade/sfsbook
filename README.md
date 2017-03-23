@@ -39,6 +39,9 @@ and you should end up with a server called `sfsbook` ready to run at the top lev
 after the initial run, and once the test passwords have been constructed, simply call
 ```
 ./sfsbook
+```
+and in another terminal (since ./sfsbook runs the server until you kill it with CMD+C or CONTROL+C):
+```
 make open
 ```
 
