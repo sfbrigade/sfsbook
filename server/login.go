@@ -164,12 +164,14 @@ func (gs *loginServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 			// i.e. we make a sad page.
 			respondWithError(w, fmt.Sprintln("Server cookie error", err))
 		}
+
+		log.Println("login worked, redirecting to index")
+		http.Redirect(w, req, "/index.html", 302)
 	}
 
 end:
 
 	templates := []string{sn, "/head.html", "/header.html", "/footer.html"}
-	// do the redirect?
 	parseAndExecuteTemplate(gs.embr, w, req, templates, loginresult)
 }
 
