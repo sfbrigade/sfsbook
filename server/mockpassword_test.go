@@ -44,21 +44,19 @@ func (mpi *mockPasswordIndex) Index(id string, data interface{}) error {
 
 // You can search for anything,
 // but only (username,password := "test_user", "password") return a nonempty result
-func (tape *mockPasswordIndex) Search(username string) (dba.PasswordSearchResult, error) {
+func (tape *mockPasswordIndex) Search(username string) (*dba.PasswordSearchResult, error) {
 
 	testUsername := "test_user"
 	testPassHash, _ := bcrypt.GenerateFromPassword([]byte("password"), bcrypt.DefaultCost)
 
-	match := dba.PasswordSearchResult{
-		Found: true,
-		DisplayName: testUsername,
-		Role: "volunteer",
-		PasswordHash: string(testPassHash),
-		ID: uuid.NewRandom(),
-	}
+	match := dba.NewPasswordSearchResult(
+		string(testPassHash),
+		"volunteer",
+		testUsername,
+		uuid.NewRandom(),
+	)
 
-	miss := dba.PasswordSearchResult{Found: false}
-
+	miss := (*dba.PasswordSearchResult)(nil)
 
 	if username == testUsername {
 		return match, nil

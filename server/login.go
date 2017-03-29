@@ -101,14 +101,14 @@ func (gs *loginServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 			respondWithError(w, errmsg)
 		}
 
-		if !searchResults.Found {
+		if searchResults == nil {
 			// This means that the user has entered an invalid username. But we don't
 			// tell the UA this.
 			log.Println("username mismatch")
 			goto end
 		}
 
-		if matchFound, err := searchResults.PasswordMatch(password); matchFound != true {
+		if err := searchResults.CompareHashAndPassword(password); err != nil {
 			// This means that the user has entered an invalid password.
 			// But we don't tell the UA this either.
 			log.Println("password mismatch, ", err)

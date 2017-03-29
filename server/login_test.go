@@ -21,8 +21,8 @@ import (
 func makeMockServer(tape *mocking.Tape) *loginServer {
 
     // not secure (not random) but OK for testing
-    var hashKey = []byte("very-secret")
-    var blockKey = []byte(nil)
+    hashKey := []byte("very-secret")
+    blockKey := []byte(nil)
 
     undertesthandler := &loginServer{
         // Always use the embedded resource.
