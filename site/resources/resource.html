@@ -63,6 +63,21 @@
             <input id="website" type="text" name="website" size="80" value="{{.Document.website}}"./>
           </div>
 
+          <div class="onefield">
+            <label for="Phone">Business Line</label>
+            <input id="Phone" type="text" name="phone" size="80" value="{{.Document.business_line}}"./>
+          </div>
+
+          <div class="onefield">
+            <label for="Phone">Crisis Line</label>
+            <input id="Phone" type="text" name="phone" size="80" value="{{.Document.crisis_line}}"./>
+          </div>
+
+          <div class="onefield">
+            <label for="Phone">Fax</label>
+            <input id="Phone" type="text" name="phone" size="80" value="{{.Document.fax}}"./>
+          </div>
+
           <div class="buttonbar">
             <div class="button usermgt secondary">
               <input type="submit" value="Discard Edits" />
@@ -114,6 +129,18 @@
           <tr>
             <th>Website</th>
             <td>{{.Document.website}}</td>
+          </tr>
+          <tr>
+            <th>Business Line</th>
+            <td>{{.Document.business_line}}</td>
+          </tr>
+          <tr>
+            <th>Crisis Line</th>
+            <td>{{.Document.crisis_line}}</td>
+          </tr>
+          <tr>
+            <th>Fax</th>
+            <td>{{.Document.fax}}</td>
           </tr>
         </table>
       </div>
