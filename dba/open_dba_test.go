@@ -27,7 +27,7 @@ const testdata = `[
             "",
             ""
         ],
-        "languges": "english spanish",
+        "languages": "english spanish",
         "name": "test record 1",
         "pops_served": "This entry needs a populations served list",
         "services": "This entry needs a services list",
@@ -77,7 +77,7 @@ func TestIndexResourcet(t *testing.T) {
 		t.Fatal("couldn't retrieve the fields from the Bleve database because", err)
 	}
 
-	want_fields := []string{"_all", "_type", "address", "categories", "date_indexed", "description", "email", "hand_sort", "languges", "name", "pops_served", "reviewed", "services", "website", "wheelchair"}
+	want_fields := []string{"_all", "_type", "address", "categories", "date_indexed", "description", "email", "hand_sort", "languages", "name", "pops_served", "reviewed", "services", "website", "wheelchair"}
 
 	sort.Strings(want_fields)
 	sort.Strings(fields)
