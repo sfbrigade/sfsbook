@@ -20,4 +20,4 @@ open:
 
 clean:
 	rm -f state/{*.dat,*.pem}
-	rm -rf state/{*.bleve}
+	rm -rf state/*.bleve
