@@ -3,9 +3,14 @@ help:
 	@echo Available targets are listed in the Makefile:
 	@cat Makefile
 
-build:
-	go get
+get-deps:
+	go get -t ./...
+
+build: get-deps
 	go build
+
+test:
+	go test -v ./...
 
 start:
 	./sfsbook -init_passwords
