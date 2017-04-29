@@ -1,0 +1,29 @@
+{
+  "name": "sfs-book",
+  "version": "1.0.1",
+  "description": "A search engine/online resource hub that provides shelter, community support, and other resources for desolate female survivors in the San Francisco & San Francisco Bay Areas.",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm test "
+  },
+  "keywords": [
+    "shelter",
+    "stop-the-violence",
+    "women",
+    "survivors",
+    "community",
+    "support",
+    "resources",
+    "search-engine"
+  ],
+  "author": "The SFS Book team, comprised of 6-10 active developers",
+  "license": "MIT",
+  "devDependencies": {},
+  "dependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-preset-latest": "^6.24.1",
+    "ejs": "^2.5.6",
+    "react": "^15.5.4",
+    "react-dom": "^15.5.4"
+  }
+}
