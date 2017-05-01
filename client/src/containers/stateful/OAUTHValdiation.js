@@ -28,11 +28,10 @@ export default (ChildComponent) => {
 /* Finally OAUTHValidation is connected to the redux store session state but this could easily be switched out to use any other flux library of your choosing. Simply put, it is subscribing to changes on session. If the hasAuthToken changes in value, the component will be re-rendered if it is presently mounted. */
 
 const mapStateToProps = ({session}) => (session);
-const mapDispatchToProps(dispatch) {
+const mapDispatchToProps = (dispatch) => {
     return bindActionCreators({
         ...ProductActions
     }, dispatch);
-    })
 }
 
 return connect(mapStateToProps, mapDispatchToProps)(OAUTHValidation);
