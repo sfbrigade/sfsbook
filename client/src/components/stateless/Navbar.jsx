@@ -1,7 +1,7 @@
 // Stateless react component that is responsible for rendering the app's main navbar.
 import React, { PropTypes } from 'react';
 
-function Navbar() {
+let Navbar = () => {
     return (
         <div>
             <nav>
