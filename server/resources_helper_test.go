@@ -19,15 +19,15 @@ const embeddedResourceForListusers = `
 
 // resourceHelper installs the above set of constant resources in place
 // of the resources read from the site directory (or compiled in.)
-// These templates make parseAndExecuteTemplate echo its 
-// template arguments to show that the middleware is 
+// These templates make parseAndExecuteTemplate echo its
+// template arguments to show that the middleware is
 // generating the correct values.
 func resourceHelper() func() {
 	stashedResources := Resources
 
 	Resources = map[string]string{
 		"/usermgt/changepasswd.html": embeddedResourceForPasswdchg,
-		"/usermgt/listusers.html": embeddedResourceForListusers,
+		"/usermgt/listusers.html":    embeddedResourceForListusers,
 		"/head.html":                 "",
 		"/header.html":               "",
 		"/searchbar.html":            "",

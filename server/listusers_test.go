@@ -2,17 +2,14 @@ package server
 
 import (
 	"context"
-//	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
 	"reflect"
-//	"strings"
 	"testing"
 
 	"github.com/pborman/uuid"
 	"github.com/rjkroege/mocking"
-//	"golang.org/x/crypto/bcrypt"
 )
 
 // makeUnderTestHandlerListUsers creates a listUsers structure that
@@ -52,7 +49,6 @@ func TestListUsersNotsignedIn(t *testing.T) {
 		t.Errorf("bad response body: got %v\n(%#v)\nwant %v\n(%#v)", got, got, want, want)
 	}
 }
-
 
 // TestListUsersSignedInNoAdmin shows that a user with a valid cookie but no capability
 // to list users is not permitted to do so.
@@ -99,7 +95,7 @@ func addCookie(req *http.Request) *http.Request {
 	// User does have the capability to view users.
 	usercookie := &UserCookie{
 		Uuid:        uuid,
-		Capability:  CapabilityViewUsers ,
+		Capability:  CapabilityViewUsers,
 		Displayname: "Homer Simpson",
 	}
 	return req.WithContext(context.WithValue(req.Context(),
@@ -107,11 +103,11 @@ func addCookie(req *http.Request) *http.Request {
 }
 
 type testPattern struct {
-	urlargs string
-	statuscode int
+	urlargs      string
+	statuscode   int
 	tapeResponse interface{}
-	tapeRecord []interface{}
-	outputString string	
+	tapeRecord   []interface{}
+	outputString string
 }
 
 // TestListUsersShowBasicList shows that a user with capability can list
@@ -134,7 +130,7 @@ func TestListUsersShowBasicList(t *testing.T) {
 					"display_name": "Lisa Simpson",
 				},
 			},
-			[]interface {}{listUsersStim{query:"", size:10, from:0}},
+			[]interface{}{listUsersStim{query: "", size: 10, from: 0}},
 			"\n\tIsAuthed: true\n\tDisplayName: Homer Simpson\n\n\tUserquery: \n\tUsers: [map[display_name:Homer Simpson] map[display_name:Lisa Simpson]]\n\tQuerysuccess: true\n\tDiagnosticmessage: \n",
 		},
 		// GET request without query and no users succeeds and indicates
@@ -143,7 +139,7 @@ func TestListUsersShowBasicList(t *testing.T) {
 			"",
 			http.StatusOK,
 			[]map[string]interface{}{},
-			[]interface {}{listUsersStim{query:"", size:10, from:0}},
+			[]interface{}{listUsersStim{query: "", size: 10, from: 0}},
 			"\n\tIsAuthed: true\n\tDisplayName: Homer Simpson\n\n\tUserquery: \n\tUsers: []\n\tQuerysuccess: false\n\tDiagnosticmessage: Userquery matches no users.\n",
 		},
 		// GET request with non-matching string succeeds and indicates
@@ -152,7 +148,7 @@ func TestListUsersShowBasicList(t *testing.T) {
 			"?userquery=pandabear",
 			http.StatusOK,
 			[]map[string]interface{}{},
-			[]interface {}{listUsersStim{query:"pandabear", size:10, from:0}},
+			[]interface{}{listUsersStim{query: "pandabear", size: 10, from: 0}},
 			"\n\tIsAuthed: true\n\tDisplayName: Homer Simpson\n\n\tUserquery: pandabear\n\tUsers: []\n\tQuerysuccess: false\n\tDiagnosticmessage: Userquery matches no users.\n",
 		},
 		// Invalid selection parameter in URL string complains.
@@ -160,7 +156,7 @@ func TestListUsersShowBasicList(t *testing.T) {
 			"?userquery=&selected-0=baduuidhere&rolechange=admin",
 			http.StatusBadRequest,
 			[]map[string]interface{}{},
-			[]interface {}{},
+			[]interface{}{},
 			"client is attempting something wrong",
 		},
 		// Invoking user is not allowed to change role so should be permission
@@ -169,14 +165,14 @@ func TestListUsersShowBasicList(t *testing.T) {
 			"?userquery=&selected-0=31E946C1-7F1A-491D-BAAE-6BAEA3641FC8&rolechange=admin",
 			http.StatusOK,
 			[]map[string]interface{}{},
-			[]interface {}{},
+			[]interface{}{},
 			"\n\tIsAuthed: true\n\tDisplayName: Homer Simpson\n\n\tUserquery: \n\tUsers: []\n\tQuerysuccess: false\n\tDiagnosticmessage: Sign in as an admin to edit users.\n",
 		},
 	}
 
-	for _, tp  := range testPatterns {
+	for _, tp := range testPatterns {
 		testreq := httptest.NewRequest("GET",
-			"https://sfsbook.org/usermgt/listusers.html" + tp.urlargs, nil)
+			"https://sfsbook.org/usermgt/listusers.html"+tp.urlargs, nil)
 		recorder := httptest.NewRecorder()
 		testreq = addCookie(testreq)
 
@@ -206,4 +202,3 @@ func TestListUsersShowBasicList(t *testing.T) {
 		}
 	}
 }
-
