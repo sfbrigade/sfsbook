@@ -12,17 +12,6 @@ import (
 	"github.com/rjkroege/mocking"
 )
 
-// makeUnderTestHandlerListUsers creates a listUsers structure that
-// uses a mock (tape based) implementation of PasswordIndex.
-func makeUnderTestHandlerListUsers(tape *mocking.Tape) *listUsers {
-	undertesthandler := &listUsers{
-		// Always use the embedded resource.
-		embr:         makeEmbeddableResource(""),
-		passwordfile: (*mockPasswordIndex)(tape),
-	}
-	return undertesthandler
-}
-
 // TestListUsersNotsignedIn shows that the server does not
 // let requests with invalid cookies retrieve the user list.
 func TestListUsersNotsignedIn(t *testing.T) {
@@ -86,28 +75,6 @@ func TestListUsersSignedInNoAdmin(t *testing.T) {
 	if got, want := string(resultAsString), "\n\tIsAuthed: true\n\tDisplayName: Homer Simpson\n\n\tUserquery: \n\tUsers: []\n\tQuerysuccess: false\n\tDiagnosticmessage: Sign in as an admin to list users.\n"; got != want {
 		t.Errorf("bad response body: got %v\n(%#v)\nwant %v\n(%#v)", got, got, want, want)
 	}
-}
-
-// addCookie augments req with the context data that specifies that the
-// user is allowed to view users from the admin dialog.
-func addCookie(req *http.Request) *http.Request {
-	uuid := uuid.NewRandom()
-	// User does have the capability to view users.
-	usercookie := &UserCookie{
-		Uuid:        uuid,
-		Capability:  CapabilityViewUsers,
-		Displayname: "Homer Simpson",
-	}
-	return req.WithContext(context.WithValue(req.Context(),
-		UserCookieStateName, usercookie))
-}
-
-type testPattern struct {
-	urlargs      string
-	statuscode   int
-	tapeResponse interface{}
-	tapeRecord   []interface{}
-	outputString string
 }
 
 // TestListUsersShowBasicList shows that a user with capability can list
@@ -174,7 +141,7 @@ func TestListUsersShowBasicList(t *testing.T) {
 		testreq := httptest.NewRequest("GET",
 			"https://sfsbook.org/usermgt/listusers.html"+tp.urlargs, nil)
 		recorder := httptest.NewRecorder()
-		testreq = addCookie(testreq)
+		testreq = addCookie(testreq, CapabilityViewUsers)
 
 		// Note simplified user data to avoid the issue that the maps are not
 		// emitted in a consistent order.
