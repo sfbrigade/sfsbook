@@ -25,8 +25,8 @@ type docStim struct {
 
 type listUsersStim struct {
 	query string
-	size int
-	from int
+	size  int
+	from  int
 }
 
 func (mpi *mockPasswordIndex) Index(id string, data interface{}) error {

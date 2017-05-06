@@ -149,4 +149,3 @@ end:
 
 	parseAndExecuteTemplate(gs.embr, w, req, templates, changeresult)
 }
-

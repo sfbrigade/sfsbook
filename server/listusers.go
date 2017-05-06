@@ -235,4 +235,3 @@ httpargloop:
 
 	gs.ender(w, req, listusersresult)
 }
-
