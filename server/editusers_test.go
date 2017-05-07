@@ -63,7 +63,14 @@ func TestEditUsersActions(t *testing.T) {
 			},
 			"\n\tIsAuthed: true\n\tDisplayName: Homer Simpson\n\n\tUserquery: \n\tUsers: [map[display_name:Lisa Simpson]]\n\tQuerysuccess: true\n\tDiagnosticmessage: Showing all...\n",
 		},
-
+		// Test that an invalid role is ignored.
+		{
+			"?userquery=&selected-0=31E946C1-7F1A-491D-BAAE-6BAEA3641FC8&rolechange=fuzzypeaches",
+			http.StatusBadRequest,
+			[]interface{}{},
+			[]interface {}{},
+			"client is attempting something wrong",
+		},
 	}
 
 	for _, tp  := range testPatterns {
