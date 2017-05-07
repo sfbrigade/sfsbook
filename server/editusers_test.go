@@ -24,10 +24,10 @@ func TestEditUsersActions(t *testing.T) {
 			"?userquery=&selected-0=31E946C1-7F1A-491D-BAAE-6BAEA3641FC8&rolechange=admin",
 			http.StatusOK,
 			[]interface{}{
-				map[string]interface{} {
+				map[string]interface{}{
 					"display_name": "Homer Simpson",
-					"role":  "volunteer",
-					"name": "homer.simpson",
+					"role":         "volunteer",
+					"name":         "homer.simpson",
 				},
 				nil,
 				[]map[string]interface{}{
@@ -39,10 +39,10 @@ func TestEditUsersActions(t *testing.T) {
 					},
 				},
 			},
-			[]interface {}{
-				docStim{name:"PasswordIndex.Document", uuid:"1\xe9F\xc1\u007f\x1aI\x1d\xba\xaek\xae\xa3d\x1f\xc8"}, 
-				indexStim{fun:"PasswordIndex.Index", id:"1\xe9F\xc1\u007f\x1aI\x1d\xba\xaek\xae\xa3d\x1f\xc8", data:map[string]interface {}{"name":"homer.simpson", "role":"admin", "display_name":"Homer Simpson"}},
-				listUsersStim{name: "PasswordIndex.ListUsers", query:"", size:10, from:0},
+			[]interface{}{
+				docStim{name: "PasswordIndex.Document", uuid: "1\xe9F\xc1\u007f\x1aI\x1d\xba\xaek\xae\xa3d\x1f\xc8"},
+				indexStim{fun: "PasswordIndex.Index", id: "1\xe9F\xc1\u007f\x1aI\x1d\xba\xaek\xae\xa3d\x1f\xc8", data: map[string]interface{}{"name": "homer.simpson", "role": "admin", "display_name": "Homer Simpson"}},
+				listUsersStim{name: "PasswordIndex.ListUsers", query: "", size: 10, from: 0},
 			},
 			"\n\tIsAuthed: true\n\tDisplayName: Homer Simpson\n\n\tUserquery: \n\tUsers: [map[display_name:Homer Simpson] map[display_name:Lisa Simpson]]\n\tQuerysuccess: true\n\tDiagnosticmessage: Showing all...\n",
 		},
@@ -58,9 +58,9 @@ func TestEditUsersActions(t *testing.T) {
 					},
 				},
 			},
-			[]interface {}{
-				deleteStim{name:"PasswordIndex.Delete", uuid:"1\xe9F\xc1\u007f\x1aI\x1d\xba\xaek\xae\xa3d\x1f\xc8"}, 
-				listUsersStim{name: "PasswordIndex.ListUsers", query:"", size:10, from:0},
+			[]interface{}{
+				deleteStim{name: "PasswordIndex.Delete", uuid: "1\xe9F\xc1\u007f\x1aI\x1d\xba\xaek\xae\xa3d\x1f\xc8"},
+				listUsersStim{name: "PasswordIndex.ListUsers", query: "", size: 10, from: 0},
 			},
 			"\n\tIsAuthed: true\n\tDisplayName: Homer Simpson\n\n\tUserquery: \n\tUsers: [map[display_name:Lisa Simpson]]\n\tQuerysuccess: true\n\tDiagnosticmessage: Showing all...\n",
 		},
@@ -69,7 +69,7 @@ func TestEditUsersActions(t *testing.T) {
 			"?userquery=&selected-0=31E946C1-7F1A-491D-BAAE-6BAEA3641FC8&rolechange=fuzzypeaches",
 			http.StatusBadRequest,
 			[]interface{}{},
-			[]interface {}{},
+			[]interface{}{},
 			"client is attempting something wrong",
 		},
 		// Test that the deletion failure is correctly handled.
@@ -84,9 +84,9 @@ func TestEditUsersActions(t *testing.T) {
 					},
 				},
 			},
-			[]interface {}{
-				deleteStim{name:"PasswordIndex.Delete", uuid:"1\xe9F\xc1\u007f\x1aI\x1d\xba\xaek\xae\xa3d\x1f\xc8"}, 
-				listUsersStim{name: "PasswordIndex.ListUsers", query:"", size:10, from:0},
+			[]interface{}{
+				deleteStim{name: "PasswordIndex.Delete", uuid: "1\xe9F\xc1\u007f\x1aI\x1d\xba\xaek\xae\xa3d\x1f\xc8"},
+				listUsersStim{name: "PasswordIndex.ListUsers", query: "", size: 10, from: 0},
 			},
 			"\n\tIsAuthed: true\n\tDisplayName: Homer Simpson\n\n\tUserquery: \n\tUsers: [map[display_name:Lisa Simpson]]\n\tQuerysuccess: true\n\tDiagnosticmessage: Couldn&#39;t successfully delete all of the selected users.\n",
 		},
@@ -105,22 +105,22 @@ func TestEditUsersActions(t *testing.T) {
 					},
 				},
 			},
-			[]interface {}{
-				docStim{name:"PasswordIndex.Document", uuid:"1\xe9F\xc1\u007f\x1aI\x1d\xba\xaek\xae\xa3d\x1f\xc8"}, 
-				listUsersStim{name: "PasswordIndex.ListUsers", query:"", size:10, from:0},
+			[]interface{}{
+				docStim{name: "PasswordIndex.Document", uuid: "1\xe9F\xc1\u007f\x1aI\x1d\xba\xaek\xae\xa3d\x1f\xc8"},
+				listUsersStim{name: "PasswordIndex.ListUsers", query: "", size: 10, from: 0},
 			},
 			"\n\tIsAuthed: true\n\tDisplayName: Homer Simpson\n\n\tUserquery: \n\tUsers: [map[display_name:Homer Simpson] map[display_name:Lisa Simpson]]\n\tQuerysuccess: true\n\tDiagnosticmessage: Couldn&#39;t successfully rolechange all of the selected users to admin.\n",
 		},
-	
+
 		// Failing to update a user via role-change is detected.
 		{
 			"?userquery=&selected-0=31E946C1-7F1A-491D-BAAE-6BAEA3641FC8&rolechange=admin",
 			http.StatusOK,
 			[]interface{}{
-				map[string]interface{} {
+				map[string]interface{}{
 					"display_name": "Homer Simpson",
-					"role":  "volunteer",
-					"name": "homer.simpson",
+					"role":         "volunteer",
+					"name":         "homer.simpson",
 				},
 				fmt.Errorf("PasswordIndex.Index failed"),
 				[]map[string]interface{}{
@@ -129,22 +129,20 @@ func TestEditUsersActions(t *testing.T) {
 					},
 				},
 			},
-			[]interface {}{
-				docStim{name:"PasswordIndex.Document", uuid:"1\xe9F\xc1\u007f\x1aI\x1d\xba\xaek\xae\xa3d\x1f\xc8"}, 
-				indexStim{fun:"PasswordIndex.Index", id:"1\xe9F\xc1\u007f\x1aI\x1d\xba\xaek\xae\xa3d\x1f\xc8", data:map[string]interface {}{"name":"homer.simpson", "role":"admin", "display_name":"Homer Simpson"}},
-				listUsersStim{name: "PasswordIndex.ListUsers", query:"", size:10, from:0},
+			[]interface{}{
+				docStim{name: "PasswordIndex.Document", uuid: "1\xe9F\xc1\u007f\x1aI\x1d\xba\xaek\xae\xa3d\x1f\xc8"},
+				indexStim{fun: "PasswordIndex.Index", id: "1\xe9F\xc1\u007f\x1aI\x1d\xba\xaek\xae\xa3d\x1f\xc8", data: map[string]interface{}{"name": "homer.simpson", "role": "admin", "display_name": "Homer Simpson"}},
+				listUsersStim{name: "PasswordIndex.ListUsers", query: "", size: 10, from: 0},
 			},
 			"\n\tIsAuthed: true\n\tDisplayName: Homer Simpson\n\n\tUserquery: \n\tUsers: [map[display_name:Lisa Simpson]]\n\tQuerysuccess: true\n\tDiagnosticmessage: Couldn&#39;t successfully rolechange all of the selected users to admin.\n",
 		},
-
-
 	}
 
-	for _, tp  := range testPatterns {
+	for _, tp := range testPatterns {
 		testreq := httptest.NewRequest("GET",
-			"https://sfsbook.org/usermgt/listusers.html" + tp.urlargs, nil)
+			"https://sfsbook.org/usermgt/listusers.html"+tp.urlargs, nil)
 		recorder := httptest.NewRecorder()
-		testreq = addCookie(testreq, CapabilityViewUsers | CapabilityEditUsers)
+		testreq = addCookie(testreq, CapabilityViewUsers|CapabilityEditUsers)
 
 		// Note simplified user data to avoid the issue that the maps are not
 		// emitted in a consistent order.
@@ -172,4 +170,3 @@ func TestEditUsersActions(t *testing.T) {
 		}
 	}
 }
-

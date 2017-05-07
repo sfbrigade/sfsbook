@@ -97,7 +97,7 @@ func TestListUsersShowBasicList(t *testing.T) {
 					"display_name": "Lisa Simpson",
 				},
 			}},
-			[]interface{}{listUsersStim{name:"PasswordIndex.ListUsers", query: "", size: 10, from: 0}},
+			[]interface{}{listUsersStim{name: "PasswordIndex.ListUsers", query: "", size: 10, from: 0}},
 			"\n\tIsAuthed: true\n\tDisplayName: Homer Simpson\n\n\tUserquery: \n\tUsers: [map[display_name:Homer Simpson] map[display_name:Lisa Simpson]]\n\tQuerysuccess: true\n\tDiagnosticmessage: \n",
 		},
 		// GET request without query and no users succeeds and indicates
@@ -106,7 +106,7 @@ func TestListUsersShowBasicList(t *testing.T) {
 			"",
 			http.StatusOK,
 			[]interface{}{[]map[string]interface{}{}},
-			[]interface{}{listUsersStim{name:"PasswordIndex.ListUsers", query: "", size: 10, from: 0}},
+			[]interface{}{listUsersStim{name: "PasswordIndex.ListUsers", query: "", size: 10, from: 0}},
 			"\n\tIsAuthed: true\n\tDisplayName: Homer Simpson\n\n\tUserquery: \n\tUsers: []\n\tQuerysuccess: false\n\tDiagnosticmessage: Userquery matches no users.\n",
 		},
 		// GET request with non-matching string succeeds and indicates
@@ -115,7 +115,7 @@ func TestListUsersShowBasicList(t *testing.T) {
 			"?userquery=pandabear",
 			http.StatusOK,
 			[]interface{}{[]map[string]interface{}{}},
-			[]interface{}{listUsersStim{name:"PasswordIndex.ListUsers", query: "pandabear", size: 10, from: 0}},
+			[]interface{}{listUsersStim{name: "PasswordIndex.ListUsers", query: "pandabear", size: 10, from: 0}},
 			"\n\tIsAuthed: true\n\tDisplayName: Homer Simpson\n\n\tUserquery: pandabear\n\tUsers: []\n\tQuerysuccess: false\n\tDiagnosticmessage: Userquery matches no users.\n",
 		},
 		// Invalid selection parameter in URL string complains.
