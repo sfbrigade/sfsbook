@@ -1,6 +1,7 @@
 package server
 
 import (
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
@@ -70,6 +71,24 @@ func TestEditUsersActions(t *testing.T) {
 			[]interface{}{},
 			[]interface {}{},
 			"client is attempting something wrong",
+		},
+		// Test that the deletion failure is correctly handled.
+		{
+			"?userquery=&selected-0=31E946C1-7F1A-491D-BAAE-6BAEA3641FC8&rolechange=nochange&deleteuser=Delete",
+			http.StatusOK,
+			[]interface{}{
+				fmt.Errorf("PasswordIndex.Delete failed"),
+				[]map[string]interface{}{
+					{
+						"display_name": "Lisa Simpson",
+					},
+				},
+			},
+			[]interface {}{
+				deleteStim{name:"PasswordIndex.Delete", uuid:"1\xe9F\xc1\u007f\x1aI\x1d\xba\xaek\xae\xa3d\x1f\xc8"}, 
+				listUsersStim{name: "PasswordIndex.ListUsers", query:"", size:10, from:0},
+			},
+			"\n\tIsAuthed: true\n\tDisplayName: Homer Simpson\n\n\tUserquery: \n\tUsers: [map[display_name:Lisa Simpson]]\n\tQuerysuccess: true\n\tDiagnosticmessage: Couldn&#39;t successfully delete all of the selected users.\n",
 		},
 	}
 
