@@ -89,14 +89,14 @@ func TestListUsersShowBasicList(t *testing.T) {
 		{
 			"",
 			http.StatusOK,
-			[]map[string]interface{}{
+			[]interface{}{[]map[string]interface{}{
 				{
 					"display_name": "Homer Simpson",
 				},
 				{
 					"display_name": "Lisa Simpson",
 				},
-			},
+			}},
 			[]interface{}{listUsersStim{query: "", size: 10, from: 0}},
 			"\n\tIsAuthed: true\n\tDisplayName: Homer Simpson\n\n\tUserquery: \n\tUsers: [map[display_name:Homer Simpson] map[display_name:Lisa Simpson]]\n\tQuerysuccess: true\n\tDiagnosticmessage: \n",
 		},
@@ -105,7 +105,7 @@ func TestListUsersShowBasicList(t *testing.T) {
 		{
 			"",
 			http.StatusOK,
-			[]map[string]interface{}{},
+			[]interface{}{[]map[string]interface{}{}},
 			[]interface{}{listUsersStim{query: "", size: 10, from: 0}},
 			"\n\tIsAuthed: true\n\tDisplayName: Homer Simpson\n\n\tUserquery: \n\tUsers: []\n\tQuerysuccess: false\n\tDiagnosticmessage: Userquery matches no users.\n",
 		},
@@ -114,7 +114,7 @@ func TestListUsersShowBasicList(t *testing.T) {
 		{
 			"?userquery=pandabear",
 			http.StatusOK,
-			[]map[string]interface{}{},
+			[]interface{}{[]map[string]interface{}{}},
 			[]interface{}{listUsersStim{query: "pandabear", size: 10, from: 0}},
 			"\n\tIsAuthed: true\n\tDisplayName: Homer Simpson\n\n\tUserquery: pandabear\n\tUsers: []\n\tQuerysuccess: false\n\tDiagnosticmessage: Userquery matches no users.\n",
 		},
@@ -122,7 +122,7 @@ func TestListUsersShowBasicList(t *testing.T) {
 		{
 			"?userquery=&selected-0=baduuidhere&rolechange=admin",
 			http.StatusBadRequest,
-			[]map[string]interface{}{},
+			[]interface{}{[]map[string]interface{}{}},
 			[]interface{}{},
 			"client is attempting something wrong",
 		},
@@ -131,7 +131,7 @@ func TestListUsersShowBasicList(t *testing.T) {
 		{
 			"?userquery=&selected-0=31E946C1-7F1A-491D-BAAE-6BAEA3641FC8&rolechange=admin",
 			http.StatusOK,
-			[]map[string]interface{}{},
+			[]interface{}{[]map[string]interface{}{}},
 			[]interface{}{},
 			"\n\tIsAuthed: true\n\tDisplayName: Homer Simpson\n\n\tUserquery: \n\tUsers: []\n\tQuerysuccess: false\n\tDiagnosticmessage: Sign in as an admin to edit users.\n",
 		},
@@ -146,7 +146,7 @@ func TestListUsersShowBasicList(t *testing.T) {
 		// Note simplified user data to avoid the issue that the maps are not
 		// emitted in a consistent order.
 		tape.Rewind()
-		tape.SetResponses(tp.tapeResponse)
+		tape.SetResponses(tp.tapeResponse...)
 
 		// Run handler.
 		undertesthandler.ServeHTTP(recorder, testreq)

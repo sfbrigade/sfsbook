@@ -28,7 +28,7 @@ const embeddedResourceForListusers = `
 type testPattern struct {
 	urlargs string
 	statuscode int
-	tapeResponse interface{}
+	tapeResponse []interface{}
 	tapeRecord []interface{}
 	outputString string	
 }
