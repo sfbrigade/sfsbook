@@ -18,7 +18,7 @@ func TestEditUsersActions(t *testing.T) {
 	undertesthandler := makeUnderTestHandlerListUsers(tape)
 
 	testPatterns := []testPattern{
-		// Sets the roll to admin
+		// Basic editing: change the role from volunteer to admin.
 		{
 			"?userquery=&selected-0=31E946C1-7F1A-491D-BAAE-6BAEA3641FC8&rolechange=admin",
 			http.StatusOK,
@@ -41,11 +41,29 @@ func TestEditUsersActions(t *testing.T) {
 			[]interface {}{
 				docStim{name:"PasswordIndex.Document", uuid:"1\xe9F\xc1\u007f\x1aI\x1d\xba\xaek\xae\xa3d\x1f\xc8"}, 
 				indexStim{fun:"PasswordIndex.Index", id:"1\xe9F\xc1\u007f\x1aI\x1d\xba\xaek\xae\xa3d\x1f\xc8", data:map[string]interface {}{"name":"homer.simpson", "role":"admin", "display_name":"Homer Simpson"}},
-				listUsersStim{query:"", size:10, from:0},
+				listUsersStim{name: "PasswordIndex.ListUsers", query:"", size:10, from:0},
 			},
 			"\n\tIsAuthed: true\n\tDisplayName: Homer Simpson\n\n\tUserquery: \n\tUsers: [map[display_name:Homer Simpson] map[display_name:Lisa Simpson]]\n\tQuerysuccess: true\n\tDiagnosticmessage: Showing all...\n",
 		},
-		// TODO(rjk): delete a user
+		// Test that the deletion works.
+		{
+			"?userquery=&selected-0=31E946C1-7F1A-491D-BAAE-6BAEA3641FC8&rolechange=nochange&deleteuser=Delete",
+			http.StatusOK,
+			[]interface{}{
+				nil,
+				[]map[string]interface{}{
+					{
+						"display_name": "Lisa Simpson",
+					},
+				},
+			},
+			[]interface {}{
+				deleteStim{name:"PasswordIndex.Delete", uuid:"1\xe9F\xc1\u007f\x1aI\x1d\xba\xaek\xae\xa3d\x1f\xc8"}, 
+				listUsersStim{name: "PasswordIndex.ListUsers", query:"", size:10, from:0},
+			},
+			"\n\tIsAuthed: true\n\tDisplayName: Homer Simpson\n\n\tUserquery: \n\tUsers: [map[display_name:Lisa Simpson]]\n\tQuerysuccess: true\n\tDiagnosticmessage: Showing all...\n",
+		},
+
 	}
 
 	for _, tp  := range testPatterns {
