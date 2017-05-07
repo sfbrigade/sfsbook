@@ -90,6 +90,54 @@ func TestEditUsersActions(t *testing.T) {
 			},
 			"\n\tIsAuthed: true\n\tDisplayName: Homer Simpson\n\n\tUserquery: \n\tUsers: [map[display_name:Lisa Simpson]]\n\tQuerysuccess: true\n\tDiagnosticmessage: Couldn&#39;t successfully delete all of the selected users.\n",
 		},
+		// Role-changing a non-existent user is detected and handled.
+		{
+			"?userquery=&selected-0=31E946C1-7F1A-491D-BAAE-6BAEA3641FC8&rolechange=admin",
+			http.StatusOK,
+			[]interface{}{
+				fmt.Errorf("PasswordIndex.Document failed"),
+				[]map[string]interface{}{
+					{
+						"display_name": "Homer Simpson",
+					},
+					{
+						"display_name": "Lisa Simpson",
+					},
+				},
+			},
+			[]interface {}{
+				docStim{name:"PasswordIndex.Document", uuid:"1\xe9F\xc1\u007f\x1aI\x1d\xba\xaek\xae\xa3d\x1f\xc8"}, 
+				listUsersStim{name: "PasswordIndex.ListUsers", query:"", size:10, from:0},
+			},
+			"\n\tIsAuthed: true\n\tDisplayName: Homer Simpson\n\n\tUserquery: \n\tUsers: [map[display_name:Homer Simpson] map[display_name:Lisa Simpson]]\n\tQuerysuccess: true\n\tDiagnosticmessage: Couldn&#39;t successfully rolechange all of the selected users to admin.\n",
+		},
+	
+		// Failing to update a user via role-change is detected.
+		{
+			"?userquery=&selected-0=31E946C1-7F1A-491D-BAAE-6BAEA3641FC8&rolechange=admin",
+			http.StatusOK,
+			[]interface{}{
+				map[string]interface{} {
+					"display_name": "Homer Simpson",
+					"role":  "volunteer",
+					"name": "homer.simpson",
+				},
+				fmt.Errorf("PasswordIndex.Index failed"),
+				[]map[string]interface{}{
+					{
+						"display_name": "Lisa Simpson",
+					},
+				},
+			},
+			[]interface {}{
+				docStim{name:"PasswordIndex.Document", uuid:"1\xe9F\xc1\u007f\x1aI\x1d\xba\xaek\xae\xa3d\x1f\xc8"}, 
+				indexStim{fun:"PasswordIndex.Index", id:"1\xe9F\xc1\u007f\x1aI\x1d\xba\xaek\xae\xa3d\x1f\xc8", data:map[string]interface {}{"name":"homer.simpson", "role":"admin", "display_name":"Homer Simpson"}},
+				listUsersStim{name: "PasswordIndex.ListUsers", query:"", size:10, from:0},
+			},
+			"\n\tIsAuthed: true\n\tDisplayName: Homer Simpson\n\n\tUserquery: \n\tUsers: [map[display_name:Lisa Simpson]]\n\tQuerysuccess: true\n\tDiagnosticmessage: Couldn&#39;t successfully rolechange all of the selected users to admin.\n",
+		},
+
+
 	}
 
 	for _, tp  := range testPatterns {
