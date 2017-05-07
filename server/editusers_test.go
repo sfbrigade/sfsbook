@@ -10,8 +10,8 @@ import (
 	"github.com/rjkroege/mocking"
 )
 
-// TestListUsersShowBasicList shows that a user with capability can list
-// the currently configured users.
+// TestEditUsersActions shows that a user with capability can edit
+// values on a user structure.
 func TestEditUsersActions(t *testing.T) {
 	defer resourceHelper()()
 	tape := mocking.NewTape()
@@ -22,9 +22,28 @@ func TestEditUsersActions(t *testing.T) {
 		{
 			"?userquery=&selected-0=31E946C1-7F1A-491D-BAAE-6BAEA3641FC8&rolechange=admin",
 			http.StatusOK,
-			[]map[string]interface{}{},
-			[]interface {}{},
-			"\n\tIsAuthed: true\n\tDisplayName: Homer Simpson\n\n\tUserquery: \n\tUsers: []\n\tQuerysuccess: false\n\tDiagnosticmessage: Sign in as an admin to edit users.\n",
+			[]interface{}{
+				map[string]interface{} {
+					"display_name": "Homer Simpson",
+					"role":  "volunteer",
+					"name": "homer.simpson",
+				},
+				nil,
+				[]map[string]interface{}{
+					{
+						"display_name": "Homer Simpson",
+					},
+					{
+						"display_name": "Lisa Simpson",
+					},
+				},
+			},
+			[]interface {}{
+				docStim{name:"PasswordIndex.Document", uuid:"1\xe9F\xc1\u007f\x1aI\x1d\xba\xaek\xae\xa3d\x1f\xc8"}, 
+				indexStim{fun:"PasswordIndex.Index", id:"1\xe9F\xc1\u007f\x1aI\x1d\xba\xaek\xae\xa3d\x1f\xc8", data:map[string]interface {}{"name":"homer.simpson", "role":"admin", "display_name":"Homer Simpson"}},
+				listUsersStim{query:"", size:10, from:0},
+			},
+			"\n\tIsAuthed: true\n\tDisplayName: Homer Simpson\n\n\tUserquery: \n\tUsers: [map[display_name:Homer Simpson] map[display_name:Lisa Simpson]]\n\tQuerysuccess: true\n\tDiagnosticmessage: Showing all...\n",
 		},
 		// TODO(rjk): delete a user
 	}
@@ -38,7 +57,7 @@ func TestEditUsersActions(t *testing.T) {
 		// Note simplified user data to avoid the issue that the maps are not
 		// emitted in a consistent order.
 		tape.Rewind()
-		tape.SetResponses(tp.tapeResponse)
+		tape.SetResponses(tp.tapeResponse...)
 
 		// Run handler.
 		undertesthandler.ServeHTTP(recorder, testreq)
