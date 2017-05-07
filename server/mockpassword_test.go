@@ -29,7 +29,7 @@ type deleteStim struct {
 }
 
 type listUsersStim struct {
-	name string
+	name  string
 	query string
 	size  int
 	from  int

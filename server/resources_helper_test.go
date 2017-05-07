@@ -26,11 +26,11 @@ const embeddedResourceForListusers = `
 `
 
 type testPattern struct {
-	urlargs string
-	statuscode int
+	urlargs      string
+	statuscode   int
 	tapeResponse []interface{}
-	tapeRecord []interface{}
-	outputString string	
+	tapeRecord   []interface{}
+	outputString string
 }
 
 // resourceHelper installs the above set of constant resources in place
@@ -77,4 +77,3 @@ func makeUnderTestHandlerListUsers(tape *mocking.Tape) *listUsers {
 	}
 	return undertesthandler
 }
-
