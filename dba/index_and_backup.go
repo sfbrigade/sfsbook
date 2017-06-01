@@ -16,9 +16,9 @@ const (
 	// BackupFolderLocation is the folder where backup json dumps go to.
 	BackupFolderLocation = "/tmp"
 
-	// UUIDIndexName is the name of index that is used to store UUIDs of the
+	// UUIDsIndexName is the name of index that is used to store UUIDs of the
 	// resources.
-	UUIDIndexName = "UUIDIndexName"
+	UUIDsIndexName = "UUIDsIndex"
 )
 
 // indexAndBackup wraps bleve.Index Document and Index methods. In addition it
@@ -42,13 +42,13 @@ func (i *indexAndBackup) Document(id string) (*document.Document, error) {
 }
 
 func (i *indexAndBackup) backup() {
-	uuids, err := i.Document(UUIDIndexName)
+	uuids, err := i.Document(UUIDsIndexName)
 	if err != nil {
-		log.Println("indexAndBackup#backup: ERR getting index: ", UUIDIndexName, err)
+		log.Println("indexAndBackup#backup: ERR getting index: ", UUIDsIndexName, err)
 		return
 	}
 
-	log.Println("indexAndBackup#backup: About to backup: ", len(uuids.Fields), "from index: ", UUIDIndexName)
+	log.Println("indexAndBackup#backup: About to backup: ", len(uuids.Fields), "from index: ", UUIDsIndexName)
 
 	listOfResources := []map[string]interface{}{}
 
