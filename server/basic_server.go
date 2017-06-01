@@ -49,7 +49,6 @@ func MakeServer(address string, hf *HandlerFactory, cf *setup.CertFactory) *http
 		WriteTimeout: 5 * time.Second,
 		Addr:         address,
 		Handler:      m,
-		TLSConfig:    cf.GetTLSConfig(),
 	}
 	return srv
 }
