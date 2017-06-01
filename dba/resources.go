@@ -106,7 +106,7 @@ func (_ RefGuideType) LoadStartData(i bleve.Index, pathroot string) error {
 	log.Println("LoadStartData: indexed resources")
 
 	// index uuid slice since bleve doesn't have a way to iterate through all keys
-	if err := i.Index(UUIDIndexName, uuidsList); err != nil {
+	if err := i.Index(UUIDsIndexName, uuidsList); err != nil {
 		return err
 	}
 	log.Println("LoadStartData: indexed uuid of resources")
