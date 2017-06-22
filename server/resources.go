@@ -65,4 +65,3 @@ func (gs *resourceServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	templates := []string{sn, "/head.html", "/header.html", "/searchbar.html", "/footer.html"}
 	parseAndExecuteTemplate(gs.embr, w, req, templates, results)
 }
-

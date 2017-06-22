@@ -15,28 +15,6 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-const embeddedResourceForUsermgt = `
-	IsAuthed: {{.DecodedCookie.IsAuthed}}
-	DisplayName: {{.DecodedCookie.DisplayName}}
-	ChangeAttemptedAndFailed: {{.Results.ChangeAttemptedAndFailed}}
-	ChangeAttemptedAndSucceeded: {{.Results.ChangeAttemptedAndSucceeded}}
-	ReasonForFailure: {{.Results.ReasonForFailure}}
-`
-
-func testHelper() func() {
-	stashedResources := Resources
-
-	Resources = map[string]string{
-		"/usermgt/changepasswd.html": embeddedResourceForUsermgt,
-		"/head.html":                 "",
-		"/header.html":               "",
-		"/searchbar.html":            "",
-		"/footer.html":               "",
-	}
-
-	return func() { Resources = stashedResources }
-}
-
 func makeUnderTestHandler(tape *mocking.Tape) *passwordChange {
 	undertesthandler := &passwordChange{
 		// Always use the embedded resource.
@@ -47,7 +25,7 @@ func makeUnderTestHandler(tape *mocking.Tape) *passwordChange {
 }
 
 func TestUsermgtNotsignedIn(t *testing.T) {
-	defer testHelper()()
+	defer resourceHelper()()
 
 	undertesthandler := makeUnderTestHandler(nil)
 
@@ -73,7 +51,7 @@ func TestUsermgtNotsignedIn(t *testing.T) {
 
 func TestUsermgtSignedIn(t *testing.T) {
 	uuid := uuid.NewRandom()
-	defer testHelper()()
+	defer resourceHelper()()
 	undertesthandler := makeUnderTestHandler(nil)
 
 	testreq := httptest.NewRequest("POST", "https://sfsbook.org/usermgt/changepasswd.html", nil)
@@ -191,7 +169,7 @@ func testStateSetup(uuid uuid.UUID, poststring string) (*httptest.ResponseRecord
 
 func TestUsermgtAffectingDatabase(t *testing.T) {
 	uuid := uuid.NewRandom()
-	defer testHelper()()
+	defer resourceHelper()()
 	tape := mocking.NewTape()
 	undertesthandler := makeUnderTestHandler(tape)
 
@@ -355,4 +333,3 @@ func TestUsermgtAffectingDatabase(t *testing.T) {
 	}
 
 }
-

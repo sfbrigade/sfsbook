@@ -169,4 +169,3 @@ end:
 	templates := []string{sn, "/head.html", "/header.html", "/footer.html"}
 	parseAndExecuteTemplate(gs.embr, w, req, templates, loginresult)
 }
-

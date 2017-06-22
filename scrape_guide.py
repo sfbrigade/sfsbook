@@ -96,9 +96,9 @@ def main():
             new_entry["wheelchair"] = "This entry needs Wheelchair accessibliy info"
             entry.pop(f+1)
             entry.pop(f)
-         # this one tells us there isn't a languges list either
+         # this one tells us there isn't a languages list either
          elif entry[f+1] == "Wheelchair Accessible: Languages":
-            new_entry["languges"] = "This entry needs a languages list"
+            new_entry["languages"] = "This entry needs a languages list"
             new_entry["services"] = "This entry needs a services list"
             new_entry["wheelchair"] = "This entry needs Wheelchair accessibliy info"
             entry.pop(f+1)
@@ -125,33 +125,33 @@ def main():
                entry.pop(f)
          except ValueError:
             new_entry["wheelchair"] = "This entry needs Wheelchair accessibliy info"
-      # languges it might already be filled in, just like wheelchair 
+      # languages it might already be filled in, just like wheelchair
       try:
-         new_entry["languges"]
+         new_entry["languages"]
       except KeyError:
          try:
             f = entry.index("Languages")
             if entry[f+1] == "Populations served:":
-               new_entry["languges"] =  "This entry needs a languges list"
+               new_entry["languages"] =  "This entry needs a languages list"
                new_entry["pops_served"] = "This entry needs a populations served list"
                entry.pop(f+1)
                entry.pop(f)
             elif entry[f+1] == "Website E-mail":
-               new_entry["languges"] =  "This entry needs a languges list"
+               new_entry["languages"] =  "This entry needs a languages list"
                new_entry["website"] = "This entry needs a website"
                new_entry["email"] = "This entry needs an email address"
                entry.pop(f+1)
                entry.pop(f)
             elif entry[f+1] == "Website":
-               new_entry["languges"] =  "This entry needs a languges list"
+               new_entry["languages"] =  "This entry needs a languages list"
                new_entry["website"] = "This entry needs a website"
                entry.pop(f+1)
                entry.pop(f)
             else:
-               new_entry["languges"] = entry[f+1]
+               new_entry["languages"] = entry[f+1]
                entry.pop(f)
          except ValueError:
-            new_entry["languges"] =  "This entry needs a languges list"
+            new_entry["languages"] =  "This entry needs a languages list"
       # populations served, same checks as wheelchair
       try:
          new_entry["pops_served"]

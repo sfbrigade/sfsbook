@@ -8,11 +8,12 @@ import (
 
 // ResourceResultsGenerator finds a specific resource by its uuid.
 type ResourceResultsGenerator struct {
-	index bleve.Index
+	index *indexAndBackup
 }
 
 func MakeResourceResultsGenerator(bi bleve.Index) *ResourceResultsGenerator {
-	return &ResourceResultsGenerator{index: bi}
+	iAndB := &indexAndBackup{index: bi}
+	return &ResourceResultsGenerator{index: iAndB}
 }
 
 type resourceResults struct {
@@ -41,6 +42,7 @@ func init() {
 	immutableFields = map[string]struct{}{
 		"_type":              o,
 		" date_indexed":      o,
+		"date_indexed":       o,
 		"date_last_modified": o,
 	}
 

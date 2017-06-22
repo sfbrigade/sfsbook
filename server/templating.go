@@ -101,4 +101,3 @@ func getTemplateStrings(embr *embeddableResources, templateNames []string) ([]st
 	}
 	return templateStrings, nil
 }
-

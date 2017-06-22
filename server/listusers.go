@@ -91,20 +91,20 @@ func (gs *listUsers) rolechangeUsers(uuids []uuid.UUID, newrole string) error {
 
 // TODO(rjk): Note refactoring opportunity with resource search.
 func (gs *listUsers) ServeHTTP(w http.ResponseWriter, req *http.Request) {
-	log.Println("ServeHTTP")
+	log.Println("listUsers.ServeHTTP", req)
 
 	listusersresult := new(listUsersResult)
 
 	// Skip immediately to end if not authed.
 	if !GetCookie(req).HasCapability(CapabilityViewUsers) {
+		listusersresult.Diagnosticmessage = "Sign in as an admin to list users."
 		gs.ender(w, req, listusersresult)
 		return
 	}
 
 	// Setup a query. The query is different if we have specified it.
 	userquery := ""
-	log.Println("not a post but proceeding anyway")
-	log.Println("req", req)
+	log.Println("not a post but proceeding anyway, req:", req)
 
 	if err := req.ParseForm(); err != nil {
 		respondWithError(w, fmt.Sprintln("bad uploaded form data to login: ", err))
@@ -116,21 +116,22 @@ func (gs *listUsers) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	// mechanism to address clients that are broken.
 	selecteduuids := make([]uuid.UUID, 0, 10)
 	action := _SEARCHACTION
+httpargloop:
 	for k, v := range req.Form {
-		log.Println("listusers ServeHTTP processing form item:", k, v)
+		log.Println("listusers ServeHTTP processing form item:", k, v, "current action", action)
 		switch {
 		case strings.HasPrefix(k, "selected-"):
 			uuidstring, err := getValidatedString(k, req.Form)
 			if err != nil {
 				log.Println("posted form contained invalid k,v pair:", k, v, err)
 				action = _BADACTORREQUEST
-				break
+				break httpargloop
 			}
 			uuid := uuid.Parse(uuidstring)
 			if uuid == nil {
 				log.Println("posted form contained invalid uuid", v)
 				action = _BADACTORREQUEST
-				break
+				break httpargloop
 			}
 			selecteduuids = append(selecteduuids, uuid)
 		case k == "rolechange":
@@ -148,7 +149,7 @@ func (gs *listUsers) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 			default:
 				log.Println("posted form contained invalid rolechange", k, v)
 				action = _BADACTORREQUEST
-				break
+				break httpargloop
 			}
 		case k == "deleteuser":
 			action = _DELETEUSERS
@@ -175,10 +176,16 @@ func (gs *listUsers) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		}
 	}
 
+	if !GetCookie(req).HasCapability(CapabilityEditUsers) && action != _SEARCHACTION && action != _BADACTORREQUEST {
+		listusersresult.Diagnosticmessage = "Sign in as an admin to edit users."
+		gs.ender(w, req, listusersresult)
+		return
+	}
+
 	// Do the updates
 	switch action {
 	case _SEARCHACTION:
-		// Or do nothing if only searchin.
+		// Or do nothing if only searching.
 	case _RESETPASSWORD:
 		// I have no idea how this should work. And I'm not going to build it
 		// until we have discussed with SFWAR.
@@ -228,4 +235,3 @@ func (gs *listUsers) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 
 	gs.ender(w, req, listusersresult)
 }
-
