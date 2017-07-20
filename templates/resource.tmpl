@@ -1,0 +1,70 @@
+<html>
+  {{template "head"}}
+  <body>
+    <div class='container'>
+      {{template "header" .}}
+      {{template "searchbar" .}}
+
+      <div class="results">
+        <h3>Resource Details</h3>
+      </div>
+
+      {{range .Resources}}
+        <div class="results">
+          <table>
+            <tr>
+              <th>Name</th>
+              <td>{{.Name}}</td>
+            </tr>
+            <tr>
+              <th>Categories</th>
+              <td>{{.Categories}}</td>
+            </tr>
+            <tr>
+              <th>Description</th>
+              <td>{{.Description}}</td>
+            </tr>
+            <tr>
+              <th>Services</th>
+              <td>{{.Services}}</td>
+            </tr>
+            <tr>
+              <th>Email</th>
+              <td>{{.Email}}</td>
+            </tr>
+            <tr>
+              <th>Address</th>
+              <td>{{.Address}}</td>
+            </tr>
+            <tr>
+              <th>Languages</th>
+              <td>{{.Languages}}</td>
+            </tr>
+            <tr>
+              <th>Populations Served</th>
+              <td>{{.PopsServed}}</td>
+            </tr>
+            <tr>
+              <th>Website</th>
+              <td>{{.Website}}</td>
+            </tr>
+            <tr>
+              <th>Business Line</th>
+              <td>{{.BusinessLine}}</td>
+            </tr>
+            <tr>
+              <th>Crisis Line</th>
+              <td>{{.CrisisLine}}</td>
+            </tr>
+            <tr>
+              <th>Fax</th>
+              <td>{{.Fax}}</td>
+            </tr>
+          </table>
+        </div>
+      {{end}} {{/* with .Resources*/}}
+
+      {{template "footer" .}}
+    </div>
+  </body>
+</html>

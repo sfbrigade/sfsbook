@@ -1,0 +1,17 @@
+var resources = [];
+{{range $index, $element := .Resources}}
+  resources[{{$index}}] = {
+    name: "{{$element.Name}}",
+    categories: "{{$element.Categories}}",
+    description: "{{$element.Description}}",
+    services: "{{$element.Services}}",
+    email: "{{$element.Email}}",
+    address: "{{$element.Address}}",
+    languages: "{{$element.Languages}}",
+    population_served: "{{$element.PopsServed}}",
+    website: "{{$element.Website}}",
+    business_line: "{{$element.BusinessLine}}",
+    crisis_line: "{{$element.CrisisLine}}",
+    fax: "{{$element.Fax}}"
+  };
+{{end}}
