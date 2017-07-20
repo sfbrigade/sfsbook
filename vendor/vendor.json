@@ -1,0 +1,91 @@
+{
+	"comment": "",
+	"ignore": "",
+	"package": [
+		{
+			"checksumSHA1": "c5Pru79r8EEtMlIeQ+byw51AeN0=",
+			"path": "github.com/gin-gonic/gin",
+			"revision": "d5b353c5d5a560322e6d96121c814115562501f7",
+			"revisionTime": "2017-04-28T10:59:23Z"
+		},
+		{
+			"checksumSHA1": "uJ5EaItCWkwh8Cb8r/08HGV6tso=",
+			"path": "github.com/gin-gonic/gin/binding",
+			"revision": "d5b353c5d5a560322e6d96121c814115562501f7",
+			"revisionTime": "2017-04-28T10:59:23Z"
+		},
+		{
+			"checksumSHA1": "v+H/cD17kjyZLCVSVc4hVle+Ydw=",
+			"path": "github.com/gin-gonic/gin/binding/example",
+			"revision": "d5b353c5d5a560322e6d96121c814115562501f7",
+			"revisionTime": "2017-04-28T10:59:23Z"
+		},
+		{
+			"checksumSHA1": "pcOdY6zOlIYt+MBeMcNBXm/7r4w=",
+			"path": "github.com/gin-gonic/gin/render",
+			"revision": "d5b353c5d5a560322e6d96121c814115562501f7",
+			"revisionTime": "2017-04-28T10:59:23Z"
+		},
+		{
+			"checksumSHA1": "jeLwJeaFXe4ew+aTxptuYa80kzs=",
+			"path": "github.com/golang/protobuf/proto",
+			"revision": "9e6977f30c91c78396e719e164e57f9287fff42c",
+			"revisionTime": "2016-05-24T19:56:25Z"
+		},
+		{
+			"checksumSHA1": "FAcShrpHCr+JlEzLtrlXb2509ng=",
+			"path": "github.com/golang/protobuf/proto/proto3_proto",
+			"revision": "9e6977f30c91c78396e719e164e57f9287fff42c",
+			"revisionTime": "2016-05-24T19:56:25Z"
+		},
+		{
+			"checksumSHA1": "CVWIduKNqEO98FJM+Dnl5t/1OhY=",
+			"path": "github.com/golang/protobuf/proto/testdata",
+			"revision": "9e6977f30c91c78396e719e164e57f9287fff42c",
+			"revisionTime": "2016-05-24T19:56:25Z"
+		},
+		{
+			"checksumSHA1": "ziJ4U3fMgzYUaflqefqATULDFv0=",
+			"path": "github.com/golang/protobuf/ptypes/any",
+			"revision": "9e6977f30c91c78396e719e164e57f9287fff42c",
+			"revisionTime": "2016-05-24T19:56:25Z"
+		},
+		{
+			"checksumSHA1": "MkWZiVGFCx8xuyIFygL7bOvKK2g=",
+			"path": "github.com/manucorporat/sse",
+			"revision": "ee05b128a739a0fb76c7ebd3ae4810c1de808d6d",
+			"revisionTime": "2016-01-26T18:01:36Z"
+		},
+		{
+			"checksumSHA1": "cAY8WWlvwXakO9nUpQbqNW13JkI=",
+			"path": "github.com/mattn/go-isatty",
+			"revision": "fc9e8d8ef48496124e79ae0df75490096eccf6fe",
+			"revisionTime": "2017-03-22T23:44:13Z"
+		},
+		{
+			"checksumSHA1": "ujkdYz/AOSZ4dVskaUGW9g/V/dM=",
+			"path": "golang.org/x/net/context",
+			"revision": "ddf80d0970594e2e4cccf5a98861cad3d9eaa4cd",
+			"revisionTime": "2017-06-14T13:40:53Z"
+		},
+		{
+			"checksumSHA1": "mPnNSOjRqLdZ9dO/KI0EC1Z03nE=",
+			"path": "golang.org/x/sys/unix",
+			"revision": "0b25a408a50076fbbcae6b7ac0ea5fbb0b085e79",
+			"revisionTime": "2017-06-08T11:43:49Z"
+		},
+		{
+			"checksumSHA1": "24wxwYO57BWvjPPSmCmWNFmmkv8=",
+			"path": "gopkg.in/go-playground/validator.v8",
+			"revision": "5f57d2222ad794d0dffb07e664ea05e2ee07d60c",
+			"revisionTime": "2016-07-18T13:41:25Z"
+		},
+		{
+			"checksumSHA1": "jOGdm8IZTAHZNv+6KIiXv0nloBM=",
+			"path": "gopkg.in/yaml.v2",
+			"revision": "e4d366fc3c7938e2958e662b4258c7a89e1f0e3e",
+			"revisionTime": "2016-07-15T03:37:55Z"
+		}
+	],
+	"rootPath": "github.com/sent-hil/sfsbook-1"
+}
