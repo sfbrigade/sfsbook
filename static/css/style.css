@@ -205,6 +205,7 @@ h2 {
 }
 .escape {
   background: rgba(255,0,0,0.7);
+  margin-bottom: 5px;
 }
 .escape:hover {
   background: rgba(255,0,0,1);

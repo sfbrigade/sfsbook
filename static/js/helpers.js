@@ -262,8 +262,11 @@ function renderSearchResults(resultsArr) {
 
     var name = document.createElement('li');
     name.classList.add('result-name');
+    var link = document.createElement('a');
+    link.setAttribute('href', '/resources/' + resultsArr[i].slug);
     var nameContent = document.createTextNode(resultsArr[i].name);
-    name.appendChild(nameContent);
+    link.appendChild(nameContent);
+    name.appendChild(link);
     ulContainer.appendChild(name);
 
     var services = document.createElement('li');
