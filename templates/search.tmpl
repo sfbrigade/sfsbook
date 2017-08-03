@@ -4,20 +4,13 @@
     <div class='container'>
       {{template "header" .}}
       {{template "searchbar" .}}
-      <ul class='results' role='main'>
+      <ul class='results' role='main' id='resources-result'>
         <h2>Results for: {{.Query}}</h2>
-        {{range .Resources}}
-        <li>
-          <ul class='result'>
-            <li><a href="/resources/{{.Uuid}}.html">{{.Name}}</a></li>
-            <li>Categories:  {{.Categories}}</li>
-            <li>Services: {{.Services}}</li>
-            <li>Description: {{.Description}}</a></li>
-          </ul>
-        </li>
-        {{end}}
       </ul>
       {{template "footer"}}
     </div>
+    <script>
+      ready(fetchSearchResultsFromUrl);
+    </script>
   </body>
 </html>
