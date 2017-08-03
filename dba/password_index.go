@@ -7,6 +7,7 @@ import (
 	"github.com/blevesearch/bleve"
 	"github.com/blevesearch/bleve/search/query"
 	"github.com/pborman/uuid"
+	"golang.org/x/crypto/bcrypt"
 )
 
 // PasswordIndex is a minimal set of entry points into bleve.Index
@@ -17,8 +18,9 @@ type PasswordIndex interface {
 	Index(id string, data interface{}) error
 
 	// Searches the password database for the specified search string
-	// and returns a search result.
-	Search(req *bleve.SearchRequest) (*bleve.SearchResult, error)
+	// and returns the first match, or nil if no match is found.
+	// If no result is returned, error may provide further info as to why.
+	Search(username string) (*PasswordSearchResult, error)
 
 	// ListUsers searches the password database for the specified match string and
 	// returns a list of users of not more than size entries starting from
@@ -49,10 +51,51 @@ func (pdoc *blevePasswordIndex) MapForDocument(id string) (map[string]interface{
 	return MakeMapFromDocument(doc)
 }
 
-// TODO(rjk): Fix the layering violation of leaking bleve into the interface.
-// Update: ListUsers resolves this in part.
-func (pdoc *blevePasswordIndex) Search(req *bleve.SearchRequest) (*bleve.SearchResult, error) {
-	return pdoc.idx.Search(req)
+// PasswordSearchResult represents the password + user details found in the index.
+// It gives you everything we're using from a bleve user search,
+// minus the requirement to use bleve.
+// Use NewPasswordSearchResult() to build one if needed.
+// Brought out to simplify mocking.
+type PasswordSearchResult struct {
+	passwordHash string
+	Role string
+	DisplayName string
+	ID uuid.UUID
+}
+
+// Construct a new PasswordSearchResult
+func NewPasswordSearchResult(passwordHash string, role string, displayName string, id uuid.UUID) *PasswordSearchResult {
+	return &PasswordSearchResult{passwordHash, role, displayName, id}
+}
+
+// CompareHashAndPassword checks if an unencrypted password matches the stored hash.
+// Like bcrypt.CompareHashAndPassword, retuns nil on success & error on failure.
+func (psr *PasswordSearchResult) CompareHashAndPassword(password string) (err error) {
+	return bcrypt.CompareHashAndPassword([]byte(psr.passwordHash), []byte(password));
+}
+
+// Search looks for the given username.
+// Returns the first match, or nil if no match is found.
+func (pdoc *blevePasswordIndex) Search(username string) (*PasswordSearchResult, error) {
+
+	// Do database access.
+	sreq := bleve.NewSearchRequest(bleve.NewMatchQuery(username))
+	sreq.Fields = []string{"name", "cost", "passwordhash", "role", "display_name"}
+
+	searchResults, err := pdoc.idx.Search(sreq)
+
+	if searchResults == nil || len(searchResults.Hits) < 1 {
+		return nil, err
+	} else {
+		result := &PasswordSearchResult{
+			passwordHash: searchResults.Hits[0].Fields["passwordhash"].(string),
+			Role: searchResults.Hits[0].Fields["role"].(string),
+			DisplayName: searchResults.Hits[0].Fields["display_name"].(string),
+			ID: uuid.UUID(searchResults.Hits[0].ID),
+		}
+
+		return result, nil
+	}
 }
 
 func (pdoc *blevePasswordIndex) ListUsers(userquery string, size, from int) ([]map[string]interface{}, error) {

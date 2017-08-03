@@ -4,12 +4,14 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/blevesearch/bleve"
 	"github.com/rjkroege/mocking"
+	"github.com/sfbrigade/sfsbook/dba"
+	"golang.org/x/crypto/bcrypt"
+	"github.com/pborman/uuid"
 )
 
 // TODO(rjk): Complete the higher level of semantic abstraction with
-// some kind of appropriate wrapper for Search.
+// some kind of appropriate wrapper for ListUsers, Delete etc.
 type mockPasswordIndex mocking.Tape
 
 type indexStim struct {
@@ -52,8 +54,26 @@ func (mpi *mockPasswordIndex) Index(id string, data interface{}) error {
 	return nil
 }
 
-func (tape *mockPasswordIndex) Search(_ *bleve.SearchRequest) (*bleve.SearchResult, error) {
-	return nil, fmt.Errorf("not-implemented")
+// You can search for anything,
+// but only (username,password := "test_user", "password") return a nonempty result
+func (tape *mockPasswordIndex) Search(username string) (*dba.PasswordSearchResult, error) {
+
+	testUsername := "test_user"
+	testPassHash, _ := bcrypt.GenerateFromPassword([]byte("password"), bcrypt.DefaultCost)
+
+	match := dba.NewPasswordSearchResult(
+		string(testPassHash),
+		"volunteer",
+		testUsername,
+		uuid.NewRandom(),
+	)
+
+	miss := (*dba.PasswordSearchResult)(nil)
+
+	if username == testUsername {
+		return match, nil
+	}
+	return miss, nil
 }
 
 func (mpi *mockPasswordIndex) ListUsers(userquery string, size, from int) ([]map[string]interface{}, error) {

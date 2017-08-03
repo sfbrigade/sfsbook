@@ -7,11 +7,8 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/blevesearch/bleve"
 	"github.com/gorilla/securecookie"
-	"github.com/pborman/uuid"
 	"github.com/sfbrigade/sfsbook/dba"
-	"golang.org/x/crypto/bcrypt"
 )
 
 // This is written possibly incorrectly. Refactor later.
@@ -96,29 +93,25 @@ func (gs *loginServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 			goto end
 		}
 
-		// Do database access.
-		sreq := bleve.NewSearchRequest(bleve.NewMatchQuery(username))
-		sreq.Fields = []string{"name", "cost", "passwordhash", "role", "display_name"}
-
 		// This is an error case (something is wrong internally)
-		searchResults, err := gs.passwordfile.Search(sreq)
+		searchResults, err := gs.passwordfile.Search(username)
 		if err != nil {
-			respondWithError(w, fmt.Sprintln("database couldn't respond with useful results", err))
+			errmsg := fmt.Sprintln("database couldn't respond with useful results:", err)
+			log.Println(errmsg)
+			respondWithError(w, errmsg)
 		}
 
-		if len(searchResults.Hits) != 1 {
+		if searchResults == nil {
 			// This means that the user has entered an invalid username. But we don't
 			// tell the UA this.
 			log.Println("username mismatch")
 			goto end
 		}
 
-		sr := searchResults.Hits[0]
-		pw := sr.Fields["passwordhash"].(string)
-		if err := bcrypt.CompareHashAndPassword([]byte(pw), []byte(password)); err != nil {
+		if err := searchResults.CompareHashAndPassword(password); err != nil {
 			// This means that the user has entered an invalid password.
 			// But we don't tell the UA this either.
-			log.Println("password mismatch")
+			log.Println("password mismatch, ", err)
 			goto end
 		}
 
@@ -129,15 +122,16 @@ func (gs *loginServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		// TODO(rjk): force updating of password if DefaultCost has changed
 
 		// Build the cookie.
-		role := sr.Fields["role"].(string)
 
 		// We're downstream of the cookieHandler and so already have a
 		// usercookie. We've signed in successfully. So augment it. That
 		// way, all downstream code will have the correct context.
 		usercookie := GetCookie(req)
-		usercookie.Uuid = uuid.UUID(sr.ID)
-		usercookie.Displayname = sr.Fields["display_name"].(string)
+		usercookie.Uuid = searchResults.ID
+		usercookie.Displayname = searchResults.DisplayName
 		usercookie.Timestamp = time.Now()
+
+		role := searchResults.Role
 
 		// TODO(rjk): Consider storing the capability in the user data record.
 		switch role {
@@ -162,11 +156,12 @@ func (gs *loginServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 			// I'm not sure what to do here.
 			// I think this means that the user can't have a cookie.
 			// i.e. we make a sad page.
+			log.Println("ERROR: User can't haz no cookies?? ", err)
 			respondWithError(w, fmt.Sprintln("Server cookie error", err))
 		}
 
 		log.Println("login worked, redirecting to index")
-		http.Redirect(w, req, "/index.html", 302)
+		http.Redirect(w, req, "/index.html", http.StatusFound)
 	}
 
 end:
