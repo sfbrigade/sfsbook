@@ -3,6 +3,7 @@ language: go
 go:
   - master
 
-install: make get-deps
+install:
+  go get github.com/codegangsta/gin
 
-script: make test
+script: go test
