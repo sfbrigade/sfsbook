@@ -204,3 +204,79 @@ function searchNav(node) {
 
   }
 }
+
+/**
+ * Queries elasticlunr to retrieve resources based on keywords
+ * @param {array} search terms to query for
+ * @return {array} search results
+ */
+function getResultsArr(searchTerms) {
+  var totalRelevantDocs = [];
+  var results = [];
+
+  // elasticlunr does not support querying for multiple terms at a time, so must do it this way
+  for (var i = 0; i < searchTerms.length; i++) {
+    var relevantDocs = index.search(searchTerms[i].replace('+', ' '));
+    totalRelevantDocs = totalRelevantDocs.concat(relevantDocs);
+  }
+
+  for(var i = 0; i < totalRelevantDocs.length; i++) {
+    results.push(resources[totalRelevantDocs[i].ref]);
+  }
+
+  return results;
+}
+
+/**
+ * Fetch search results after user presses enter or clicks on the search button
+ * @param {object} node The selected navigation node.
+ */
+function fetchSearchResults(node) {
+  if (node.type === "click" || event.which === keys.enter) {
+    var searchTerm = document.getElementById('query_field').value;
+    var results = getResultsArr(searchTerm);
+    renderSearchResults(results);
+  }
+}
+
+/**
+ * When user navigates to search page, grabs query from the url to pass to elasticlunr
+ */
+function fetchSearchResultsFromUrl() {
+  // TODO: figure out better regex for this expression
+  var query = window.location.href.match(/query=(.*)/)[1].replace('%2F', '%2C+').split('%2C+');
+  var results = getResultsArr(query);
+  renderSearchResults(results);
+}
+
+/**
+ * Renders search results to the DOM
+ * @param {array} the results from elasticlunr
+ */
+function renderSearchResults(resultsArr) {
+  var fragment = document.createDocumentFragment();
+
+  for(var i = 0; i < resultsArr.length; i++) {
+    var ulContainer = document.createElement('ul');
+    ulContainer.classList.add('result');
+
+    var name = document.createElement('li');
+    name.classList.add('result-name');
+    var nameContent = document.createTextNode(resultsArr[i].name);
+    name.appendChild(nameContent);
+    ulContainer.appendChild(name);
+
+    var services = document.createElement('li');
+    var servicesContent = document.createTextNode("Services: " + resultsArr[i].services);
+    services.appendChild(servicesContent);
+    ulContainer.appendChild(services);
+
+    var description = document.createElement('li');
+    var descriptionContent = document.createTextNode("Description: " + resultsArr[i].description);
+    description.appendChild(descriptionContent);
+    ulContainer.appendChild(description);
+
+    fragment.appendChild(ulContainer);
+  }
+  document.getElementById('resources-result').appendChild(fragment.cloneNode(true));
+}

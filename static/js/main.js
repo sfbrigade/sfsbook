@@ -40,6 +40,13 @@ function attachToggles() {
   }
 }
 
+function attachSearchListeners() {
+  var searchClickTrigger = document.getElementById('search-submit-button');
+  var searchEnterTrigger = document.getElementById('query_field');
+  addEventListener(searchClickTrigger, 'click', fetchSearchResults);
+  addEventListener(searchEnterTrigger, 'keypress', fetchSearchResults);
+}
+
 /**
  * Listens for document ready (i.e. readyState not loading), and invokes callback.
  * @param {function} fn The function to be invoked once ready detected.
@@ -60,3 +67,5 @@ function ready(fn) {
 
 /** Calls attachToggles once ready is detected */
 ready(attachToggles);
+// will uncomment this out when we refactor to single page search
+// ready(attachSearchListeners);

@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"errors"
+	"html/template"
 	"io/ioutil"
 	"log"
 	"regexp"
@@ -27,6 +28,22 @@ type Resource struct {
 	BusinessLine string
 	CrisisLine   string
 	Fax          string
+}
+
+type escapedResources struct {
+	Name         template.HTML
+	Slug         template.HTML
+	Categories   template.HTML
+	Description  template.HTML
+	Services     template.HTML
+	Email        template.HTML
+	Address      template.HTML
+	Languages    template.HTML
+	PopsServed   template.HTML
+	Website      template.HTML
+	BusinessLine template.HTML
+	CrisisLine   template.HTML
+	Fax          template.HTML
 }
 
 var ResourceFile = "refguides/2016-april/refguide.json"

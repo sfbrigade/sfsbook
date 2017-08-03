@@ -1,6 +1,7 @@
 package main
 
 import (
+	"html/template"
 	"log"
 	"net/http"
 
@@ -55,7 +56,27 @@ func ResourcesJsIndexHandler(c *gin.Context) {
 		log.Fatal(err)
 	}
 
+	r := []*escapedResources{}
+
+	for _, old := range resources {
+		r = append(r, &escapedResources{
+			Name:         template.HTML(old.Name),
+			Categories:   template.HTML(old.Categories),
+			Description:  template.HTML(old.Description),
+			Services:     template.HTML(old.Services),
+			Email:        template.HTML(old.Email),
+			Address:      template.HTML(old.Address),
+			Languages:    template.HTML(old.Languages),
+			PopsServed:   template.HTML(old.PopsServed),
+			Website:      template.HTML(old.Website),
+			BusinessLine: template.HTML(old.BusinessLine),
+			CrisisLine:   template.HTML(old.CrisisLine),
+			Fax:          template.HTML(old.Fax),
+			Slug:         template.HTML(old.Slug),
+		})
+	}
+
 	c.HTML(http.StatusOK, "resources.js.tmpl", gin.H{
-		"Resources": resources,
+		"Resources": r,
 	})
 }

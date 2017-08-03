@@ -578,6 +578,8 @@ th {
 }
 .result {
   list-style: none;
+  background-color: rgba(126, 129, 170, 0.05);
+  padding: 5px;
 }
 .result li:first-child + li + li + li {
   padding-bottom: 10px;
@@ -595,6 +597,9 @@ th {
 .results table {
   margin-right: 0;
   margin-left: 10px;
+}
+.result-name {
+  font-weight: bold;
 }
 #reviewed {
   width: initial;
