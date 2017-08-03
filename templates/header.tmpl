@@ -1,7 +1,7 @@
 {{define "header"}}
 <header class="header" role='banner'>
   <div class="header-section logo">
-    <a href="/index.html" >
+    <a href="/" >
       <h1>SFWAR Resource Guide</h1>
     </a>
   </div>
@@ -20,7 +20,7 @@
             <span> Get Help Now </span>
           </a>
         </li>
-        {{if .DecodedCookie.IsAuthed}}
+        <!-- {{if .DecodedCookie.IsAuthed}}
         {{with .DecodedCookie}}
         <li class="user-menu" role='menuitem' aria-haspopup='true' tabindex='0'><a>{{.DisplayName}}</a>
           <ul class="user-menu-dropdown" role='menu' aria-haspopup='true'>
@@ -34,7 +34,7 @@
         </li>
         {{else}}
         <li tabindex='-1'><a tabindex='0' href="/login.html"><h2>Sign in</h2></a></li>
-        {{end}}
+        {{end}} -->
       </ul>
     </div>
   </div>
