@@ -33,10 +33,15 @@ func main() {
 	}
 
 	srv := server.MakeServer(*port, handlerfactory, certfactory)
-	if err := srv.ListenAndServeTLS(
-		certfactory.GetCertfFileName(),
-		certfactory.GetKeyFileName()); err != nil {
+
+	// TODO(sa): enable this once we've a cert
+	//if err := srv.ListenAndServeTLS(
+	//  certfactory.GetCertfFileName(),
+	//  certfactory.GetKeyFileName()); err != nil {
+	//  log.Fatal("serving went wrong", err)
+	//}
+
+	if err := srv.ListenAndServe(); err != nil {
 		log.Fatal("serving went wrong", err)
 	}
-
 }
