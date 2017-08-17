@@ -269,10 +269,10 @@ function renderSearchResults(resultsArr) {
     name.appendChild(link);
     ulContainer.appendChild(name);
 
-    var services = document.createElement('li');
-    var servicesContent = document.createTextNode("Services: " + resultsArr[i].services);
-    services.appendChild(servicesContent);
-    ulContainer.appendChild(services);
+    var categories = document.createElement('li');
+    var categoriesContent = document.createTextNode("Categories: " + resultsArr[i].categories);
+    categories.appendChild(categoriesContent);
+    ulContainer.appendChild(categories);
 
     var description = document.createElement('li');
     var descriptionContent = document.createTextNode("Description: " + resultsArr[i].description);
