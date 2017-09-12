@@ -52,6 +52,8 @@ Optionally, if you add a new dep, be sure to add it to vendor/ with:
     go get -u github.com/kardianos/govendor
     govendor add +external
 
+Be sure to commit the new contents of vendor/ folder along with your changes.
+
 ## Credits
 
 This repo's frontend and javascript code is original from
