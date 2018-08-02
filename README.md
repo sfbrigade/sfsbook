@@ -25,10 +25,10 @@ vendor/ - contains vendored dependencies;
 
 ## Development
 
-Install [gin](https://github.com/codegangsta/gin) which is a live reload
+Install [gin](github.com/gin-gonic/gin) which is a live reload
 utility.
 
-    go get github.com/codegangsta/gin
+    go get github.com/gin-gonic/gin
 
 Run server with:
 
