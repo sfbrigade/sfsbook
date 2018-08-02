@@ -1,6 +1,10 @@
-# sfsbook
+# sfsbook Introduction
 
 STOP VIOLENCE!
+
+This project is on a (conceivably indefinite) hiatus. We built a proof-of-concept and demonstrated it to the client. After appropriate consultation, we collectively decided that continuing this specific project would not further our mission of technological tools to help reduce or ameliorate in-relationship violence. Thanks to everybody who contributed their time and work. And obviously: keep doing your part to stop in-relationship violence.
+
+# Overview
 
 ## Structure
 
